@@ -1,5 +1,6 @@
 #ifndef WALKING_GAME__H_
 #define WALKING_GAME__H_
+#include "PaperBot.h"
 #include "BotGame.h"
 
 class WalkingGame : public BotGame {

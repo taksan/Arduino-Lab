@@ -1,5 +1,4 @@
 #include <Nunchuck.h>
-#include <Servo.h>
 #include "PaperBot.h"
 #include "led.h"
 #include "joy.h"
