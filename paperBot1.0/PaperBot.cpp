@@ -29,30 +29,22 @@ PaperBot::PaperBot(int thrustPort, int directionPort)
 void PaperBot::stepAhead() {
 	if (lastMove != movingAhead) {
 		move = stepAheadAction;
+		move->setup();
 	}
+	move->perform();
 	
-
-	if (thrustAngle == DIR_0_INIT_THRUST_ANGLE) {
-		setDirectionAndWait(INIT_DIR);
-		setThrustAndWait(DIR_180_INIT_THRUST_ANGLE);
-	}
-	else {
-		setDirectionAndWait(END_DIR);
-		setThrustAndWait(DIR_0_INIT_THRUST_ANGLE);
-	}
 	lastMove = movingAhead;
 	facingDirection = ahead;
 }
 
 void PaperBot::stepBack() {
-	if (thrustAngle == DIR_0_INIT_THRUST_ANGLE) {
-		setDirectionAndWait(END_DIR);
-		setThrustAndWait(DIR_180_INIT_THRUST_ANGLE);
+	if (lastMove != movingBack) {
+		move = stepBackAction;
+		move->setup();
 	}
-	else {
-		setDirectionAndWait(INIT_DIR);
-		setThrustAndWait(DIR_0_INIT_THRUST_ANGLE);
-	}
+
+	move->perform();
+
 	lastMove = movingBack;
 	facingDirection = back;
 }
@@ -129,7 +121,6 @@ int PaperBot::getDirectionAngle() {
 int PaperBot::getThrustAngle() {
 	return thrustAngle;
 }
-
 
 void PaperBot::setupForRight() {
 	if (facingDirection == ahead) {

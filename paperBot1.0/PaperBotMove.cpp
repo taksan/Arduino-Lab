@@ -24,11 +24,11 @@ void StepAhead::stop()
 void StepBack::perform()
 {
 	if (bot->getThrustAngle() == DIR_0_INIT_THRUST_ANGLE) {
-		bot->setDirectionAndWait(INIT_DIR);
+		bot->setDirectionAndWait(END_DIR);
 		bot->setThrustAndWait(DIR_180_INIT_THRUST_ANGLE);
 	}
 	else {
-		bot->setDirectionAndWait(END_DIR);
+		bot->setDirectionAndWait(INIT_DIR);
 		bot->setThrustAndWait(DIR_0_INIT_THRUST_ANGLE);
 	}
 }
