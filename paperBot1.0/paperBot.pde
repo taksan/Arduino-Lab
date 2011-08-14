@@ -3,79 +3,47 @@
 #include "PaperBot.h"
 #include "led.h"
 #include "joy.h"
+#include "WalkingGame.h"
+#include "MaintenanceGame.h"
 
-PaperBot * bot;
 Joy * joy;
-long lastMove;
 
-Angle dirAngle;
-Angle thrustAngle;
+WalkingGame * walking;
+MaintenanceGame * maintenance;
+BotGame * currentGame;
 
+Led maintenanceLed(13);
+boolean isInMaintenance = false;
 
 void setup()
 {
 	Serial.begin(9600);
 	Serial.println("------");
-	bot = new PaperBot(9, 10);
+
+	PaperBot * bot = new PaperBot(9, 10);
 	joy = new Joy();
-	lastMove = micros();
+	walking = new WalkingGame(bot,joy);
+	maintenance = new MaintenanceGame(bot,joy);
+	currentGame = walking;
 }
-
-
-Led maintenanceLed(13);
-void maintenanceLoop();
-void walkingLoop();
-boolean isInMaintenance = false;
 
 void loop()
 {
 	joy->update();
 	if (joy->zPressed()) {
 		isInMaintenance = !isInMaintenance;
+		if (isInMaintenance) {
+			Serial.println("Switched to maintenance");
+			maintenanceLed.turnOn();
+			currentGame = maintenance;
+		}
+		else {	
+			Serial.println("Switched to walking mode");
+			maintenanceLed.turnOff();
+			currentGame = walking;
+		}
 	}
-	if (isInMaintenance) {
-		maintenanceLoop();
-	}
-	else {
-		walkingLoop();
-	}
+
+	currentGame->tick();
 }
-
-void walkingLoop()
-{
-	maintenanceLed.turnOn();	
-	if (joy->upJoy()) {
-		bot->stepAhead();
-	}
-	if (joy->downJoy()) {
-		bot->stepBack();
-	}
-}
-
-void maintenanceLoop()
-{
-	maintenanceLed.turnOnAndHoldUntilExpired(200);
-	if (joy->upJoy()) {
-		thrustAngle.inc();
-	}
-	if (joy->downJoy()) {
-		thrustAngle.dec();
-	}
-
-	if (joy->rightJoy()) {
-		dirAngle.inc();
-	}
-	if (joy->leftJoy()) {
-		dirAngle.dec();
-	}
-	if (joy->cPressed()) {
-		Serial.println(dirAngle.get());
-		Serial.println(thrustAngle.get());
-	}
-
-	bot->setDirection(dirAngle.get());
-	bot->setThrust(thrustAngle.get());
-	delay(20);
-}
-
 
