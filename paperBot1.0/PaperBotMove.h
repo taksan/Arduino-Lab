@@ -2,6 +2,7 @@
 #define PAPER_BOT_MOVE_H__
 
 #include "Common.h"
+#define STEP_ANGLE 5
 
 class PaperBot;
 
@@ -27,42 +28,62 @@ public:
 	StepAction(PaperBot * aBot, int aDirToStartMovingFromFront, int aDirToStartMovingFromBack):
 		bot(aBot),
 		dirToStartMovingFromFront(aDirToStartMovingFromFront),
-		dirToStartMovingFromBack(aDirToStartMovingFromBack)
+		dirToStartMovingFromBack(aDirToStartMovingFromBack),
+		thrustStep(STEP_ANGLE),
+		direction(1)
 		{ }
 
 	void perform();
 		
-	void setup(){}; 
+	void setup();
 
 	void stop(){};
+
+	static const int initialThrustForStartFromFront = 40;
+	static const int initialThrustForStartFromBack  = 140;
+
 private:
+	int getThrustStep(); 
+	void updateStepDirection();
+
 	PaperBot * bot;
 	int dirToStartMovingFromFront;
 	int dirToStartMovingFromBack;
+	int thrustStep;
+	int direction;
+
 };
 
 class StepAhead: public StepAction
 {	
 public:
-	StepAhead(PaperBot * aBot):StepAction(aBot, INIT_DIR, END_DIR) { }
+	StepAhead(PaperBot * aBot):
+		StepAction(aBot, 
+				   StepAction::initialThrustForStartFromFront, 
+				   StepAction::initialThrustForStartFromBack) 
+   { }
 };
 
 class StepBack: public StepAction
 {	
 public:
-	StepBack(PaperBot * aBot):StepAction(aBot, END_DIR, INIT_DIR) { }
+	StepBack(PaperBot * aBot):
+		StepAction(aBot, 
+				   StepAction::initialThrustForStartFromBack,
+				   StepAction::initialThrustForStartFromFront) 
+   { }
 };
 
 
 class TurnMove: public PaperBotMove {
 	public:
-		TurnMove(PaperBot * bot, int angleToReinit, int directionToStartMoving, int thrustToStartMoving, int angleIncrement) {
-			this->bot = bot;
-			this->angleToReinit          = angleToReinit;
-			this->directionToStartMoving = directionToStartMoving;
-			this->thrustToStartMoving    = thrustToStartMoving;
-			this->angleIncrement         = angleIncrement;
-		}
+		TurnMove(PaperBot * bot, int angleToReinit, int directionToStartMoving, int thrustToStartMoving, int angleIncrement):
+			bot(bot),
+			angleToReinit(angleToReinit),
+			directionToStartMoving(directionToStartMoving),
+			thrustToStartMoving(thrustToStartMoving),
+			angleIncrement(angleIncrement)
+		{ }
 
 		virtual void perform();
 		
@@ -83,7 +104,7 @@ class TurnMove: public PaperBotMove {
 
 class TurnRightWhenFacingAhead : public TurnMove {
 	public:
-		TurnRightWhenFacingAhead(PaperBot * bot):TurnMove(bot, DIR_180_INIT_THRUST_ANGLE, END_DIR, 110, -5) { }
+		TurnRightWhenFacingAhead(PaperBot * bot):TurnMove(bot, DIR_180_INIT_THRUST_ANGLE, END_DIR, 110, -STEP_ANGLE) { }
 
 		void stop();
 	protected:
@@ -94,7 +115,7 @@ class TurnRightWhenFacingAhead : public TurnMove {
 
 class TurnRightWhenFacingBack : public TurnMove {
 	public:
-		TurnRightWhenFacingBack(PaperBot * bot):TurnMove(bot, DIR_0_INIT_THRUST_ANGLE, END_DIR, 70, -5) { }
+		TurnRightWhenFacingBack(PaperBot * bot):TurnMove(bot, DIR_0_INIT_THRUST_ANGLE, END_DIR, 70, -STEP_ANGLE) { }
 		void stop();
 
 	protected:
@@ -105,7 +126,7 @@ class TurnRightWhenFacingBack : public TurnMove {
 
 class TurnLeftWhenFacingAhead : public TurnMove {
 	public:
-		TurnLeftWhenFacingAhead(PaperBot * bot):TurnMove(bot, DIR_0_INIT_THRUST_ANGLE, INIT_DIR, 70, 5) { }
+		TurnLeftWhenFacingAhead(PaperBot * bot):TurnMove(bot, DIR_0_INIT_THRUST_ANGLE, INIT_DIR, 70, STEP_ANGLE) { }
 
 		void stop();
 
@@ -117,7 +138,7 @@ class TurnLeftWhenFacingAhead : public TurnMove {
 
 class TurnLeftWhenFacingBack : public TurnMove {
 	public:
-		TurnLeftWhenFacingBack(PaperBot * bot):TurnMove(bot, DIR_180_INIT_THRUST_ANGLE, INIT_DIR, 110, 5) { }
+		TurnLeftWhenFacingBack(PaperBot * bot):TurnMove(bot, DIR_180_INIT_THRUST_ANGLE, INIT_DIR, 110, STEP_ANGLE) { }
 
 		void stop();
 
