@@ -21,32 +21,36 @@ class NoMovement: public PaperBotMove {
 		void stop() {}
 };
 
-class StepAhead: public PaperBotMove
-{	
+class StepAction: public PaperBotMove
+{
 public:
-	StepAhead(PaperBot * aBot):bot(aBot) { }
+	StepAction(PaperBot * aBot, int aDirToStartMovingFromFront, int aDirToStartMovingFromBack):
+		bot(aBot),
+		dirToStartMovingFromFront(aDirToStartMovingFromFront),
+		dirToStartMovingFromBack(aDirToStartMovingFromBack)
+		{ }
 
 	void perform();
 		
-	void setup(); 
+	void setup(){}; 
 
-	void stop();
+	void stop(){};
 private:
 	PaperBot * bot;
+	int dirToStartMovingFromFront;
+	int dirToStartMovingFromBack;
 };
 
-class StepBack: public PaperBotMove
+class StepAhead: public StepAction
 {	
 public:
-	StepBack(PaperBot * aBot):bot(aBot) { }
+	StepAhead(PaperBot * aBot):StepAction(aBot, INIT_DIR, END_DIR) { }
+};
 
-	void perform();
-		
-	void setup(); 
-
-	void stop();
-private:
-	PaperBot * bot;
+class StepBack: public StepAction
+{	
+public:
+	StepBack(PaperBot * aBot):StepAction(aBot, END_DIR, INIT_DIR) { }
 };
 
 
@@ -65,7 +69,7 @@ class TurnMove: public PaperBotMove {
 		virtual void setup(); 
 
 	protected:
-		virtual boolean isTheEndAngle(int angle) {
+		virtual boolean isPastTheFinalAngle(int angle) {
 			return false;
 		}
 	protected:	
@@ -83,7 +87,7 @@ class TurnRightWhenFacingAhead : public TurnMove {
 
 		void stop();
 	protected:
-		boolean isTheEndAngle(int angle)   { 
+		boolean isPastTheFinalAngle(int angle)   { 
 			return angle <= INIT_DIR;
 		}
 };
@@ -94,7 +98,7 @@ class TurnRightWhenFacingBack : public TurnMove {
 		void stop();
 
 	protected:
-		boolean isTheEndAngle(int angle)   { 
+		boolean isPastTheFinalAngle(int angle)   { 
 			return angle <= INIT_DIR;
 		}
 };
@@ -106,7 +110,7 @@ class TurnLeftWhenFacingAhead : public TurnMove {
 		void stop();
 
 	protected:
-		boolean isTheEndAngle(int angle)   { 
+		boolean isPastTheFinalAngle(int angle)   { 
 			return angle >= END_DIR;
 		}
 };
@@ -118,7 +122,7 @@ class TurnLeftWhenFacingBack : public TurnMove {
 		void stop();
 
 	protected:
-		boolean isTheEndAngle(int angle)   { 
+		boolean isPastTheFinalAngle(int angle)   { 
 			return angle >= END_DIR;
 		}
 };

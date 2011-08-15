@@ -1,50 +1,20 @@
 #include "PaperBotMove.h"
 #include "PaperBot.h"
 
-void StepAhead::perform()
+void StepAction::perform()
 {
 	if (bot->getThrustAngle() == DIR_0_INIT_THRUST_ANGLE) {
-		bot->setDirectionAndWait(INIT_DIR);
+		bot->setDirectionAndWait(dirToStartMovingFromFront);
 		bot->setThrustAndWait(DIR_180_INIT_THRUST_ANGLE);
 	}
 	else {
-		bot->setDirectionAndWait(END_DIR);
+		bot->setDirectionAndWait(dirToStartMovingFromBack);
 		bot->setThrustAndWait(DIR_0_INIT_THRUST_ANGLE);
 	}
 }
-
-void StepAhead::setup()
-{
-}
-
-void StepAhead::stop()
-{
-}
-
-void StepBack::perform()
-{
-	if (bot->getThrustAngle() == DIR_0_INIT_THRUST_ANGLE) {
-		bot->setDirectionAndWait(END_DIR);
-		bot->setThrustAndWait(DIR_180_INIT_THRUST_ANGLE);
-	}
-	else {
-		bot->setDirectionAndWait(INIT_DIR);
-		bot->setThrustAndWait(DIR_0_INIT_THRUST_ANGLE);
-	}
-}
-
-void StepBack::setup()
-{
-}
-
-void StepBack::stop()
-{
-}
-
-
 
 void TurnMove::perform() {
-	if (isTheEndAngle(bot->getDirectionAngle())) {
+	if (isPastTheFinalAngle(bot->getDirectionAngle())) {
 		bot->setThrustAndWait(angleToReinit);
 		setup();
 	}
