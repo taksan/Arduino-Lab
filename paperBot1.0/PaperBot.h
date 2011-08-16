@@ -11,13 +11,13 @@ class PaperBot
 public:
 	PaperBot(int thrustPort, int directionPort); 
 
-	void stepAhead();
+	void stepAhead(int intensity);
 
-	void stepBack();
+	void stepBack(int intensity);
 
-	void turnRight();
+	void turnRight(int intensity);
 
-	void turnLeft();
+	void turnLeft(int intensity);
 
 	void stop();
 

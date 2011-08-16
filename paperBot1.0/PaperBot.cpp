@@ -26,43 +26,43 @@ PaperBot::PaperBot(int thrustPort, int directionPort)
 	noMove = new NoMovement();
 }
 
-void PaperBot::stepAhead() {
+void PaperBot::stepAhead(int intensity) {
 	if (lastMove != movingAhead) {
 		move = stepAheadAction;
 		move->setup();
 	}
-	move->perform();
+	move->perform(intensity);
 	
 	lastMove = movingAhead;
 	facingDirection = ahead;
 }
 
-void PaperBot::stepBack() {
+void PaperBot::stepBack(int intensity) {
 	if (lastMove != movingBack) {
 		move = stepBackAction;
 		move->setup();
 	}
 
-	move->perform();
+	move->perform(intensity);
 
 	lastMove = movingBack;
 	facingDirection = back;
 }
 
-void PaperBot::turnRight() {
+void PaperBot::turnRight(int intensity) {
 	if (lastMove != turningRight) {
 		setupForRight();
 	}
-	move->perform();
+	move->perform(intensity);
 
 	lastMove = turningRight;
 }
 
-void PaperBot::turnLeft() {
+void PaperBot::turnLeft(int intensity) {
 	if (lastMove != turningLeft) {
 		setupForLeft();
 	}
-	move->perform();
+	move->perform(intensity);
 
 	lastMove = turningLeft;
 }

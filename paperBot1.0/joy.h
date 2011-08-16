@@ -1,8 +1,15 @@
+#ifndef JOY__H__
+#define JOY__H__
+
+#include "NunchuckInterface.h"
+
 class Joy {
 public:
-	Joy(){
-		nunchuck = new Nunchuck();
-		nunchuck->begin();
+	Joy(NunchuckInterface * nunchuck){
+		this->nunchuck = nunchuck;
+		this->nunchuck->begin();
+		baseX = this->nunchuck->readJoyX();
+		baseY = this->nunchuck->readJoyY();
 	}
 
 	void update() {
@@ -10,19 +17,30 @@ public:
 	}
 
 	boolean upJoy() {
-		return nunchuck->readJoyY() == 255;
+		int y = nunchuck->readJoyY();
+		int intensity = y - baseY;
+
+		return isRelevant(intensity);
 	}
 
 	boolean downJoy() {
-		return nunchuck->readJoyY() == 0;
+		int y = nunchuck->readJoyY();
+		int intensity = baseY - y;
+
+		return isRelevant(intensity);
 	}
 
 	boolean leftJoy() {
-		return nunchuck->readJoyX() == 0;
+		int x = nunchuck->readJoyX();
+		int intensity = baseX - x;
+
+		return isRelevant(intensity);
 	}
 
 	boolean rightJoy() {
-		return nunchuck->readJoyX() == 255;
+		int x = nunchuck->readJoyX();
+		int intensity = x - baseX;
+		return isRelevant(intensity);
 	}
 
 	boolean cPressed() {
@@ -34,6 +52,14 @@ public:
 	}
 
 private:
-	Nunchuck * nunchuck;
+	boolean isRelevant(int intensity) {
+		return intensity > 5;
+	}
+
+	NunchuckInterface * nunchuck;
+
+	int baseX;
+	int baseY;
 };
 
+#endif

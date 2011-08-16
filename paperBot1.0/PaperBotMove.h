@@ -3,19 +3,20 @@
 
 #include "Common.h"
 #define STEP_ANGLE 5
+#define INTENSITY_FACTOR(X) STEP_ANGLE * ((float)X/255)
 
 class PaperBot;
 
 class PaperBotMove {
 	public:
-		virtual void perform()=0;
+		virtual void perform(int intensity)=0;
 		virtual void setup()=0;
 		virtual void stop();
 };
 
 class NoMovement: public PaperBotMove {
 	public:
-		void perform() {}
+		void perform(int intensity) {}
 
 		void setup() {}
 
@@ -24,54 +25,54 @@ class NoMovement: public PaperBotMove {
 
 class StepAction: public PaperBotMove
 {
-public:
-	StepAction(PaperBot * aBot, int aDirToStartMovingFromFront, int aDirToStartMovingFromBack):
-		bot(aBot),
-		dirToStartMovingFromFront(aDirToStartMovingFromFront),
-		dirToStartMovingFromBack(aDirToStartMovingFromBack),
-		thrustStep(STEP_ANGLE),
-		direction(1)
-		{ }
+	public:
+		StepAction(PaperBot * aBot, int aDirToStartMovingFromFront, int aDirToStartMovingFromBack):
+			bot(aBot),
+			dirToStartMovingFromFront(aDirToStartMovingFromFront),
+			dirToStartMovingFromBack(aDirToStartMovingFromBack),
+			thrustStep(STEP_ANGLE),
+			direction(1)
+	{ }
 
-	void perform();
-		
-	void setup();
+		void perform(int intensity);
 
-	void stop(){};
+		void setup();
 
-	static const int initialThrustForStartFromFront = 40;
-	static const int initialThrustForStartFromBack  = 140;
+		void stop(){};
 
-private:
-	int getThrustStep(); 
-	void updateStepDirection();
+		static const int initialThrustForStartFromFront = 40;
+		static const int initialThrustForStartFromBack  = 140;
 
-	PaperBot * bot;
-	int dirToStartMovingFromFront;
-	int dirToStartMovingFromBack;
-	int thrustStep;
-	int direction;
+	private:
+		int getThrustStep(); 
+		void updateStepDirection();
+
+		PaperBot * bot;
+		int dirToStartMovingFromFront;
+		int dirToStartMovingFromBack;
+		int thrustStep;
+		int direction;
 
 };
 
 class StepAhead: public StepAction
 {	
-public:
-	StepAhead(PaperBot * aBot):
-		StepAction(aBot, 
-				   StepAction::initialThrustForStartFromFront, 
-				   StepAction::initialThrustForStartFromBack) 
-   { }
+	public:
+		StepAhead(PaperBot * aBot):
+			StepAction(aBot, 
+					StepAction::initialThrustForStartFromFront, 
+					StepAction::initialThrustForStartFromBack) 
+	{ }
 };
 
 class StepBack: public StepAction
 {	
-public:
-	StepBack(PaperBot * aBot):
-		StepAction(aBot, 
-				   StepAction::initialThrustForStartFromBack,
-				   StepAction::initialThrustForStartFromFront) 
-   { }
+	public:
+		StepBack(PaperBot * aBot):
+			StepAction(aBot, 
+					StepAction::initialThrustForStartFromBack,
+					StepAction::initialThrustForStartFromFront) 
+	{ }
 };
 
 
@@ -83,10 +84,10 @@ class TurnMove: public PaperBotMove {
 			directionToStartMoving(directionToStartMoving),
 			thrustToStartMoving(thrustToStartMoving),
 			angleIncrement(angleIncrement)
-		{ }
+	{ }
 
-		virtual void perform();
-		
+		virtual void perform(int intensity);
+
 		virtual void setup(); 
 
 	protected:

@@ -1,10 +1,12 @@
 #include "PaperBotMove.h"
 #include "PaperBot.h"
 
-void StepAction::perform()
+void StepAction::perform(int intensity)
 {
 	updateStepDirection();
-	bot->setThrustAndWait(bot->getThrustAngle()+getThrustStep());
+	int thrustStep = getThrustStep() * INTENSITY_FACTOR(intensity);
+	int thrustAngle = bot->getThrustAngle()+thrustStep;
+	bot->setThrustAndWait(thrustAngle);
 }
 
 void StepAction::setup()
@@ -18,7 +20,6 @@ void StepAction::setup()
 		bot->setDirectionAndWait(dirToStartMovingFromBack);
 	}
 }
-
 
 void StepAction::updateStepDirection()
 {
@@ -37,12 +38,14 @@ int StepAction::getThrustStep()
 	return thrustStep * direction;
 }
 
-void TurnMove::perform() {
+void TurnMove::perform(int intensity) {
 	if (isPastTheFinalAngle(bot->getDirectionAngle())) {
 		bot->setThrustAndWait(angleToReinit);
 		setup();
 	}
-	bot->setDirectionAndWait(bot->getDirectionAngle()+angleIncrement);
+	int angleStep = INTENSITY_FACTOR(intensity) * angleIncrement;
+	int directionAngle = bot->getDirectionAngle()+angleStep;
+	bot->setDirectionAndWait(directionAngle);
 }
 
 void TurnMove::setup() {

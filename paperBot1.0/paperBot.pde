@@ -4,6 +4,7 @@
 #include "joy.h"
 #include "WalkingGame.h"
 #include "MaintenanceGame.h"
+#include "NunchuckHw.h"
 
 Joy * joy;
 
@@ -20,7 +21,7 @@ void setup()
 	Serial.println("------");
 
 	PaperBot * bot = new PaperBot(9, 10);
-	joy = new Joy();
+	joy = new Joy(new NunchuckHw());
 	walking = new WalkingGame(bot,joy);
 	maintenance = new MaintenanceGame(bot,joy);
 	currentGame = walking;
