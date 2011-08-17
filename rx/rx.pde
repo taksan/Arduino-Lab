@@ -1,10 +1,5 @@
 #include "../NunchuckParams.h"
 #include <VirtualWire.h>  // you must download and install the VirtualWire.h to your hardware/libraries folder
-#undef int
-#undef abs
-#undef double
-#undef float
-#undef round
 
 #define RX_PIN 7
 

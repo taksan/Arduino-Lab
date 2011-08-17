@@ -5,6 +5,9 @@
 #include "WalkingGame.h"
 #include "MaintenanceGame.h"
 #include "NunchuckHw.h"
+//#include "NunchuckRx.h"
+
+#define NUNCHUCK_RX_PIN 7
 
 Joy * joy;
 
@@ -21,6 +24,7 @@ void setup()
 	Serial.println("------");
 
 	PaperBot * bot = new PaperBot(9, 10);
+//	joy = new Joy(new NunchuckRx(NUNCHUCK_RX_PIN));
 	joy = new Joy(new NunchuckHw());
 	walking = new WalkingGame(bot,joy);
 	maintenance = new MaintenanceGame(bot,joy);

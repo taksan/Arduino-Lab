@@ -3,7 +3,7 @@
 
 #include <WProgram.h>
 
-#define ABS(X) (X)<0?-(X):X
+#define ABS(X) ((X)<0?-(X):X)
 
 #define DIR_0_INIT_THRUST_ANGLE 10
 #define DIR_180_INIT_THRUST_ANGLE 170

@@ -12,10 +12,12 @@ void StepAction::perform(int intensity)
 void StepAction::setup()
 {
 	if (bot->getThrustAngle() < 90) {
+		Serial.println("SETUP < 90");
 		bot->setThrustAndWait(initialThrustForStartFromFront);
 		bot->setDirectionAndWait(dirToStartMovingFromFront);
 	}
 	else {
+		Serial.println("SETUP > 90");
 		bot->setThrustAndWait(initialThrustForStartFromBack);
 		bot->setDirectionAndWait(dirToStartMovingFromBack);
 	}
@@ -23,13 +25,14 @@ void StepAction::setup()
 
 void StepAction::updateStepDirection()
 {
-	if (bot->getThrustAngle() <= DIR_0_INIT_THRUST_ANGLE) {
+	if (bot->getThrustAngle() <= frontThrustTurningPoint) {
 		bot->setDirectionAndWait(dirToStartMovingFromFront);
 		direction=1;
 	}
-	if (bot->getThrustAngle() >= DIR_180_INIT_THRUST_ANGLE) {
+	if (bot->getThrustAngle() >= backThrustTurningPoint) {
 		bot->setDirectionAndWait(dirToStartMovingFromBack);
 		direction=-1;
+		bot->setThrust(170);
 	}
 }
 

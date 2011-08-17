@@ -3,7 +3,7 @@
 
 #include "Common.h"
 #define STEP_ANGLE 5
-#define INTENSITY_FACTOR(X) STEP_ANGLE * ((float)X/255)
+#define INTENSITY_FACTOR(X) STEP_ANGLE * ((float)X/127)
 
 class PaperBot;
 
@@ -40,9 +40,6 @@ class StepAction: public PaperBotMove
 
 		void stop(){};
 
-		static const int initialThrustForStartFromFront = 40;
-		static const int initialThrustForStartFromBack  = 140;
-
 	private:
 		int getThrustStep(); 
 		void updateStepDirection();
@@ -53,6 +50,10 @@ class StepAction: public PaperBotMove
 		int thrustStep;
 		int direction;
 
+		static const int initialThrustForStartFromFront = 40;
+		static const int initialThrustForStartFromBack  = 140;
+		static const int frontThrustTurningPoint = 25;
+		static const int backThrustTurningPoint = 155;
 };
 
 class StepAhead: public StepAction
@@ -60,8 +61,8 @@ class StepAhead: public StepAction
 	public:
 		StepAhead(PaperBot * aBot):
 			StepAction(aBot, 
-					StepAction::initialThrustForStartFromFront, 
-					StepAction::initialThrustForStartFromBack) 
+					INIT_DIR,
+					END_DIR)
 	{ }
 };
 
@@ -70,8 +71,8 @@ class StepBack: public StepAction
 	public:
 		StepBack(PaperBot * aBot):
 			StepAction(aBot, 
-					StepAction::initialThrustForStartFromBack,
-					StepAction::initialThrustForStartFromFront) 
+					END_DIR,
+					INIT_DIR)
 	{ }
 };
 

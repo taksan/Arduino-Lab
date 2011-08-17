@@ -2,45 +2,42 @@
 #define JOY__H__
 
 #include "NunchuckInterface.h"
+#include "../NunchuckParams.h"
 
 class Joy {
 public:
 	Joy(NunchuckInterface * nunchuck){
 		this->nunchuck = nunchuck;
 		this->nunchuck->begin();
+
 		baseX = this->nunchuck->readJoyX();
 		baseY = this->nunchuck->readJoyY();
 	}
 
+	long lastPrint;
 	void update() {
 		nunchuck->update();
+		
+		jY = nunchuck->readJoyY();
+		jX = nunchuck->readJoyX();
+
+		ensureOnlyASingleMovementIsConsidered();
 	}
 
 	boolean upJoy() {
-		int y = nunchuck->readJoyY();
-		int intensity = y - baseY;
-
-		return isRelevant(intensity);
+		return isRelevant(jY, baseY);
 	}
 
 	boolean downJoy() {
-		int y = nunchuck->readJoyY();
-		int intensity = baseY - y;
-
-		return isRelevant(intensity);
+		return isRelevant(baseY, jY);
 	}
 
 	boolean leftJoy() {
-		int x = nunchuck->readJoyX();
-		int intensity = baseX - x;
-
-		return isRelevant(intensity);
+		return isRelevant(baseX, jX);
 	}
 
 	boolean rightJoy() {
-		int x = nunchuck->readJoyX();
-		int intensity = x - baseX;
-		return isRelevant(intensity);
+		return isRelevant(jX, baseX);
 	}
 
 	boolean cPressed() {
@@ -52,14 +49,32 @@ public:
 	}
 
 private:
-	boolean isRelevant(int intensity) {
-		return intensity > 5;
+	void ensureOnlyASingleMovementIsConsidered() {
+		if (ABS(jY-baseY) > ABS(jX-baseX)) {
+			neutralizeXAxis();
+		}
+		else {
+			neutralizeYAxis();
+		}
+	}
+
+	inline void neutralizeXAxis() {
+		jX = baseX;
+	}
+	inline void neutralizeYAxis() {
+		jY = baseY;
+	}
+
+	inline boolean isRelevant(int op1, int op2) {
+		int intensity = op1-op2;
+		return intensity > 10;
 	}
 
 	NunchuckInterface * nunchuck;
 
 	int baseX;
 	int baseY;
+	int jX, jY;
 };
 
 #endif

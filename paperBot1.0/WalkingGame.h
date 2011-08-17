@@ -16,19 +16,19 @@ public:
 		boolean readMove = false;
 		if (joy->upJoy()) {
 			readMove = true;
-			bot->stepAhead(255);
+			bot->stepAhead(127);
 		}
 		if (joy->downJoy()) {
 			readMove = true;
-			bot->stepBack(255);
+			bot->stepBack(127);
 		}
 		if (joy->rightJoy()) {
 			readMove = true;
-			bot->turnRight(255);
+			bot->turnRight(127);
 		}
 		if (joy->leftJoy()) {
 			readMove = true;
-			bot->turnLeft(255);
+			bot->turnLeft(127);
 		}
 		if (!readMove) {
 			bot->stop();

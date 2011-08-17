@@ -146,6 +146,6 @@ void PaperBot::setupForLeft() {
 void PaperBot::waitBasedOnAngleOffset(int previousAngle, int newAngle)
 {
 	int angleOffset = ABS(previousAngle - newAngle);
-	long timeToWait = 500 * (angleOffset / (float)END_DIR);
+	long timeToWait = TIME_TO_DO_180 * (angleOffset / (float)END_DIR);
 	delay(timeToWait);
 }
