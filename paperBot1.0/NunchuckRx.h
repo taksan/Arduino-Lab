@@ -18,17 +18,12 @@ public:
 		vw_setup(boundRate);
 		vw_set_rx_pin(commPin);
 		vw_rx_start(); 
-		update();
+		updateAndEnsureReceivedData();
 	}
 
-	void update() {
-		if (vw_get_message(buf, &buflen)) // check to see if anything has been received
-		{   
-			NunchuckParams * p = (NunchuckParams*)buf;
-			if (buflen == sizeof(NunchuckParams)) {
-				printDebugInfo();
-			}
-		}
+	void update()
+	{
+		updateReturnTrueIfNewData();
 	}
 
 	int readJoyX() {
@@ -39,11 +34,17 @@ public:
 		return receivedParams->y;
 	}
 	boolean cPressed() {
-		return receivedParams->c;
+		boolean pressed = receivedParams->c;
+		receivedParams->c = false;
+
+		return pressed;
 	}
 
 	boolean zPressed() {
-		return receivedParams->z;
+		boolean pressed = receivedParams->z;
+		receivedParams->z = false;
+
+		return pressed;
 	}
 
 	int readAccelX() {
@@ -59,11 +60,27 @@ public:
 	}
 
 private:
+	boolean updateReturnTrueIfNewData() {
+		if (vw_get_message(buf, &buflen)) // check to see if anything has been received
+		{   
+			if (buflen == sizeof(NunchuckParams)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void updateAndEnsureReceivedData() {
+		while (!updateReturnTrueIfNewData()) {
+			delay(20);
+		}
+	}
+
 	void printDebugInfo()
 	{
 		char msg[80];
 		sprintf(msg, 
-				"x=%d y=%d c=%d z=%d ax=%d ay=%d az=%d",
+				"Rx data: x=%d y=%d c=%d z=%d ax=%d ay=%d az=%d",
 				receivedParams->x,
 				receivedParams->y,
 				receivedParams->c,

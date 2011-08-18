@@ -79,6 +79,8 @@ void PaperBot::stop()
 }
 
 void PaperBot::setDirection(int angle) {
+	if (directionAngle == angle) 
+		return;
 	directionAngle = angle;
 	directionMotor->write(angle);
 }

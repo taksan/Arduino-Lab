@@ -1,14 +1,14 @@
 #include "TxNunchuck.h"
 
-RFNunchuck * rfNunchuck;
+TxNunchuck * txNunchuck;
 void setup()
 {
 	Serial.begin(9600);
-	rfNunchuck = new RFNunchuck(3);
+	txNunchuck = new TxNunchuck(3);
 }
 
 void loop()
 {
-   rfNunchuck->update();
+   txNunchuck->update();
    delay(200);
 }

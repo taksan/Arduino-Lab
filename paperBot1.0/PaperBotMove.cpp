@@ -12,12 +12,10 @@ void StepAction::perform(int intensity)
 void StepAction::setup()
 {
 	if (bot->getThrustAngle() < 90) {
-		Serial.println("SETUP < 90");
 		bot->setThrustAndWait(initialThrustForStartFromFront);
 		bot->setDirectionAndWait(dirToStartMovingFromFront);
 	}
 	else {
-		Serial.println("SETUP > 90");
 		bot->setThrustAndWait(initialThrustForStartFromBack);
 		bot->setDirectionAndWait(dirToStartMovingFromBack);
 	}

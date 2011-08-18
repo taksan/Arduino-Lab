@@ -12,6 +12,7 @@ public:
 
 		baseX = this->nunchuck->readJoyX();
 		baseY = this->nunchuck->readJoyY();
+
 	}
 
 	long lastPrint;

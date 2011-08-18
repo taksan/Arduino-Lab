@@ -47,8 +47,8 @@ public:
 				nunchuck.readAccelZ()
 			   );
 
-		Serial.print("Sender : ");
-		Serial.println(nunchuckParams);
+//		Serial.print("Sender : ");
+//		Serial.println(nunchuckParams);
 	}
 private:
 	Nunchuck nunchuck;

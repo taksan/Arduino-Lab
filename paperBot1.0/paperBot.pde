@@ -4,8 +4,9 @@
 #include "joy.h"
 #include "WalkingGame.h"
 #include "MaintenanceGame.h"
-#include "NunchuckHw.h"
-//#include "NunchuckRx.h"
+#include "NunchuckRx.h"
+#include "LightFollow.h"
+#include "ArduinoApiImpl.h"
 
 #define NUNCHUCK_RX_PIN 7
 
@@ -17,6 +18,7 @@ BotGame * currentGame;
 
 Led maintenanceLed(13);
 boolean isInMaintenance = false;
+LightFollow * lightFollow;
 
 void setup()
 {
@@ -24,15 +26,29 @@ void setup()
 	Serial.println("------");
 
 	PaperBot * bot = new PaperBot(9, 10);
-//	joy = new Joy(new NunchuckRx(NUNCHUCK_RX_PIN));
-	joy = new Joy(new NunchuckHw());
+	joy = new Joy(new NunchuckRx(NUNCHUCK_RX_PIN));
 	walking = new WalkingGame(bot,joy);
 	maintenance = new MaintenanceGame(bot,joy);
 	currentGame = walking;
+	lightFollow = new LightFollow(2,1, new ArduinoApiImpl());
 }
 
 void loop()
 {
+	lightFollow->update();
+	if (lightFollow->wentLeft()) {
+		Serial.println("go left!");
+	}
+	else
+	if (lightFollow->wentRight()) {
+		Serial.println("go right!");
+	}
+	else {
+		Serial.println("go ahead");
+	}
+
+	delay(100);
+	return;
 	joy->update();
 	if (joy->zPressed()) {
 		isInMaintenance = !isInMaintenance;
