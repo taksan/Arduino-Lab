@@ -1,11 +1,11 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "LightFollowTest.h"
+#include "LightDirectionDetectorTest.h"
 
-CPPUNIT_TEST_SUITE_REGISTRATION( LightFollowTest );
+CPPUNIT_TEST_SUITE_REGISTRATION( LightDirectionDetectorTest );
 
-void LightFollowTest::updateWithRightStronger_wentRightShouldReturnTrue() 
+void LightDirectionDetectorTest::updateWithRightStronger_wentRightShouldReturnTrue() 
 {
 	mock->setNextAnalogValueToReturn(0, 80);
 	mock->setNextAnalogValueToReturn(1, 60);
@@ -15,7 +15,7 @@ void LightFollowTest::updateWithRightStronger_wentRightShouldReturnTrue()
 	CPPUNIT_ASSERT( subject->wentRight() );
 }
 
-void LightFollowTest::updateWithRightProportionallyStronger_wentRightShouldReturnTrue()
+void LightDirectionDetectorTest::updateWithRightProportionallyStronger_wentRightShouldReturnTrue()
 {
 	mock->setNextAnalogValueToReturn(0, 102);
 	mock->setNextAnalogValueToReturn(1, 60);
@@ -25,7 +25,7 @@ void LightFollowTest::updateWithRightProportionallyStronger_wentRightShouldRetur
 	CPPUNIT_ASSERT( subject->wentRight() );
 }
 
-void LightFollowTest::updateWithLeftStronger_wentLeftShouldReturnTrue() 
+void LightDirectionDetectorTest::updateWithLeftStronger_wentLeftShouldReturnTrue() 
 {
 	mock->setNextAnalogValueToReturn(0, 85);
 	mock->setNextAnalogValueToReturn(1, 40);
@@ -36,7 +36,7 @@ void LightFollowTest::updateWithLeftStronger_wentLeftShouldReturnTrue()
 
 }
 
-void LightFollowTest::updateWithLeftProportionallyStronger_wentLeftShouldReturnTrue()
+void LightDirectionDetectorTest::updateWithLeftProportionallyStronger_wentLeftShouldReturnTrue()
 {
 	mock->setNextAnalogValueToReturn(0, 122);
 	mock->setNextAnalogValueToReturn(1, 60);
@@ -47,7 +47,7 @@ void LightFollowTest::updateWithLeftProportionallyStronger_wentLeftShouldReturnT
 }
 
 
-void LightFollowTest::updateWithEqualStrenght_wentRightAndWentLeftShouldReturnFalse()
+void LightDirectionDetectorTest::updateWithEqualStrength_wentRightAndWentLeftShouldReturnFalse()
 {
 	mock->setNextAnalogValueToReturn(0, 80);
 	mock->setNextAnalogValueToReturn(1, 40);
@@ -58,7 +58,19 @@ void LightFollowTest::updateWithEqualStrenght_wentRightAndWentLeftShouldReturnFa
 	CPPUNIT_ASSERT( !subject->wentLeft() );
 }
 
-void LightFollowTest::setUp(void) 
+
+void LightDirectionDetectorTest::updateWithAlmostEqualStrength_wentRightAndWentLeftShouldReturnFalse()
+{
+	mock->setNextAnalogValueToReturn(0, 86);
+	mock->setNextAnalogValueToReturn(1, 41);
+
+	subject->update();
+
+	CPPUNIT_ASSERT( !subject->wentRight() );
+	CPPUNIT_ASSERT( !subject->wentLeft() );
+}
+
+void LightDirectionDetectorTest::setUp(void) 
 {
 	mock = new ArduinoMockApi(2);
 	mock->setNextAnalogValueToReturn(0, 80);
@@ -66,10 +78,10 @@ void LightFollowTest::setUp(void)
 
 	int leftPin  = 0;
 	int rightPin = 1;
-	subject = new LightFollow(leftPin,rightPin,mock);
+	subject = new LightDirectionDetector(leftPin,rightPin,mock);
 }
 
-void LightFollowTest::tearDown(void) 
+void LightDirectionDetectorTest::tearDown(void) 
 {
 	delete mock;
 }

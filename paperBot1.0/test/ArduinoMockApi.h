@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include "../ArduinoApi.h"
 
 class ArduinoMockApi : public ArduinoApi
@@ -17,6 +18,10 @@ public:
 
 	int _analogRead(int pin) {
 		return valuesToReturn[pin];
+	}
+
+	void _delay(int ms) {
+		usleep(ms * 1000);
 	}
 
 private:	

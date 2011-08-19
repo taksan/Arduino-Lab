@@ -1,15 +1,16 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "ArduinoMockApi.h"
-#include "../LightFollow.h"
+#include "../LightDirectionDetector.h"
 
-class LightFollowTest : public CppUnit::TestFixture {
-	CPPUNIT_TEST_SUITE( LightFollowTest );
+class LightDirectionDetectorTest : public CppUnit::TestFixture {
+	CPPUNIT_TEST_SUITE( LightDirectionDetectorTest );
 	CPPUNIT_TEST( updateWithRightStronger_wentRightShouldReturnTrue );
 	CPPUNIT_TEST( updateWithRightProportionallyStronger_wentRightShouldReturnTrue );
 	CPPUNIT_TEST( updateWithLeftStronger_wentLeftShouldReturnTrue );
 	CPPUNIT_TEST( updateWithLeftProportionallyStronger_wentLeftShouldReturnTrue );
-	CPPUNIT_TEST( updateWithEqualStrenght_wentRightAndWentLeftShouldReturnFalse );
+	CPPUNIT_TEST( updateWithEqualStrength_wentRightAndWentLeftShouldReturnFalse );
+	CPPUNIT_TEST( updateWithAlmostEqualStrength_wentRightAndWentLeftShouldReturnFalse );
 
 	CPPUNIT_TEST_SUITE_END();
 
@@ -21,10 +22,11 @@ public:
 	void updateWithRightProportionallyStronger_wentRightShouldReturnTrue();
 	void updateWithLeftStronger_wentLeftShouldReturnTrue();
 	void updateWithLeftProportionallyStronger_wentLeftShouldReturnTrue();
-	void updateWithEqualStrenght_wentRightAndWentLeftShouldReturnFalse();
+	void updateWithEqualStrength_wentRightAndWentLeftShouldReturnFalse();
+	void updateWithAlmostEqualStrength_wentRightAndWentLeftShouldReturnFalse();
 private:	
 	ArduinoMockApi * mock; 
-	LightFollow * subject;
+	LightDirectionDetector * subject;
 };
 
 

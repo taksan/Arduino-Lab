@@ -1,25 +1,28 @@
 #ifndef LIGHT_FOLLOW__H_
 #define LIGHT_FOLLOW__H_
 
+#include "SerialDebug.h"
+
 #include "ArduinoApi.h"
 
-class LightFollow {
+class LightDirectionDetector {
 public:
-	LightFollow(int leftEyePin, int rightEyePin, ArduinoApi * api)
+	LightDirectionDetector(int leftEyePin, int rightEyePin, ArduinoApi * api):
+		api(api),
+		leftEyePin(leftEyePin),
+		rightEyePin(rightEyePin)
 	{
-		this->leftEyePin = leftEyePin;
-		this->rightEyePin = rightEyePin;
-
-		this->baseLeftLevel = api->_analogRead(leftEyePin);
-		this->baseRightLevel = api->_analogRead(rightEyePin);
+		this->gaugeBase();
 
 		this->leftRightAdjust = (float)this->baseRightLevel / this->baseLeftLevel;
-		this->api = api;
 	}
 
 	void update() {
 		leftEyeLevel = api->_analogRead(leftEyePin);
 		rightEyeLevel = api->_analogRead(rightEyePin);
+
+		SerialDebug::println("Raw: leftEye: %d rightEye: %d", leftEyeLevel, rightEyeLevel);
+		SerialDebug::println("Intensity: leftEye: %d rightEye: %d", leftIntensity(), rightIntensity());
 	}
 
 	bool wentLeft() {
@@ -30,6 +33,12 @@ public:
 		return  (rightIntensity() > leftIntensity());
 	}
 
+	bool wentAhead() {
+	}
+
+	bool wentNowhere() {
+	}
+
 private:
 	int leftIntensity() {
 		return (leftEyeLevel - baseLeftLevel) * leftRightAdjust;
@@ -37,6 +46,11 @@ private:
 
 	int rightIntensity() {
 		return rightEyeLevel - baseRightLevel;
+	}
+
+	void gaugeBase() {
+		this->baseLeftLevel = api->_analogRead(leftEyePin);
+		this->baseRightLevel = api->_analogRead(rightEyePin);
 	}
 
 	int leftEyePin;

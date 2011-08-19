@@ -4,6 +4,7 @@
 class ArduinoApi {
 public:
 	virtual int _analogRead(int inputPin) = 0;
+	virtual void _delay(int ms) = 0;
 };
 
 #endif

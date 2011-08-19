@@ -5,7 +5,7 @@
 #include "Common.h"
 
 #include "PaperBotMove.h"
-#define TIME_TO_DO_180 500
+#define TIME_TO_DO_180 250
 
 #define Servo ServoTimer2
 
@@ -69,7 +69,6 @@ private:
 	Servo * directionMotor;
 	PaperBotMove * move;
 
-	TurnRightWhenFacingAhead * turnRightWhenFacingAhead;
 	TurnRightWhenFacingBack * turnRightWhenFacingBack;
 
 	TurnLeftWhenFacingAhead * turnLeftWhenFacingAhead;

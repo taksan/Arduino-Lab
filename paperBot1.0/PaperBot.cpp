@@ -17,7 +17,6 @@ PaperBot::PaperBot(int thrustPort, int directionPort)
 	stepAheadAction = new StepAhead(this);
 	stepBackAction  = new StepBack(this);
 
-	turnRightWhenFacingAhead = new TurnRightWhenFacingAhead(this);
 	turnRightWhenFacingBack = new TurnRightWhenFacingBack(this);;
 
 	turnLeftWhenFacingAhead = new TurnLeftWhenFacingAhead(this);
@@ -125,12 +124,7 @@ int PaperBot::getThrustAngle() {
 }
 
 void PaperBot::setupForRight() {
-	if (facingDirection == ahead) {
-		move = turnRightWhenFacingAhead;
-	}
-	else {
-		move = turnRightWhenFacingBack;
-	}
+	move = turnRightWhenFacingBack;
 	move->setup();
 }
 

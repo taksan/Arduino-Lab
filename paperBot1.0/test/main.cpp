@@ -1,4 +1,4 @@
-#include "LightFollowTest.h"
+#include "LightDirectionDetectorTest.h"
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TextTestRunner.h>

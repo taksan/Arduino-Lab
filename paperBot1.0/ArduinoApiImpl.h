@@ -9,6 +9,10 @@ public:
 	int _analogRead(int inputPin){
 		return analogRead(inputPin);
 	}
+
+	void _delay(int ms) {
+		delay(ms);
+	}
 };
 
 #endif
