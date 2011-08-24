@@ -24,32 +24,35 @@ void setup()
 {
 	Serial.begin(9600);
 	Serial.println("------o");
-
+#if 0
 	PaperBot * bot = new PaperBot(9, 10);
 	joy = new Joy(new NunchuckRx(NUNCHUCK_RX_PIN));
 	walking = new WalkingGame(bot,joy);
 	maintenance = new MaintenanceGame(bot,joy);
 	currentGame = walking;
-
-	lightFollow = new LightDirectionDetector(2,1, new ArduinoApiImpl());
+#endif
+	ArduinoApi * api = new ArduinoApiImpl();
+	lightFollow = new LightDirectionDetector(new Eye(api, 2),new Eye(api, 1));
 }
 
 void loop()
 {
 	lightFollow->update();
-	if (lightFollow->wentLeft()) {
+	LightDirectionDetector::Direction directionToGo = lightFollow->getDirectionToGo();
+	if (directionToGo == LightDirectionDetector::turnLeft) {
 		Serial.println("go left!");
 	}
-	else
-	if (lightFollow->wentRight()) {
+
+	if (directionToGo == LightDirectionDetector::turnRight) {
 		Serial.println("go right!");
 	}
-	else {
+
+	if (directionToGo == LightDirectionDetector::goAhead) {
 		Serial.println("go ahead");
 	}
 
-//	delay(500);
-//	return;
+	delay(500);
+	return;
 	joy->update();
 	if (joy->zPressed()) {
 		isInMaintenance = !isInMaintenance;

@@ -2,67 +2,81 @@
 #define LIGHT_FOLLOW__H_
 
 #include "SerialDebug.h"
-
 #include "ArduinoApi.h"
+#include "Eye.h"
 
 class LightDirectionDetector {
 public:
-	LightDirectionDetector(int leftEyePin, int rightEyePin, ArduinoApi * api):
-		api(api),
-		leftEyePin(leftEyePin),
-		rightEyePin(rightEyePin)
+	enum Direction {
+		goAhead,
+		turnLeft,
+		turnRight
+	};
+
+	LightDirectionDetector(Eye *leftEye, Eye *rightEye):
+		leftEye(leftEye),
+		rightEye(rightEye),
+		lastTakenDirection(turnRight)
 	{
 		this->gaugeBase();
+		leftEye->setAdjustFactorAgainst(rightEye->getLevel());
 
-		this->leftRightAdjust = (float)this->baseRightLevel / this->baseLeftLevel;
 	}
 
 	void update() {
-		leftEyeLevel = api->_analogRead(leftEyePin);
-		rightEyeLevel = api->_analogRead(rightEyePin);
+		leftEye->update();
+		rightEye->update();
 
-		SerialDebug::println("Raw: leftEye: %d rightEye: %d", leftEyeLevel, rightEyeLevel);
-		SerialDebug::println("Intensity: leftEye: %d rightEye: %d", leftIntensity(), rightIntensity());
+		SerialDebug::println("Raw: leftEye: %d rightEye: %d", leftEye->getLevel(), rightEye->getLevel());
+		SerialDebug::println("Intensity: leftEye: %d rightEye: %d", leftEye->getIntensity(), rightEye->getIntensity());
 	}
 
-	bool wentLeft() {
-		return  (leftIntensity() > rightIntensity());
-	}
+	Direction getDirectionToGo() {
+		if (leftEye->isStronglyInfluenced() && rightEye->isStronglyInfluenced()) {
+			return goAhead;
+		}
+		if (leftEye->isStronglyInfluenced() && rightEye->isWeaklyInfluenced()) {
+			return turnLeft;
+		}
+		if (rightEye->isStronglyInfluenced() && leftEye->isWeaklyInfluenced()) {
+			return turnRight;
+		}
 
-	bool wentRight() {
-		return  (rightIntensity() > leftIntensity());
-	}
-
-	bool wentAhead() {
-	}
-
-	bool wentNowhere() {
+		return determineDirectionOnWeakLevels();
 	}
 
 private:
-	int leftIntensity() {
-		return (leftEyeLevel - baseLeftLevel) * leftRightAdjust;
+	Direction determineDirectionOnWeakLevels() {
+		if (lightWentLeft()) {
+			return turnLeft;
+		}
+		if (lightWentRight()) {
+			return turnRight;
+		}
+		if (leftEye->isStrongerThan(rightEye)) {
+			return turnLeft;
+		}
+
+		return turnRight;
 	}
 
-	int rightIntensity() {
-		return rightEyeLevel - baseRightLevel;
+	bool lightWentLeft() {
+		return (leftEye->previousIntensityWasStrong());
 	}
+
+	bool lightWentRight() {
+		return (rightEye->previousIntensityWasStrong());
+	}
+
 
 	void gaugeBase() {
-		this->baseLeftLevel = api->_analogRead(leftEyePin);
-		this->baseRightLevel = api->_analogRead(rightEyePin);
+		leftEye->gaugeBase();
+		rightEye->gaugeBase();
 	}
 
-	int leftEyePin;
-	int rightEyePin;
-
-	int leftEyeLevel;
-	int rightEyeLevel;
-
-	int baseLeftLevel;
-	int baseRightLevel;
-	ArduinoApi * api;
-	float leftRightAdjust;
+	Eye * leftEye;
+	Eye * rightEye;
+	Direction lastTakenDirection;
 };
 
 #endif
