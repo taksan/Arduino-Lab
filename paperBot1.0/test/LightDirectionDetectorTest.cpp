@@ -6,7 +6,7 @@
 
 using namespace std;
 
-static const string directionNames[] = { "goAhead", "turnRight", "turnLeft" };
+static const string directionNames[] = { "goAhead", "turnLeft", "turnRight" };
 
 CPPUNIT_TEST_SUITE_REGISTRATION( LightDirectionDetectorTest );
 
@@ -71,6 +71,32 @@ void LightDirectionDetectorTest::updateWithBothWeak_FirstTime_shouldReturnRight(
 	assertDirection( LightDirectionDetector::turnRight );
 }
 
+void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasRight_shouldReturnRight()
+{
+	mock->setNextAnalogValueToReturn(0, 80 + strongLeftThreshold + 1);
+	mock->setNextAnalogValueToReturn(1, 40);
+	subject->update();
+
+	mock->setNextAnalogValueToReturn(0, 80);
+	mock->setNextAnalogValueToReturn(1, 40 + strongRightThreshold + 1);
+	subject->update();
+
+
+	assertDirection( LightDirectionDetector::turnRight );
+
+	mock->setNextAnalogValueToReturn(0, 80); 
+	mock->setNextAnalogValueToReturn(1, 40);
+	subject->update();
+
+	assertDirection( LightDirectionDetector::turnRight );
+
+	mock->setNextAnalogValueToReturn(0, 80); 
+	mock->setNextAnalogValueToReturn(1, 40);
+	subject->update();
+
+	assertDirection( LightDirectionDetector::turnRight );
+}
+
 void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasLeft_shouldReturnLeft()
 {
 	mock->setNextAnalogValueToReturn(0, 80 + strongLeftThreshold + 1);
@@ -89,6 +115,7 @@ void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasLeft_should
 
 	assertDirection( LightDirectionDetector::turnLeft );
 }
+
 
 void LightDirectionDetectorTest::updateWithBothEyeStrong_shouldReturnGoAhead()
 {
@@ -125,5 +152,5 @@ void LightDirectionDetectorTest::tearDown(void)
 void LightDirectionDetectorTest::assertDirection(LightDirectionDetector::Direction expectedDirection)
 {
 	LightDirectionDetector::Direction directionToGo = subject->getDirectionToGo();
-	CPPUNIT_ASSERT_EQUAL( directionNames[directionToGo], directionNames[expectedDirection] );
+	CPPUNIT_ASSERT_EQUAL( directionNames[expectedDirection], directionNames[directionToGo] );
 }

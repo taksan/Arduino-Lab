@@ -13,6 +13,7 @@ class LightDirectionDetectorTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST( updateWithBothEyeStrong_shouldReturnGoAhead );
 	CPPUNIT_TEST( updateWithBothWeak_FirstTime_shouldReturnRight );
 	CPPUNIT_TEST( updateWithBothWeak_PreviousStrongWasLeft_shouldReturnLeft );
+	CPPUNIT_TEST( updateWithBothWeak_PreviousStrongWasRight_shouldReturnRight );
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -28,6 +29,7 @@ public:
 
 	void updateWithBothWeak_FirstTime_shouldReturnRight();
 	void updateWithBothWeak_PreviousStrongWasLeft_shouldReturnLeft();
+	void updateWithBothWeak_PreviousStrongWasRight_shouldReturnRight();
 
 private:	
 	void assertDirection(LightDirectionDetector::Direction expectedDirection);

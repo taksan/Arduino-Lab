@@ -8,7 +8,7 @@
 class LightDirectionDetector {
 public:
 	enum Direction {
-		goAhead,
+		goAhead = 0,
 		turnLeft,
 		turnRight
 	};
@@ -26,6 +26,7 @@ public:
 	void update() {
 		leftEye->update();
 		rightEye->update();
+		lastTakenDirection = getDirectionToGo();
 
 		SerialDebug::println("Raw: leftEye: %d rightEye: %d", leftEye->getLevel(), rightEye->getLevel());
 		SerialDebug::println("Intensity: leftEye: %d rightEye: %d", leftEye->getIntensity(), rightEye->getIntensity());
@@ -57,7 +58,7 @@ private:
 			return turnLeft;
 		}
 
-		return turnRight;
+		return lastTakenDirection;
 	}
 
 	bool lightWentLeft() {
