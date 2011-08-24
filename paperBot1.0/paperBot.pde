@@ -1,9 +1,9 @@
-#include <Nunchuck.h>
 #include "PaperBot.h"
 #include "led.h"
 #include "joy.h"
 #include "WalkingGame.h"
 #include "MaintenanceGame.h"
+#include "FollowTheLightGame.h"
 #include "NunchuckRx.h"
 #include "LightDirectionDetector.h"
 #include "ArduinoApiImpl.h"
@@ -14,6 +14,7 @@ Joy * joy;
 
 WalkingGame * walking;
 MaintenanceGame * maintenance;
+FollowTheLightGame * followTheLightGame;
 BotGame * currentGame;
 
 Led maintenanceLed(13);
@@ -24,8 +25,8 @@ void setup()
 {
 	Serial.begin(9600);
 	Serial.println("------o");
-#if 0
 	PaperBot * bot = new PaperBot(9, 10);
+#if 0
 	joy = new Joy(new NunchuckRx(NUNCHUCK_RX_PIN));
 	walking = new WalkingGame(bot,joy);
 	maintenance = new MaintenanceGame(bot,joy);
@@ -33,25 +34,16 @@ void setup()
 #endif
 	ArduinoApi * api = new ArduinoApiImpl();
 	lightFollow = new LightDirectionDetector(new Eye(api, 2),new Eye(api, 1));
+
+	followTheLightGame = new FollowTheLightGame(bot, lightFollow);
+
+	currentGame = maintenance;
 }
 
 void loop()
 {
-	lightFollow->update();
-	LightDirectionDetector::Direction directionToGo = lightFollow->getDirectionToGo();
-	if (directionToGo == LightDirectionDetector::turnLeft) {
-		Serial.println("go left!");
-	}
+	currentGame->tick();
 
-	if (directionToGo == LightDirectionDetector::turnRight) {
-		Serial.println("go right!");
-	}
-
-	if (directionToGo == LightDirectionDetector::goAhead) {
-		Serial.println("go ahead");
-	}
-
-	delay(500);
 	return;
 	joy->update();
 	if (joy->zPressed()) {

@@ -32,7 +32,7 @@ public:
 	void updateWithBothWeak_PreviousStrongWasRight_shouldReturnRight();
 
 private:	
-	void assertDirection(LightDirectionDetector::Direction expectedDirection);
+	void assertDirection(Direction expectedDirection);
 
 
 	ArduinoMockApi * mock; 

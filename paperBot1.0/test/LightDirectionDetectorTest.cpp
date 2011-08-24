@@ -17,7 +17,7 @@ void LightDirectionDetectorTest::updateWithRightStronger_shouldReturnTurnRight()
 
 	subject->update();
 
-	assertDirection( LightDirectionDetector::turnRight);
+	assertDirection( dvTurnRight);
 }
 
 void LightDirectionDetectorTest::updateWithRightProportionallyStronger_shouldReturnTurnRight()
@@ -27,7 +27,7 @@ void LightDirectionDetectorTest::updateWithRightProportionallyStronger_shouldRet
 
 	subject->update();
 
-	assertDirection( LightDirectionDetector::turnRight);
+	assertDirection( dvTurnRight);
 }
 
 void LightDirectionDetectorTest::updateWithLeftStronger_shouldReturnTurnLeft() 
@@ -37,7 +37,7 @@ void LightDirectionDetectorTest::updateWithLeftStronger_shouldReturnTurnLeft()
 
 	subject->update();
 
-	assertDirection( LightDirectionDetector::turnLeft );
+	assertDirection( dvTurnLeft );
 }
 
 void LightDirectionDetectorTest::updateWithLeftProportionallyStronger_shouldReturnTurnLeft()
@@ -47,7 +47,7 @@ void LightDirectionDetectorTest::updateWithLeftProportionallyStronger_shouldRetu
 
 	subject->update();
 
-	assertDirection( LightDirectionDetector::turnLeft );
+	assertDirection( dvTurnLeft );
 }
 
 
@@ -58,7 +58,7 @@ void LightDirectionDetectorTest::updateWithWeakStrenghAndWeakPrevious_shouldRetu
 
 	subject->update();
 
-	assertDirection( LightDirectionDetector::turnRight );
+	assertDirection( dvTurnRight );
 }
 
 void LightDirectionDetectorTest::updateWithBothWeak_FirstTime_shouldReturnRight()
@@ -68,7 +68,7 @@ void LightDirectionDetectorTest::updateWithBothWeak_FirstTime_shouldReturnRight(
 
 	subject->update();
 
-	assertDirection( LightDirectionDetector::turnRight );
+	assertDirection( dvTurnRight );
 }
 
 void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasRight_shouldReturnRight()
@@ -82,19 +82,19 @@ void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasRight_shoul
 	subject->update();
 
 
-	assertDirection( LightDirectionDetector::turnRight );
+	assertDirection( dvTurnRight );
 
 	mock->setNextAnalogValueToReturn(0, 80); 
 	mock->setNextAnalogValueToReturn(1, 40);
 	subject->update();
 
-	assertDirection( LightDirectionDetector::turnRight );
+	assertDirection( dvTurnRight );
 
 	mock->setNextAnalogValueToReturn(0, 80); 
 	mock->setNextAnalogValueToReturn(1, 40);
 	subject->update();
 
-	assertDirection( LightDirectionDetector::turnRight );
+	assertDirection( dvTurnRight );
 }
 
 void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasLeft_shouldReturnLeft()
@@ -107,13 +107,13 @@ void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasLeft_should
 	mock->setNextAnalogValueToReturn(1, 40);
 	subject->update();
 
-	assertDirection( LightDirectionDetector::turnLeft );
+	assertDirection( dvTurnLeft );
 
 	mock->setNextAnalogValueToReturn(0, 80); 
 	mock->setNextAnalogValueToReturn(1, 40);
 	subject->update();
 
-	assertDirection( LightDirectionDetector::turnLeft );
+	assertDirection( dvTurnLeft );
 }
 
 
@@ -123,7 +123,7 @@ void LightDirectionDetectorTest::updateWithBothEyeStrong_shouldReturnGoAhead()
 	mock->setNextAnalogValueToReturn(1, 52);
 
 	subject->update();
-	assertDirection( LightDirectionDetector::goAhead );
+	assertDirection( dvGoAhead );
 }
 
 
@@ -149,8 +149,8 @@ void LightDirectionDetectorTest::tearDown(void)
 	delete mock;
 }
 
-void LightDirectionDetectorTest::assertDirection(LightDirectionDetector::Direction expectedDirection)
+void LightDirectionDetectorTest::assertDirection(Direction expectedDirection)
 {
-	LightDirectionDetector::Direction directionToGo = subject->getDirectionToGo();
+	Direction directionToGo = subject->getDirectionToGo();
 	CPPUNIT_ASSERT_EQUAL( directionNames[expectedDirection], directionNames[directionToGo] );
 }

@@ -4,19 +4,14 @@
 #include "SerialDebug.h"
 #include "ArduinoApi.h"
 #include "Eye.h"
+#include "AbstractLightDirectionDetector.h"
 
-class LightDirectionDetector {
+class LightDirectionDetector : public AbstractLightDirectionDetector {
 public:
-	enum Direction {
-		goAhead = 0,
-		turnLeft,
-		turnRight
-	};
-
 	LightDirectionDetector(Eye *leftEye, Eye *rightEye):
 		leftEye(leftEye),
 		rightEye(rightEye),
-		lastTakenDirection(turnRight)
+		lastTakenDirection(dvTurnRight)
 	{
 		this->gaugeBase();
 		leftEye->setAdjustFactorAgainst(rightEye->getLevel());
@@ -32,15 +27,16 @@ public:
 		SerialDebug::println("Intensity: leftEye: %d rightEye: %d", leftEye->getIntensity(), rightEye->getIntensity());
 	}
 
-	Direction getDirectionToGo() {
+	Direction getDirectionToGo() 
+	{
 		if (leftEye->isStronglyInfluenced() && rightEye->isStronglyInfluenced()) {
-			return goAhead;
+			return dvGoAhead;
 		}
 		if (leftEye->isStronglyInfluenced() && rightEye->isWeaklyInfluenced()) {
-			return turnLeft;
+			return dvTurnLeft;
 		}
 		if (rightEye->isStronglyInfluenced() && leftEye->isWeaklyInfluenced()) {
-			return turnRight;
+			return dvTurnRight;
 		}
 
 		return determineDirectionOnWeakLevels();
@@ -49,13 +45,13 @@ public:
 private:
 	Direction determineDirectionOnWeakLevels() {
 		if (lightWentLeft()) {
-			return turnLeft;
+			return dvTurnLeft;
 		}
 		if (lightWentRight()) {
-			return turnRight;
+			return dvTurnRight;
 		}
 		if (leftEye->isStrongerThan(rightEye)) {
-			return turnLeft;
+			return dvTurnLeft;
 		}
 
 		return lastTakenDirection;
