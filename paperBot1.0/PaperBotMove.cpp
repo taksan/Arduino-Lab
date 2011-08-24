@@ -75,3 +75,23 @@ void TurnLeftWhenFacingBack::stop() {
 	bot->setDirectionAndWait(INIT_DIR);
 }
 
+
+void NonBlockingMove::perform(int intensity) {
+	if (bot->isReady()) {
+		decorated->perform(intensity);
+	}
+}
+
+void NonBlockingMove::setup() {
+	if (bot->isReady()) {
+		decorated->setup();
+	}
+}
+
+void NonBlockingMove::stop()
+{
+	if (bot->isReady()) {
+		decorated->stop();
+	}
+}
+

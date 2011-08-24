@@ -16,13 +16,12 @@ PaperBot::PaperBot(int thrustPort, int directionPort)
 
 	stepAheadAction = new StepAhead(this);
 	stepBackAction  = new StepBack(this);
-
-	turnRightWhenFacingBack = new TurnRightWhenFacingBack(this);;
-
+	turnRightWhenFacingBack = new TurnRightWhenFacingBack(this);
 	turnLeftWhenFacingAhead = new TurnLeftWhenFacingAhead(this);
-	turnLeftWhenFacingBack = new TurnLeftWhenFacingBack(this);;
-
+	turnLeftWhenFacingBack = new TurnLeftWhenFacingBack(this);
 	noMove = new NoMovement();
+	
+	commandExpirationTime = millis();
 }
 
 void PaperBot::stepAhead(int intensity) {
@@ -143,5 +142,12 @@ void PaperBot::waitBasedOnAngleOffset(int previousAngle, int newAngle)
 {
 	int angleOffset = ABS(previousAngle - newAngle);
 	long timeToWait = TIME_TO_DO_180 * (angleOffset / (float)END_DIR);
+
+	commandExpirationTime = millis() + timeToWait;
 	delay(timeToWait);
+}
+
+bool PaperBot::isReady()
+{
+	return millis() > commandExpirationTime; 
 }

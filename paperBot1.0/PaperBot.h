@@ -5,7 +5,7 @@
 #include "Common.h"
 
 #include "PaperBotMove.h"
-#define TIME_TO_DO_180 250
+#define TIME_TO_DO_180 500
 
 #define Servo ServoTimer2
 
@@ -37,6 +37,8 @@ public:
 	int getDirectionAngle(); 
 
 	int getThrustAngle(); 
+
+	bool isReady();
 private:
 
 	void setupForRight(); 
@@ -69,14 +71,16 @@ private:
 	Servo * directionMotor;
 	PaperBotMove * move;
 
-	TurnRightWhenFacingBack * turnRightWhenFacingBack;
+	PaperBotMove * turnRightWhenFacingBack;
 
-	TurnLeftWhenFacingAhead * turnLeftWhenFacingAhead;
-	TurnLeftWhenFacingBack * turnLeftWhenFacingBack;
-	StepAhead * stepAheadAction;
-	StepBack  * stepBackAction;
+	PaperBotMove * turnLeftWhenFacingAhead;
+	PaperBotMove * turnLeftWhenFacingBack;
+	PaperBotMove * stepAheadAction;
+	PaperBotMove * stepBackAction;
 
-	NoMovement * noMove;
+	PaperBotMove * noMove;
+
+	long commandExpirationTime;
 };
 
 #endif

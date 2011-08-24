@@ -150,4 +150,20 @@ class TurnLeftWhenFacingBack : public TurnMove {
 		}
 };
 
+class NonBlockingMove: public PaperBotMove {
+public:
+	NonBlockingMove(PaperBot * bot, PaperBotMove * decorated) {
+		this->decorated = decorated;
+		this->bot = bot;
+	}
+	void perform(int intensity);
+	void setup();
+	void stop();
+
+private:
+	PaperBotMove * decorated;
+	PaperBot * bot;
+};
+
+
 #endif

@@ -64,6 +64,7 @@ private:
 		if (vw_get_message(buf, &buflen)) // check to see if anything has been received
 		{   
 			if (buflen == sizeof(NunchuckParams)) {
+				printDebugInfo();
 				return true;
 			}
 		}
