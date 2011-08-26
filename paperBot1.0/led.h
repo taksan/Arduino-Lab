@@ -3,7 +3,7 @@
 
 class Led {
 public:
-  Led(int16_t ledPin) {
+  Led(int8_t ledPin) {
     this->ledPin = ledPin;
     prepare();
   }
@@ -47,7 +47,7 @@ public:
   }
 
 private:
-  int16_t ledPin;
+  int8_t ledPin;
   bool ledOn;
 };
 

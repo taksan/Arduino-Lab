@@ -5,7 +5,7 @@
 
 class Eye {
 public:
-	Eye(ArduinoApi * api, int16_t pin):
+	Eye(ArduinoApi * api, int8_t pin):
 		api(api),
 		pin(pin),
 		adjustFactor(1),
@@ -18,7 +18,7 @@ public:
 		level = baseLevel;
 	}
 
-	void setAdjustFactorAgainst(int otherLevel)
+	void setAdjustFactorAgainst(int16_t otherLevel)
 	{
 		this->adjustFactor = (float)otherLevel / this->baseLevel;
 	}
@@ -40,12 +40,12 @@ public:
 		return previousIntensity > STRENGH_THRESHOLD;
 	}
 
-	int getIntensity() {
-		int levelOffset = level - baseLevel;
+	int16_t getIntensity() {
+		int16_t levelOffset = level - baseLevel;
 		return levelOffset * adjustFactor;
 	}
 
-	int getLevel() { 
+	int16_t getLevel() { 
 		return level;
 	}
 
@@ -54,10 +54,10 @@ public:
 	}
 
 private:
-	int16_t pin;
-	int level;
-	int previousIntensity;
-	int baseLevel;
+	int8_t pin;
+	int16_t level;
+	int16_t previousIntensity;
+	int16_t baseLevel;
 	float adjustFactor;
 
 	ArduinoApi * api;
