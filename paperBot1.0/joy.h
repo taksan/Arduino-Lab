@@ -24,11 +24,6 @@ public:
 			jX = nunchuck->readJoyX();
 		}
 
-		char msg[40];
-		sprintf(msg, "jx %d jy %d", jX, jY);
-		Serial.println(msg);
-		
-
 		ensureOnlyASingleMovementIsConsidered();
 	}
 

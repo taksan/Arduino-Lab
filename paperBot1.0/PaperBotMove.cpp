@@ -23,14 +23,15 @@ void StepAction::setup()
 
 void StepAction::updateStepDirection()
 {
-	if (bot->getThrustAngle() <= frontThrustTurningPoint) {
-		bot->setDirectionAndWait(dirToStartMovingFromFront);
-		direction=1;
-	}
+	char msg[40];
 	if (bot->getThrustAngle() >= backThrustTurningPoint) {
 		bot->setDirectionAndWait(dirToStartMovingFromBack);
 		direction=-1;
-		bot->setThrust(170);
+	}
+
+	if (bot->getThrustAngle() <= frontThrustTurningPoint) {
+		bot->setDirectionAndWait(dirToStartMovingFromFront);
+		direction=1;
 	}
 }
 

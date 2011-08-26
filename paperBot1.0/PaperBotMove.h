@@ -26,7 +26,7 @@ class NoMovement: public PaperBotMove {
 class StepAction: public PaperBotMove
 {
 	public:
-		StepAction(PaperBot * aBot, int16_t aDirToStartMovingFromFront, int8_t aDirToStartMovingFromBack):
+		StepAction(PaperBot * aBot, int16_t aDirToStartMovingFromFront, int16_t aDirToStartMovingFromBack):
 			bot(aBot),
 			dirToStartMovingFromFront(aDirToStartMovingFromFront),
 			dirToStartMovingFromBack(aDirToStartMovingFromBack),
@@ -53,7 +53,7 @@ class StepAction: public PaperBotMove
 		static const int16_t initialThrustForStartFromFront = 40;
 		static const int16_t initialThrustForStartFromBack  = 140;
 		static const int16_t frontThrustTurningPoint = 25;
-		static const int16_t backThrustTurningPoint = 170;
+		static const int16_t backThrustTurningPoint = 155;
 };
 
 class StepAhead: public StepAction
