@@ -14,13 +14,13 @@ class PaperBot
 public:
 	PaperBot(int16_t thrustPort, int8_t directionPort); 
 
-	void stepAhead(int intensity);
+	void stepAhead(int16_t intensity);
 
-	void stepBack(int intensity);
+	void stepBack(int16_t intensity);
 
-	void turnRight(int intensity);
+	void turnRight(int16_t intensity);
 
-	void turnLeft(int intensity);
+	void turnLeft(int16_t intensity);
 
 	void stop();
 
@@ -34,9 +34,9 @@ public:
 
 	void ensureMotorPosition();
 
-	int getDirectionAngle(); 
+	int16_t getDirectionAngle(); 
 
-	int getThrustAngle(); 
+	int16_t getThrustAngle(); 
 
 	bool isReady();
 private:
@@ -45,7 +45,7 @@ private:
 
 	void setupForLeft(); 
 
-	void waitBasedOnAngleOffset(int previousAngle, int newAngle);
+	void waitBasedOnAngleOffset(int16_t previousAngle, int16_t newAngle);
 
 	enum Direction {
 		ahead,

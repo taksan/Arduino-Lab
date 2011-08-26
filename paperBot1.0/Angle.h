@@ -19,11 +19,11 @@ public:
 			angle = 0;
 	}
 
-	int get() {
+	int16_t get() {
 		return angle;
 	}
 private:
-	int angle;
+	int16_t angle;
 };
 
 

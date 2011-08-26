@@ -24,7 +24,7 @@ PaperBot::PaperBot(int16_t thrustPort, int8_t directionPort)
 	commandExpirationTime = millis();
 }
 
-void PaperBot::stepAhead(int intensity) {
+void PaperBot::stepAhead(int16_t intensity) {
 	if (lastMove != movingAhead) {
 		move = stepAheadAction;
 		move->setup();
@@ -35,7 +35,7 @@ void PaperBot::stepAhead(int intensity) {
 	facingDirection = ahead;
 }
 
-void PaperBot::stepBack(int intensity) {
+void PaperBot::stepBack(int16_t intensity) {
 	if (lastMove != movingBack) {
 		move = stepBackAction;
 		move->setup();
@@ -47,7 +47,7 @@ void PaperBot::stepBack(int intensity) {
 	facingDirection = back;
 }
 
-void PaperBot::turnRight(int intensity) {
+void PaperBot::turnRight(int16_t intensity) {
 	if (lastMove != turningRight) {
 		setupForRight();
 	}
@@ -56,7 +56,7 @@ void PaperBot::turnRight(int intensity) {
 	lastMove = turningRight;
 }
 
-void PaperBot::turnLeft(int intensity) {
+void PaperBot::turnLeft(int16_t intensity) {
 	if (lastMove != turningLeft) {
 		setupForLeft();
 	}
@@ -114,11 +114,11 @@ void PaperBot::ensureMotorPosition() {
 	directionMotor->write(directionAngle);
 }
 
-int PaperBot::getDirectionAngle() {
+int16_t PaperBot::getDirectionAngle() {
 	return directionAngle;
 }
 
-int PaperBot::getThrustAngle() {
+int16_t PaperBot::getThrustAngle() {
 	return thrustAngle;
 }
 
@@ -138,10 +138,10 @@ void PaperBot::setupForLeft() {
 }
 
 
-void PaperBot::waitBasedOnAngleOffset(int previousAngle, int newAngle)
+void PaperBot::waitBasedOnAngleOffset(int16_t previousAngle, int16_t newAngle)
 {
 	int16_t angleOffset = ABS(previousAngle - newAngle);
-	long timeToWait = TIME_TO_DO_180 * (angleOffset / (float)END_DIR);
+	int32_t timeToWait = TIME_TO_DO_180 * (angleOffset / (float)END_DIR);
 
 	commandExpirationTime = millis() + timeToWait;
 	delay(timeToWait);

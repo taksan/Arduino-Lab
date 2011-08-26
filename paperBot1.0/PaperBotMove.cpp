@@ -1,7 +1,7 @@
 #include "PaperBotMove.h"
 #include "PaperBot.h"
 
-void StepAction::perform(int intensity)
+void StepAction::perform(int16_t intensity)
 {
 	updateStepDirection();
 	int16_t thrustStep = getThrustStep() * INTENSITY_FACTOR(intensity);
@@ -40,7 +40,7 @@ int16_t StepAction::getThrustStep()
 	return thrustStep * direction;
 }
 
-void TurnMove::perform(int intensity) {
+void TurnMove::perform(int16_t intensity) {
 	if (isPastTheFinalAngle(bot->getDirectionAngle())) {
 		bot->setThrustAndWait(angleToReinit);
 		setup();
@@ -77,7 +77,7 @@ void TurnLeftWhenFacingBack::stop() {
 }
 
 
-void NonBlockingMove::perform(int intensity) {
+void NonBlockingMove::perform(int16_t intensity) {
 	if (bot->isReady()) {
 		decorated->perform(intensity);
 	}

@@ -9,14 +9,14 @@ class PaperBot;
 
 class PaperBotMove {
 	public:
-		virtual void perform(int intensity)=0;
+		virtual void perform(int16_t intensity)=0;
 		virtual void setup()=0;
 		virtual void stop();
 };
 
 class NoMovement: public PaperBotMove {
 	public:
-		void perform(int intensity) {}
+		void perform(int16_t intensity) {}
 
 		void setup() {}
 
@@ -34,7 +34,7 @@ class StepAction: public PaperBotMove
 			direction(1)
 	{ }
 
-		void perform(int intensity);
+		void perform(int16_t intensity);
 
 		void setup();
 
@@ -79,7 +79,7 @@ class StepBack: public StepAction
 
 class TurnMove: public PaperBotMove {
 	public:
-		TurnMove(PaperBot * bot, int16_t angleToReinit, int directionToStartMoving, int thrustToStartMoving, int8_t angleIncrement):
+		TurnMove(PaperBot * bot, int16_t angleToReinit, int16_t directionToStartMoving, int16_t thrustToStartMoving, int8_t angleIncrement):
 			bot(bot),
 			angleToReinit(angleToReinit),
 			directionToStartMoving(directionToStartMoving),
@@ -87,7 +87,7 @@ class TurnMove: public PaperBotMove {
 			angleIncrement(angleIncrement)
 	{ }
 
-		virtual void perform(int intensity);
+		virtual void perform(int16_t intensity);
 
 		virtual void setup(); 
 
@@ -156,7 +156,7 @@ public:
 		this->decorated = decorated;
 		this->bot = bot;
 	}
-	void perform(int intensity);
+	void perform(int16_t intensity);
 	void setup();
 	void stop();
 
