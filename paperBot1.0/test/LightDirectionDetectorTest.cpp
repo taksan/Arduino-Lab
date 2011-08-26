@@ -4,16 +4,19 @@
 
 #include "LightDirectionDetectorTest.h"
 
+#define LEFT_EYE_PIN  0
+#define RIGHT_EYE_PIN 1
+
 using namespace std;
 
-static const string directionNames[] = { "goAhead", "turnLeft", "turnRight" };
+static const string directionNames[] = { "goNowhere", "goAhead", "turnLeft", "turnRight" };
 
 CPPUNIT_TEST_SUITE_REGISTRATION( LightDirectionDetectorTest );
 
 void LightDirectionDetectorTest::updateWithRightStronger_shouldReturnTurnRight() 
 {
-	mock->setNextAnalogValueToReturn(0, 80);
-	mock->setNextAnalogValueToReturn(1, 60);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 80);
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 60);
 
 	subject->update();
 
@@ -22,8 +25,8 @@ void LightDirectionDetectorTest::updateWithRightStronger_shouldReturnTurnRight()
 
 void LightDirectionDetectorTest::updateWithRightProportionallyStronger_shouldReturnTurnRight()
 {
-	mock->setNextAnalogValueToReturn(0, 80 + strongLeftThreshold );
-	mock->setNextAnalogValueToReturn(1, 40 + strongRightThreshold + 1);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 80 + strongLeftThreshold );
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 40 + strongRightThreshold + 1);
 
 	subject->update();
 
@@ -32,8 +35,8 @@ void LightDirectionDetectorTest::updateWithRightProportionallyStronger_shouldRet
 
 void LightDirectionDetectorTest::updateWithLeftStronger_shouldReturnTurnLeft() 
 {
-	mock->setNextAnalogValueToReturn(0, 80 + strongLeftThreshold - 1 );
-	mock->setNextAnalogValueToReturn(1, 40);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 80 + strongLeftThreshold - 1 );
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 40);
 
 	subject->update();
 
@@ -42,8 +45,8 @@ void LightDirectionDetectorTest::updateWithLeftStronger_shouldReturnTurnLeft()
 
 void LightDirectionDetectorTest::updateWithLeftProportionallyStronger_shouldReturnTurnLeft()
 {
-	mock->setNextAnalogValueToReturn(0, 90);
-	mock->setNextAnalogValueToReturn(1, 43);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 90);
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 43);
 
 	subject->update();
 
@@ -53,8 +56,8 @@ void LightDirectionDetectorTest::updateWithLeftProportionallyStronger_shouldRetu
 
 void LightDirectionDetectorTest::updateWithWeakStrenghAndWeakPrevious_shouldReturnTurnRight()
 {
-	mock->setNextAnalogValueToReturn(0, 80);
-	mock->setNextAnalogValueToReturn(1, 40);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 80);
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 40);
 
 	subject->update();
 
@@ -63,8 +66,8 @@ void LightDirectionDetectorTest::updateWithWeakStrenghAndWeakPrevious_shouldRetu
 
 void LightDirectionDetectorTest::updateWithBothWeak_FirstTime_shouldReturnRight()
 {
-	mock->setNextAnalogValueToReturn(0, 80);
-	mock->setNextAnalogValueToReturn(1, 39);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 80);
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 39);
 
 	subject->update();
 
@@ -73,25 +76,25 @@ void LightDirectionDetectorTest::updateWithBothWeak_FirstTime_shouldReturnRight(
 
 void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasRight_shouldReturnRight()
 {
-	mock->setNextAnalogValueToReturn(0, 80 + strongLeftThreshold + 1);
-	mock->setNextAnalogValueToReturn(1, 40);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 80 + strongLeftThreshold + 1);
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 40);
 	subject->update();
 
-	mock->setNextAnalogValueToReturn(0, 80);
-	mock->setNextAnalogValueToReturn(1, 40 + strongRightThreshold + 1);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 80);
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 40 + strongRightThreshold + 1);
 	subject->update();
 
 
 	assertDirection( dvTurnRight );
 
-	mock->setNextAnalogValueToReturn(0, 80); 
-	mock->setNextAnalogValueToReturn(1, 40);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 80); 
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 40);
 	subject->update();
 
 	assertDirection( dvTurnRight );
 
-	mock->setNextAnalogValueToReturn(0, 80); 
-	mock->setNextAnalogValueToReturn(1, 40);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 80); 
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 40);
 	subject->update();
 
 	assertDirection( dvTurnRight );
@@ -99,18 +102,18 @@ void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasRight_shoul
 
 void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasLeft_shouldReturnLeft()
 {
-	mock->setNextAnalogValueToReturn(0, 80 + strongLeftThreshold + 1);
-	mock->setNextAnalogValueToReturn(1, 40);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 80 + strongLeftThreshold + 1);
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 40);
 	subject->update();
 
-	mock->setNextAnalogValueToReturn(0, 80); 
-	mock->setNextAnalogValueToReturn(1, 40);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 80); 
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 40);
 	subject->update();
 
 	assertDirection( dvTurnLeft );
 
-	mock->setNextAnalogValueToReturn(0, 80); 
-	mock->setNextAnalogValueToReturn(1, 40);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 80); 
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 40);
 	subject->update();
 
 	assertDirection( dvTurnLeft );
@@ -119,8 +122,8 @@ void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasLeft_should
 
 void LightDirectionDetectorTest::updateWithBothEyeStrong_shouldReturnGoAhead()
 {
-	mock->setNextAnalogValueToReturn(0, 122);
-	mock->setNextAnalogValueToReturn(1, 52);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 122);
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 52);
 
 	subject->update();
 	assertDirection( dvGoAhead );
@@ -130,14 +133,14 @@ void LightDirectionDetectorTest::updateWithBothEyeStrong_shouldReturnGoAhead()
 void LightDirectionDetectorTest::setUp(void) 
 {
 	mock = new ArduinoMockApi(2);
-	mock->setNextAnalogValueToReturn(0, 80);
-	mock->setNextAnalogValueToReturn(1, 40);
+	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, 80);
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 40);
 
 	strongLeftThreshold = STRENGH_THRESHOLD * (80/40);
 	strongRightThreshold = STRENGH_THRESHOLD;
 
-	int leftPin  = 0;
-	int rightPin = 1;
+	int leftPin  = LEFT_EYE_PIN;
+	int rightPin = RIGHT_EYE_PIN;
 	Eye * left  = new Eye(mock, leftPin);
 	Eye * right = new Eye(mock, rightPin);
 	

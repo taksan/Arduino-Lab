@@ -1,6 +1,6 @@
 #include "PaperBot.h"
 
-PaperBot::PaperBot(int thrustPort, int directionPort) 
+PaperBot::PaperBot(int16_t thrustPort, int8_t directionPort) 
 {
 	thrustMotor = new Servo();
 	thrustMotor->attach(thrustPort);
@@ -16,9 +16,9 @@ PaperBot::PaperBot(int thrustPort, int directionPort)
 
 	stepAheadAction = new StepAhead(this);
 	stepBackAction  = new StepBack(this);
-	turnRightWhenFacingBack = new TurnRightWhenFacingBack(this);
-	turnLeftWhenFacingAhead = new TurnLeftWhenFacingAhead(this);
-	turnLeftWhenFacingBack = new TurnLeftWhenFacingBack(this);
+	turnRightWhenFacingBack = new NonBlockingMove(this, new TurnRightWhenFacingBack(this));
+	turnLeftWhenFacingAhead = new NonBlockingMove(this, new TurnLeftWhenFacingAhead(this));
+	turnLeftWhenFacingBack = new NonBlockingMove(this, new TurnLeftWhenFacingBack(this));
 	noMove = new NoMovement();
 	
 	commandExpirationTime = millis();
@@ -76,14 +76,14 @@ void PaperBot::stop()
 	lastMove = none;
 }
 
-void PaperBot::setDirection(int angle) {
+void PaperBot::setDirection(int16_t angle) {
 	if (directionAngle == angle) 
 		return;
 	directionAngle = angle;
 	directionMotor->write(angle);
 }
 
-void PaperBot::setThrustAndWait(int angle) {
+void PaperBot::setThrustAndWait(int16_t angle) {
 	if (angle == thrustAngle)
 		return;
 	int previousAngle = thrustAngle;
@@ -92,7 +92,7 @@ void PaperBot::setThrustAndWait(int angle) {
 	waitBasedOnAngleOffset(previousAngle, angle);
 }
 
-void PaperBot::setDirectionAndWait(int angle) {
+void PaperBot::setDirectionAndWait(int16_t angle) {
 	if (angle == directionAngle)
 		return;
 	int previousAngle = directionAngle;
@@ -102,7 +102,7 @@ void PaperBot::setDirectionAndWait(int angle) {
 	waitBasedOnAngleOffset(previousAngle, angle);
 }
 
-void PaperBot::setThrust(int angle) {
+void PaperBot::setThrust(int16_t angle) {
 	if (angle == thrustAngle)
 		return;
 	thrustAngle = angle;
@@ -140,7 +140,7 @@ void PaperBot::setupForLeft() {
 
 void PaperBot::waitBasedOnAngleOffset(int previousAngle, int newAngle)
 {
-	int angleOffset = ABS(previousAngle - newAngle);
+	int16_t angleOffset = ABS(previousAngle - newAngle);
 	long timeToWait = TIME_TO_DO_180 * (angleOffset / (float)END_DIR);
 
 	commandExpirationTime = millis() + timeToWait;

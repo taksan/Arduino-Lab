@@ -3,23 +3,22 @@
 #include "joy.h"
 #include "WalkingGame.h"
 #include "MaintenanceGame.h"
-//#include "FollowTheLightGame.h"
 #include "NunchuckRx.h"
-//#include "LightDirectionDetector.h"
-//#include "ArduinoApiImpl.h"
+#include "FollowTheLightGame.h"
+#include "LightDirectionDetector.h"
+#include "ArduinoApiImpl.h"
 
 #define NUNCHUCK_RX_PIN 7
+#define LEFT_LED_PIN 5
+#define RIGH_LED_PIN 6
 
-Joy * joy;
 
-WalkingGame * walking;
-MaintenanceGame * maintenance;
-//FollowTheLightGame * followTheLightGame;
-BotGame * currentGame;
+  Joy * joy;
+BotGame * games[3];
 
-Led maintenanceLed(13);
-boolean isInMaintenance = false;
-//LightDirectionDetector * lightFollow;
+Led gameLed(13);
+int8_t currentGameNumber;
+LightDirectionDetector * lightFollow;
 
 void setup()
 {
@@ -28,33 +27,38 @@ void setup()
 	PaperBot * bot = new PaperBot(9, 10);
 
 	joy = new Joy(new NunchuckRx(NUNCHUCK_RX_PIN));
-	walking = new WalkingGame(bot,joy);
-	maintenance = new MaintenanceGame(bot,joy);
-	currentGame = walking;
 
-//	ArduinoApi * api = new ArduinoApiImpl();
-//	lightFollow = new LightDirectionDetector(new Eye(api, 2),new Eye(api, 1));
+	games[0] = new WalkingGame(bot,joy);
+	games[1] = new MaintenanceGame(bot,joy);
 
-//	followTheLightGame = new FollowTheLightGame(bot, lightFollow);
+	ArduinoApi * api = new ArduinoApiImpl();
+	lightFollow = new LightDirectionDetector(new Eye(api, 2),new Eye(api, 1));
+	games[2] = new FollowTheLightGame(bot, lightFollow, LEFT_LED_PIN, RIGH_LED_PIN);
+
+	currentGameNumber = 0;
+}
+
+void updateGameLed() {
+	switch(currentGameNumber) {
+	case 0:
+		gameLed.turnOn();
+		break;
+	case 1:
+		gameLed.turnOff();
+		break;
+	case 2:
+		gameLed.blink(500);
+	}
 }
 
 void loop()
 {
 	joy->update();
 	if (joy->zPressed()) {
-		isInMaintenance = !isInMaintenance;
-		if (isInMaintenance) {
-			Serial.println("Switched to maintenance");
-			maintenanceLed.turnOn();
-			currentGame = maintenance;
-		}
-		else {	
-			Serial.println("Switched to walking mode");
-			maintenanceLed.turnOff();
-			currentGame = walking;
-		}
+		currentGameNumber = (currentGameNumber + 1) % 3;
 	}
-
-	currentGame->tick();
+	
+	updateGameLed();
+	games[currentGameNumber]->tick();
 }
 

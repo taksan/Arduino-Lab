@@ -4,8 +4,8 @@
 void StepAction::perform(int intensity)
 {
 	updateStepDirection();
-	int thrustStep = getThrustStep() * INTENSITY_FACTOR(intensity);
-	int thrustAngle = bot->getThrustAngle()+thrustStep;
+	int16_t thrustStep = getThrustStep() * INTENSITY_FACTOR(intensity);
+	int16_t thrustAngle = bot->getThrustAngle()+thrustStep;
 	bot->setThrustAndWait(thrustAngle);
 }
 
@@ -34,7 +34,7 @@ void StepAction::updateStepDirection()
 	}
 }
 
-int StepAction::getThrustStep()
+int16_t StepAction::getThrustStep()
 {
 	return thrustStep * direction;
 }
@@ -44,8 +44,8 @@ void TurnMove::perform(int intensity) {
 		bot->setThrustAndWait(angleToReinit);
 		setup();
 	}
-	int angleStep = INTENSITY_FACTOR(intensity) * angleIncrement;
-	int directionAngle = bot->getDirectionAngle()+angleStep;
+	int16_t angleStep = INTENSITY_FACTOR(intensity) * angleIncrement;
+	int16_t directionAngle = bot->getDirectionAngle()+angleStep;
 	bot->setDirectionAndWait(directionAngle);
 }
 

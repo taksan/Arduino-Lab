@@ -26,7 +26,7 @@ class NoMovement: public PaperBotMove {
 class StepAction: public PaperBotMove
 {
 	public:
-		StepAction(PaperBot * aBot, int aDirToStartMovingFromFront, int aDirToStartMovingFromBack):
+		StepAction(PaperBot * aBot, int16_t aDirToStartMovingFromFront, int8_t aDirToStartMovingFromBack):
 			bot(aBot),
 			dirToStartMovingFromFront(aDirToStartMovingFromFront),
 			dirToStartMovingFromBack(aDirToStartMovingFromBack),
@@ -41,19 +41,19 @@ class StepAction: public PaperBotMove
 		void stop(){};
 
 	private:
-		int getThrustStep(); 
+		int16_t getThrustStep(); 
 		void updateStepDirection();
 
 		PaperBot * bot;
-		int dirToStartMovingFromFront;
-		int dirToStartMovingFromBack;
-		int thrustStep;
-		int direction;
+		int16_t dirToStartMovingFromFront;
+		int16_t dirToStartMovingFromBack;
+		int16_t thrustStep;
+		int16_t direction;
 
-		static const int initialThrustForStartFromFront = 40;
-		static const int initialThrustForStartFromBack  = 140;
-		static const int frontThrustTurningPoint = 25;
-		static const int backThrustTurningPoint = 155;
+		static const int16_t initialThrustForStartFromFront = 40;
+		static const int16_t initialThrustForStartFromBack  = 140;
+		static const int16_t frontThrustTurningPoint = 25;
+		static const int16_t backThrustTurningPoint = 170;
 };
 
 class StepAhead: public StepAction
@@ -79,7 +79,7 @@ class StepBack: public StepAction
 
 class TurnMove: public PaperBotMove {
 	public:
-		TurnMove(PaperBot * bot, int angleToReinit, int directionToStartMoving, int thrustToStartMoving, int angleIncrement):
+		TurnMove(PaperBot * bot, int16_t angleToReinit, int directionToStartMoving, int thrustToStartMoving, int8_t angleIncrement):
 			bot(bot),
 			angleToReinit(angleToReinit),
 			directionToStartMoving(directionToStartMoving),
@@ -92,16 +92,16 @@ class TurnMove: public PaperBotMove {
 		virtual void setup(); 
 
 	protected:
-		virtual boolean isPastTheFinalAngle(int angle) {
+		virtual boolean isPastTheFinalAngle(int16_t angle) {
 			return false;
 		}
 	protected:	
 		PaperBot *bot;
 	private:	
-		int angleToReinit;
-		int	directionToStartMoving;
-		int	thrustToStartMoving;
-		int angleIncrement;
+		int16_t angleToReinit;
+		int16_t	directionToStartMoving;
+		int16_t	thrustToStartMoving;
+		int16_t angleIncrement;
 };
 
 class TurnRightWhenFacingAhead : public TurnMove {
@@ -110,7 +110,7 @@ class TurnRightWhenFacingAhead : public TurnMove {
 
 		void stop();
 	protected:
-		boolean isPastTheFinalAngle(int angle)   { 
+		boolean isPastTheFinalAngle(int16_t angle)   { 
 			return angle <= INIT_DIR;
 		}
 };
@@ -121,7 +121,7 @@ class TurnRightWhenFacingBack : public TurnMove {
 		void stop();
 
 	protected:
-		boolean isPastTheFinalAngle(int angle)   { 
+		boolean isPastTheFinalAngle(int16_t angle)   { 
 			return angle <= INIT_DIR;
 		}
 };
@@ -133,7 +133,7 @@ class TurnLeftWhenFacingAhead : public TurnMove {
 		void stop();
 
 	protected:
-		boolean isPastTheFinalAngle(int angle)   { 
+		boolean isPastTheFinalAngle(int16_t angle)   { 
 			return angle >= END_DIR;
 		}
 };
@@ -145,7 +145,7 @@ class TurnLeftWhenFacingBack : public TurnMove {
 		void stop();
 
 	protected:
-		boolean isPastTheFinalAngle(int angle)   { 
+		boolean isPastTheFinalAngle(int16_t angle)   { 
 			return angle >= END_DIR;
 		}
 };

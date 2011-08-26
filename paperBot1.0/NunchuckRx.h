@@ -21,9 +21,9 @@ public:
 		updateAndEnsureReceivedData();
 	}
 
-	void update()
+	bool update()
 	{
-		updateReturnTrueIfNewData();
+		return updateReturnTrueIfNewData();
 	}
 
 	int readJoyX() {

@@ -10,5 +10,4 @@ void setup()
 void loop()
 {
    txNunchuck->update();
-   delay(200);
 }

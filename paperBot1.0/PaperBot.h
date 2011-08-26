@@ -12,7 +12,7 @@
 class PaperBot
 {
 public:
-	PaperBot(int thrustPort, int directionPort); 
+	PaperBot(int16_t thrustPort, int8_t directionPort); 
 
 	void stepAhead(int intensity);
 
@@ -24,13 +24,13 @@ public:
 
 	void stop();
 
-	void setDirection(int angle); 
+	void setDirection(int16_t angle); 
 
-	void setThrustAndWait(int angle); 
+	void setThrustAndWait(int16_t angle); 
 
-	void setDirectionAndWait(int angle); 
+	void setDirectionAndWait(int16_t angle); 
 
-	void setThrust(int angle); 
+	void setThrust(int16_t angle); 
 
 	void ensureMotorPosition();
 
@@ -64,8 +64,8 @@ private:
 	Direction facingDirection;
 	MoveType lastMove;
 
-	int thrustAngle;
-	int directionAngle;
+	int16_t thrustAngle;
+	int16_t directionAngle;
 
 	Servo * thrustMotor;
 	Servo * directionMotor;
@@ -80,7 +80,7 @@ private:
 
 	PaperBotMove * noMove;
 
-	long commandExpirationTime;
+	int32_t commandExpirationTime;
 };
 
 #endif

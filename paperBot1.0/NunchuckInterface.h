@@ -4,7 +4,7 @@
 class NunchuckInterface {
 public:
 	virtual void begin() = 0;
-	virtual void update() = 0;
+	virtual bool update() = 0;
 	virtual int readJoyX() = 0;
 	virtual int readJoyY() = 0;
 	virtual boolean cPressed() = 0;

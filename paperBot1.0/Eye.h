@@ -5,7 +5,7 @@
 
 class Eye {
 public:
-	Eye(ArduinoApi * api, int pin):
+	Eye(ArduinoApi * api, int16_t pin):
 		api(api),
 		pin(pin),
 		adjustFactor(1),
@@ -54,7 +54,7 @@ public:
 	}
 
 private:
-	int pin;
+	int16_t pin;
 	int level;
 	int previousIntensity;
 	int baseLevel;

@@ -6,6 +6,8 @@
 #include "Eye.h"
 #include "AbstractLightDirectionDetector.h"
 
+#define CONFUSED_THRESHOLD 10
+
 class LightDirectionDetector : public AbstractLightDirectionDetector {
 public:
 	LightDirectionDetector(Eye *leftEye, Eye *rightEye):
@@ -15,7 +17,7 @@ public:
 	{
 		this->gaugeBase();
 		leftEye->setAdjustFactorAgainst(rightEye->getLevel());
-
+		weakTimes = 0;
 	}
 
 	void update() {
@@ -30,12 +32,15 @@ public:
 	Direction getDirectionToGo() 
 	{
 		if (leftEye->isStronglyInfluenced() && rightEye->isStronglyInfluenced()) {
+			weakTimes = 0;
 			return dvGoAhead;
 		}
 		if (leftEye->isStronglyInfluenced() && rightEye->isWeaklyInfluenced()) {
+			weakTimes = 0;
 			return dvTurnLeft;
 		}
 		if (rightEye->isStronglyInfluenced() && leftEye->isWeaklyInfluenced()) {
+			weakTimes = 0;
 			return dvTurnRight;
 		}
 
@@ -74,6 +79,7 @@ private:
 	Eye * leftEye;
 	Eye * rightEye;
 	Direction lastTakenDirection;
+	int16_t weakTimes;
 };
 
 #endif

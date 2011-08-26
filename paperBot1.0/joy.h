@@ -12,15 +12,22 @@ public:
 
 		baseX = this->nunchuck->readJoyX();
 		baseY = this->nunchuck->readJoyY();
-
+		jY = baseY;
+		jX = baseX;
+		loopsWithoutUpdate  = 0;
 	}
 
-	long lastPrint;
+	int loopsWithoutUpdate;
 	void update() {
-		nunchuck->update();
+		if (nunchuck->update()){
+			jY = nunchuck->readJoyY();
+			jX = nunchuck->readJoyX();
+		}
+
+		char msg[40];
+		sprintf(msg, "jx %d jy %d", jX, jY);
+		Serial.println(msg);
 		
-		jY = nunchuck->readJoyY();
-		jX = nunchuck->readJoyX();
 
 		ensureOnlyASingleMovementIsConsidered();
 	}

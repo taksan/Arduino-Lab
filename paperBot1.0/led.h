@@ -1,24 +1,30 @@
+#ifndef LED__H__
+#define LED__H__
+
 class Led {
 public:
-  Led(int ledPin) {
+  Led(int16_t ledPin) {
     this->ledPin = ledPin;
     prepare();
   }
   
   void prepare() {
     pinMode(ledPin,OUTPUT);
+	ledOnExpirationTime = millis();
   }
   
   void turnOn() {
      digitalWrite(ledPin, HIGH);
+	 ledOn = true;
   }
   
   void turnOff() {
     digitalWrite(ledPin, LOW);
+	ledOn = false;
   }
   
   long ledOnExpirationTime;
-  void turnOnAndHoldUntilExpired(int timeToHold) {
+  void turnOnAndHoldUntilExpired(int16_t timeToHold) {
     turnOn();
     ledOnExpirationTime = millis() + timeToHold;  
   }
@@ -29,7 +35,20 @@ public:
     turnOff();    
   }
 
+  void blink(int period) {
+  	if (millis() < ledOnExpirationTime) {
+		return;
+	}
+  	ledOnExpirationTime = millis() + period;
+	if (ledOn) 
+		turnOff();
+	else 
+  		turnOn();
+  }
+
 private:
-  int ledPin;
+  int16_t ledPin;
+  bool ledOn;
 };
 
+#endif

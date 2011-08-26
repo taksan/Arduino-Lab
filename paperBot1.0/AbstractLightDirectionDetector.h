@@ -3,7 +3,8 @@
 
 namespace DirectionValue {
 	enum Direction {
-		dvGoAhead = 0,
+		dvGoNowhere = 0,
+		dvGoAhead,
 		dvTurnLeft,
 		dvTurnRight
 	};

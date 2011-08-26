@@ -10,8 +10,9 @@ public:
 		mNunchuck.begin();
 	}
 
-	void update() {
+	bool update() {
 		mNunchuck.update();
+		return true;
 	}
 
 	int readJoyX() {
