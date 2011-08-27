@@ -50,6 +50,9 @@ void updateGameLed() {
 		gameLed.blink(500);
 	}
 }
+extern "C" {
+void vw_pll();
+}
 
 void loop()
 {

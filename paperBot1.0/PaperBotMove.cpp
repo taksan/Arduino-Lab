@@ -1,5 +1,6 @@
 #include "PaperBotMove.h"
 #include "PaperBot.h"
+#include "SerialDebug.h"
 
 void StepAction::perform(int16_t intensity)
 {
@@ -23,7 +24,6 @@ void StepAction::setup()
 
 void StepAction::updateStepDirection()
 {
-	char msg[40];
 	if (bot->getThrustAngle() >= backThrustTurningPoint) {
 		bot->setDirectionAndWait(dirToStartMovingFromBack);
 		direction=-1;

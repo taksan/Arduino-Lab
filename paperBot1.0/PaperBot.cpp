@@ -1,4 +1,5 @@
 #include "PaperBot.h"
+#include "SerialDebug.h"
 
 PaperBot::PaperBot(int16_t thrustPort, int8_t directionPort) 
 {
@@ -16,9 +17,9 @@ PaperBot::PaperBot(int16_t thrustPort, int8_t directionPort)
 
 	stepAheadAction = new StepAhead(this);
 	stepBackAction  = new StepBack(this);
-	turnRightWhenFacingBack = new NonBlockingMove(this, new TurnRightWhenFacingBack(this));
-	turnLeftWhenFacingAhead = new NonBlockingMove(this, new TurnLeftWhenFacingAhead(this));
-	turnLeftWhenFacingBack = new NonBlockingMove(this, new TurnLeftWhenFacingBack(this));
+	turnRightWhenFacingBack = new TurnRightWhenFacingBack(this);
+	turnLeftWhenFacingAhead = new TurnLeftWhenFacingAhead(this);
+	turnLeftWhenFacingBack = new TurnLeftWhenFacingBack(this);
 	noMove = new NoMovement();
 	
 	commandExpirationTime = millis();
