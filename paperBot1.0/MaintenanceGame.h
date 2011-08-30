@@ -43,7 +43,7 @@ public:
 
 		bot->setDirection(dirAngle.get());
 		bot->setThrust(thrustAngle.get());
-		delay(20);
+		delay(100);
 	}
 
 	void printParameters() {
