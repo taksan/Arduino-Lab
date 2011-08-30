@@ -1,13 +1,13 @@
 #ifndef PAPER_BOT_H__
 #define PAPER_BOT_H__
 #include <WProgram.h>
-#include <ServoTimer2.h>
+#include <Servo.h>
 #include "Common.h"
 
 #include "PaperBotMove.h"
 #define TIME_TO_DO_180 500
 
-#define Servo ServoTimer2
+#define Servo Servo
 
 class PaperBot
 {

@@ -11,13 +11,17 @@ void setup()
 
 	// Initialise the IO and ISR
 	vw_set_ptt_inverted(true);    // Required for RX Link Module
-	vw_setup(2000);                   // Bits per sec
+	vw_setup(4800);                   // Bits per sec
 	vw_set_rx_pin(RX_PIN);           // We will be receiving on pin 23 (Mega) ie the RX pin from the module connects to this pin.
 	vw_rx_start();                      // Start the receiver
 }
 
 void loop()
 {
+//	delay(1000);
+//	Serial.println(tcounter,DEC);
+//	return;
+
 	uint8_t buf[VW_MAX_MESSAGE_LEN];
 	uint8_t buflen = VW_MAX_MESSAGE_LEN;
 

@@ -50,10 +50,8 @@ void updateGameLed() {
 		gameLed.blink(500);
 	}
 }
-extern "C" {
-void vw_pll();
-}
 
+long nextstop = 0;
 void loop()
 {
 	joy->update();
@@ -63,5 +61,9 @@ void loop()
 	
 	updateGameLed();
 	games[currentGameNumber]->tick();
+	if (tcounter > nextstop) {
+		Serial.println(tcounter, DEC);
+		nextstop+=8000;
+	}
 }
 
