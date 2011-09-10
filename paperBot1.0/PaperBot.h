@@ -5,7 +5,7 @@
 #include "Common.h"
 
 #include "PaperBotMove.h"
-#define TIME_TO_DO_180 500
+#define TIME_TO_DO_180 200
 
 #define Servo ServoTimer2
 

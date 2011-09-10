@@ -9,7 +9,6 @@ public:
 	NunchuckRx(int commPin) {
 		this->commPin = commPin;
 		this->buflen = VW_MAX_MESSAGE_LEN;
-		this->receivedParams = (NunchuckParams*)buf;
 	}
 
 	void begin() {
@@ -27,37 +26,37 @@ public:
 	}
 
 	int readJoyX() {
-		return receivedParams->x;
+		return receivedParams.x;
 	}
 
 	int readJoyY() {
-		return receivedParams->y;
+		return receivedParams.y;
 	}
 
 	boolean cPressed() {
-		boolean pressed = receivedParams->c;
-		receivedParams->c = false;
+		boolean pressed = receivedParams.c;
+		receivedParams.c = false;
 
 		return pressed;
 	}
 
 	boolean zPressed() {
-		boolean pressed = receivedParams->z;
-		receivedParams->z = false;
+		boolean pressed = receivedParams.z;
+		receivedParams.z = false;
 
 		return pressed;
 	}
 
 	int readAccelX() {
-		return receivedParams->ax;
+		return receivedParams.ax;
 	}
 
 	int readAccelY() {
-		return receivedParams->ay;
+		return receivedParams.ay;
 	}
 
 	int readAccelZ() {
-		return receivedParams->az;
+		return receivedParams.az;
 	}
 
 private:
@@ -66,6 +65,7 @@ private:
 		{   
 			if (buflen == sizeof(NunchuckParams)) {
 				printDebugInfo();
+				memcpy(&receivedParams, buf, sizeof(receivedParams));
 				return true;
 			}
 			Serial.println("bogus data received");
@@ -84,19 +84,19 @@ private:
 		char msg[80];
 		sprintf(msg, 
 				"Rx data: x=%d y=%d c=%d z=%d ax=%d ay=%d az=%d",
-				receivedParams->x,
-				receivedParams->y,
-				receivedParams->c,
-				receivedParams->z,
-				receivedParams->ax,
-				receivedParams->ay,
-				receivedParams->az
+				receivedParams.x,
+				receivedParams.y,
+				receivedParams.c,
+				receivedParams.z,
+				receivedParams.ax,
+				receivedParams.ay,
+				receivedParams.az
 			   );
 		Serial.println(msg);
 	}
 
 	int commPin;
-	NunchuckParams * receivedParams;
+	NunchuckParams receivedParams;
 	uint8_t buf[VW_MAX_MESSAGE_LEN];
 	uint8_t buflen;
 };
