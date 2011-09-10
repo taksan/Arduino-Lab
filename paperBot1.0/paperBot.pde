@@ -24,7 +24,7 @@ void setup()
 {
 	Serial.begin(9600);
 	Serial.println("------o");
-	PaperBot * bot = new PaperBot(9, 10);
+	PaperBot * bot = new PaperBot(9,10);
 
 	joy = new Joy(new NunchuckRx(NUNCHUCK_RX_PIN));
 
@@ -51,7 +51,8 @@ void updateGameLed() {
 	}
 }
 
-long nextstop = 0;
+long prevCount=0;
+long before, now;
 void loop()
 {
 	joy->update();
@@ -61,9 +62,5 @@ void loop()
 	
 	updateGameLed();
 	games[currentGameNumber]->tick();
-	if (tcounter > nextstop) {
-		Serial.println(tcounter, DEC);
-		nextstop+=8000;
-	}
 }
 

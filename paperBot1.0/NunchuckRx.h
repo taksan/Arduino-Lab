@@ -33,6 +33,7 @@ public:
 	int readJoyY() {
 		return receivedParams->y;
 	}
+
 	boolean cPressed() {
 		boolean pressed = receivedParams->c;
 		receivedParams->c = false;
@@ -64,8 +65,10 @@ private:
 		if (vw_get_message(buf, &buflen)) // check to see if anything has been received
 		{   
 			if (buflen == sizeof(NunchuckParams)) {
+				printDebugInfo();
 				return true;
 			}
+			Serial.println("bogus data received");
 		}
 		return false;
 	}

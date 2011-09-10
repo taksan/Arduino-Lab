@@ -4,7 +4,7 @@ BOARD_TAG=mega
 #BOARD_TAG=atmega328
 ARDUINO_PORT=/dev/ttyUSB1
 AVRDUDE_CONF=$(ARDUINO_DIR)/hardware/tools/avrdude.conf
-ARDUINO_LIBS=BaseNew VirtualWire2 Nunchuck Wire twi
+ARDUINO_LIBS=BaseNew VirtualWire Nunchuck Wire twi
 
 
 TARGET=rfnunchuck

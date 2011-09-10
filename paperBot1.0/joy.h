@@ -3,7 +3,11 @@
 
 #include "NunchuckInterface.h"
 #include "../NunchuckParams.h"
+#include "SerialDebug.h"
 
+#define MAX_LOOPS_WITHOUT_UPDATE 10
+
+extern bool turnPointMet;
 class Joy {
 public:
 	Joy(NunchuckInterface * nunchuck){
@@ -12,6 +16,7 @@ public:
 
 		baseX = this->nunchuck->readJoyX();
 		baseY = this->nunchuck->readJoyY();
+		SerialDebug::println("bx %d by %d", baseX, baseY);
 		jY = baseY;
 		jX = baseX;
 		loopsWithoutUpdate  = 0;
@@ -19,10 +24,9 @@ public:
 
 	int loopsWithoutUpdate;
 	void update() {
-		if (nunchuck->update()){
-			jY = nunchuck->readJoyY();
-			jX = nunchuck->readJoyX();
-		}
+		nunchuck->update();
+		jY = nunchuck->readJoyY();
+		jX = nunchuck->readJoyX();
 
 		ensureOnlyASingleMovementIsConsidered();
 	}
@@ -61,6 +65,16 @@ private:
 		}
 	}
 
+	bool ensureDataIsReceivedIfUpdateShortageHappens() {
+		loopsWithoutUpdate++;
+		if (loopsWithoutUpdate > MAX_LOOPS_WITHOUT_UPDATE) {
+			while(!nunchuck->update()) delay(1);
+			loopsWithoutUpdate=0;
+			return true;
+		}
+		return false;
+	}
+
 	inline void neutralizeXAxis() {
 		jX = baseX;
 	}
@@ -70,7 +84,11 @@ private:
 
 	inline boolean isRelevant(int op1, int op2) {
 		int intensity = op1-op2;
-		return intensity > 10;
+		bool relevant = intensity > 10;
+		if (relevant) {
+			SerialDebug::println("op-new=%ld op-base=%ld", op1, op2);
+		}
+		return relevant;
 	}
 
 	NunchuckInterface * nunchuck;
