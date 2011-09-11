@@ -9,7 +9,8 @@ public:
 		api(api),
 		pin(pin),
 		adjustFactor(1),
-		previousIntensity(0)
+		previousWasStrong(false),
+		strenghThreshold(STRENGH_THRESHOLD)
 	{
 	}
 
@@ -24,12 +25,13 @@ public:
 	}
 
 	void update() {
-		previousIntensity = getIntensity();
+		previousWasStrong = isStronglyInfluenced();
+		updateStrenghThresold();
 		level = api->_analogRead(pin);
 	}
 
 	bool isStronglyInfluenced() {
-		return getIntensity() > STRENGH_THRESHOLD;
+		return getIntensity() > strenghThreshold;
 	}
 
 	bool isWeaklyInfluenced() {
@@ -37,7 +39,7 @@ public:
 	}
 
 	bool previousIntensityWasStrong() {
-		return previousIntensity > STRENGH_THRESHOLD;
+		return previousWasStrong;
 	}
 
 	int16_t getIntensity() {
@@ -50,17 +52,34 @@ public:
 	}
 
 	bool isStrongerThan(Eye * anotherEye) {
-		return (this->getIntensity() - STRENGH_THRESHOLD/2) > anotherEye->getIntensity();
+		return (this->getIntensity() - strenghThreshold/2) > anotherEye->getIntensity();
 	}
 
 private:
 	int8_t pin;
 	int16_t level;
-	int16_t previousIntensity;
 	int16_t baseLevel;
 	float adjustFactor;
+	bool previousWasStrong;
+	int strenghThreshold;
 
 	ArduinoApi * api;
+
+	void updateStrenghThresold() {
+		if (isStronglyInfluenced()) {
+			int16_t newThreshold = getIntensity() - 3;
+			if (newThreshold > strenghThreshold) {
+				strenghThreshold = newThreshold;
+				SerialDebug::println("Updating threshold to %d", newThreshold);
+			}
+		}
+		else {
+			if (strenghThreshold > STRENGH_THRESHOLD*2) {
+				strenghThreshold--;
+			}
+		}
+	}
 };
+
 
 #endif

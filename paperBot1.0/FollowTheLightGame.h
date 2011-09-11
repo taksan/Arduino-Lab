@@ -7,6 +7,8 @@
 
 #include "AbstractLightDirectionDetector.h"
 
+#define SPEED 127
+
 class FollowTheLightGame : public BotGame {
 public:
 	FollowTheLightGame(PaperBot * bot, AbstractLightDirectionDetector * lightDirection, int16_t leftLedPin, int8_t rightLedPin):
@@ -28,17 +30,17 @@ public:
 		}
 		previous = directionToGo;
 		if (directionToGo == dvTurnLeft) {
-			bot->turnLeft(127);
+			bot->turnLeft(SPEED);
 			leftLed.turnOn();
 		}
 
 		if (directionToGo == dvTurnRight) {
-			bot->turnRight(127);
+			bot->turnRight(SPEED);
 			rightLed.turnOn();
 		}
 
 		if (directionToGo == dvGoAhead) {
-			bot->stepAhead(127);
+			bot->stepAhead(SPEED);
 			rightLed.turnOn();
 			leftLed.turnOn();
 		}

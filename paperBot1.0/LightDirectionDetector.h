@@ -6,8 +6,6 @@
 #include "Eye.h"
 #include "AbstractLightDirectionDetector.h"
 
-#define CONFUSED_THRESHOLD 10
-
 class LightDirectionDetector : public AbstractLightDirectionDetector {
 public:
 	LightDirectionDetector(Eye *leftEye, Eye *rightEye):
@@ -17,36 +15,34 @@ public:
 	{
 		this->gaugeBase();
 		leftEye->setAdjustFactorAgainst(rightEye->getLevel());
-		weakTimes = 0;
 	}
 
 	void update() {
 		leftEye->update();
 		rightEye->update();
 		lastTakenDirection = getDirectionToGo();
-
-		SerialDebug::println("Raw: leftEye: %d rightEye: %d", leftEye->getLevel(), rightEye->getLevel());
-		SerialDebug::println("Intensity: leftEye: %d rightEye: %d", leftEye->getIntensity(), rightEye->getIntensity());
 	}
 
 	Direction getDirectionToGo() 
 	{
 		if (leftEye->isStronglyInfluenced() && rightEye->isStronglyInfluenced()) {
-			weakTimes = 0;
 			return dvGoAhead;
 		}
 		if (leftEye->isStronglyInfluenced() && rightEye->isWeaklyInfluenced()) {
-			weakTimes = 0;
 			return dvTurnLeft;
 		}
 		if (rightEye->isStronglyInfluenced() && leftEye->isWeaklyInfluenced()) {
-			weakTimes = 0;
 			return dvTurnRight;
 		}
 
 		return determineDirectionOnWeakLevels();
 	}
 
+	void printDebugInfo() {
+		SerialDebug::println("Raw: leftEye: %d rightEye: %d", leftEye->getLevel(), rightEye->getLevel());
+		SerialDebug::println("Intensity: leftEye: %d rightEye: %d", leftEye->getIntensity(), rightEye->getIntensity());
+		SerialDebug::println("Direction to go : %d", lastTakenDirection);
+	}
 private:
 	Direction determineDirectionOnWeakLevels() {
 		if (lightWentLeft()) {
@@ -79,7 +75,6 @@ private:
 	Eye * leftEye;
 	Eye * rightEye;
 	Direction lastTakenDirection;
-	int16_t weakTimes;
 };
 
 #endif
