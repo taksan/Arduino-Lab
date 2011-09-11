@@ -7,7 +7,7 @@
 
 #include "AbstractLightDirectionDetector.h"
 
-#define SPEED 127
+#define SPEED 25
 
 class FollowTheLightGame : public BotGame {
 public:
@@ -44,6 +44,7 @@ public:
 			rightLed.turnOn();
 			leftLed.turnOn();
 		}
+		delay(20);
 	}
 private:
 	PaperBot * bot;

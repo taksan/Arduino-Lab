@@ -13,7 +13,7 @@
 #define RIGH_LED_PIN 6
 
 
-  Joy * joy;
+Joy * joy;
 BotGame * games[3];
 
 Led gameLed(13);
@@ -27,6 +27,8 @@ void setup()
 	PaperBot * bot = new PaperBot(9,10);
 
 	joy = new Joy(new NunchuckRx(NUNCHUCK_RX_PIN));
+
+	Serial.println("joy started");
 
 	games[0] = new WalkingGame(bot,joy);
 	games[1] = new MaintenanceGame(bot,joy);
