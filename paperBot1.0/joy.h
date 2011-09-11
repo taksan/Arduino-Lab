@@ -5,9 +5,6 @@
 #include "../NunchuckParams.h"
 #include "SerialDebug.h"
 
-#define MAX_LOOPS_WITHOUT_UPDATE 10
-
-extern bool turnPointMet;
 class Joy {
 public:
 	Joy(NunchuckInterface * nunchuck){
@@ -19,16 +16,18 @@ public:
 		SerialDebug::println("bx %d by %d", baseX, baseY);
 		jY = baseY;
 		jX = baseX;
-		loopsWithoutUpdate  = 0;
 	}
 
-	int loopsWithoutUpdate;
 	void update() {
 		nunchuck->update();
 		jY = nunchuck->readJoyY();
 		jX = nunchuck->readJoyX();
 
 		ensureOnlyASingleMovementIsConsidered();
+	}
+
+	int16_t getLastMoveIntensity() {
+		return lastMoveIntensity;
 	}
 
 	boolean upJoy() {
@@ -65,16 +64,6 @@ private:
 		}
 	}
 
-	bool ensureDataIsReceivedIfUpdateShortageHappens() {
-		loopsWithoutUpdate++;
-		if (loopsWithoutUpdate > MAX_LOOPS_WITHOUT_UPDATE) {
-			while(!nunchuck->update()) delay(1);
-			loopsWithoutUpdate=0;
-			return true;
-		}
-		return false;
-	}
-
 	inline void neutralizeXAxis() {
 		jX = baseX;
 	}
@@ -83,19 +72,19 @@ private:
 	}
 
 	inline boolean isRelevant(int op1, int op2) {
-		int intensity = op1-op2;
+		int16_t intensity = op1-op2;
 		bool relevant = intensity > 10;
-		if (relevant) {
-			SerialDebug::println("op-new=%ld op-base=%ld", op1, op2);
-		}
+		if (relevant)
+			lastMoveIntensity = intensity;
 		return relevant;
 	}
 
 	NunchuckInterface * nunchuck;
 
-	int baseX;
-	int baseY;
-	int jX, jY;
+	int16_t baseX;
+	int16_t baseY;
+	int16_t jX, jY;
+	int16_t lastMoveIntensity;
 };
 
 #endif
