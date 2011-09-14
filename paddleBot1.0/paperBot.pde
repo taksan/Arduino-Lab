@@ -2,7 +2,6 @@
 #include "led.h"
 #include "joy.h"
 #include "WalkingGame.h"
-#include "MaintenanceGame.h"
 #include "NunchuckRx.h"
 #include "FollowTheLightGame.h"
 #include "LightDirectionDetector.h"
@@ -12,9 +11,10 @@
 #define LEFT_LED_PIN 5
 #define RIGH_LED_PIN 6
 
+#define GAME_COUNT 2
 
 Joy * joy;
-BotGame * games[3];
+BotGame * games[GAME_COUNT];
 
 Led gameLed(13);
 int8_t currentGameNumber;
@@ -31,11 +31,10 @@ void setup()
 	Serial.println("joy started");
 
 	games[0] = new WalkingGame(bot,joy);
-	games[1] = new MaintenanceGame(bot,joy);
 
 	ArduinoApi * api = new ArduinoApiImpl();
 	lightFollow = new LightDirectionDetector(new Eye(api, 2),new Eye(api, 1));
-	games[2] = new FollowTheLightGame(bot, lightFollow, LEFT_LED_PIN, RIGH_LED_PIN);
+	games[1] = new FollowTheLightGame(bot, lightFollow, LEFT_LED_PIN, RIGH_LED_PIN);
 
 	currentGameNumber = 0;
 }
@@ -48,8 +47,6 @@ void updateGameLed() {
 	case 1:
 		gameLed.turnOff();
 		break;
-	case 2:
-		gameLed.blink(500);
 	}
 }
 
@@ -59,10 +56,9 @@ void loop()
 {
 	joy->update();
 	if (joy->zPressed()) {
-		currentGameNumber = (currentGameNumber + 1) % 3;
+		currentGameNumber = (currentGameNumber + 1) % GAME_COUNT;
 	}
 	
 	updateGameLed();
 	games[currentGameNumber]->tick();
 }
-

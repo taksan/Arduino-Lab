@@ -69,7 +69,7 @@ private:
 		if (isStronglyInfluenced()) {
 			int16_t newThreshold = getIntensity() - 3;
 			if (newThreshold > strenghThreshold) {
-				strenghThreshold = newThreshold;
+				strenghThreshold++;
 				SerialDebug::println("Updating threshold to %d", newThreshold);
 			}
 		}

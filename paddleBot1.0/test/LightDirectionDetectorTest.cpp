@@ -53,6 +53,8 @@ void LightDirectionDetectorTest::updateWithLeftProportionallyStronger_shouldRetu
 	subject->update();
 
 	assertDirection( dvTurnLeft );
+
+	CPPUNIT_ASSERT_EQUAL( 100,  subject->getAccuracy() );
 }
 
 
@@ -64,16 +66,21 @@ void LightDirectionDetectorTest::updateWithWeakStrenghAndWeakPrevious_shouldRetu
 	subject->update();
 
 	assertDirection( dvTurnRight );
+
+	CPPUNIT_ASSERT_EQUAL( 10,  subject->getAccuracy() );
 }
 
 void LightDirectionDetectorTest::updateWithBothWeak_FirstTime_shouldReturnRight()
 {
 	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, INITIAL_LEFT_LEVEL);
-	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, 39);
+	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, INITIAL_RIGHT_LEVEL-1);
 
 	subject->update();
 
 	assertDirection( dvTurnRight );
+
+
+	CPPUNIT_ASSERT_EQUAL( 10,  subject->getAccuracy() );
 }
 
 void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasRight_shouldReturnRight()
@@ -95,11 +102,15 @@ void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasRight_shoul
 
 	assertDirection( dvTurnRight );
 
+	CPPUNIT_ASSERT_EQUAL( 50,  subject->getAccuracy() );
+
 	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, INITIAL_LEFT_LEVEL); 
 	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, INITIAL_RIGHT_LEVEL);
 	subject->update();
 
 	assertDirection( dvTurnRight );
+
+	CPPUNIT_ASSERT_EQUAL( 40,  subject->getAccuracy() );
 }
 
 void LightDirectionDetectorTest::updateWithBothWeak_PreviousStrongWasLeft_shouldReturnLeft()
@@ -135,11 +146,15 @@ void LightDirectionDetectorTest::updateWithLeftStrong_ShouldRaiseStrongThreshold
 	assertDirection( dvTurnLeft );
 
 
+	CPPUNIT_ASSERT_EQUAL( 50,  subject->getAccuracy() );
+
 	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, INITIAL_LEFT_LEVEL); 
 	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, INITIAL_RIGHT_LEVEL + strongRightThreshold + 1);
 	subject->update();
 
 	assertDirection( dvTurnLeft );
+
+	CPPUNIT_ASSERT_EQUAL( 40,  subject->getAccuracy() );
 
 	mock->setNextAnalogValueToReturn(LEFT_EYE_PIN, INITIAL_LEFT_LEVEL); 
 	mock->setNextAnalogValueToReturn(RIGHT_EYE_PIN, INITIAL_RIGHT_LEVEL + strongRightThreshold + 3);
@@ -147,6 +162,7 @@ void LightDirectionDetectorTest::updateWithLeftStrong_ShouldRaiseStrongThreshold
 
 	assertDirection( dvTurnRight );
 
+	CPPUNIT_ASSERT_EQUAL( 100,  subject->getAccuracy() );
 }
 
 
