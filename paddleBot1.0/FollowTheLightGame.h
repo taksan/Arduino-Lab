@@ -7,7 +7,7 @@
 
 #include "AbstractLightDirectionDetector.h"
 
-#define SPEED 25
+#define MAX_INTENSITY 127
 
 class FollowTheLightGame : public BotGame {
 public:
@@ -22,6 +22,9 @@ public:
 
 	virtual void tick()
 	{
+		if (!isReady())
+			return;
+
 		lightDirection->update();
 		Direction directionToGo = lightDirection->getDirectionToGo();
 		if (directionToGo != previous) {
@@ -29,22 +32,28 @@ public:
 			rightLed.turnOff();
 		}
 		previous = directionToGo;
+		int acc = lightDirection->getAccuracy();
+		float accuracy = lightDirection->getAccuracy()/100.0;
+		int16_t intensity = MAX_INTENSITY * accuracy;
+		if (intensity < 25)
+			intensity = 25;
+		
 		if (directionToGo == dvTurnLeft) {
-			bot->turnLeft(SPEED);
+			bot->turnLeft(intensity);
 			leftLed.turnOn();
 		}
 
 		if (directionToGo == dvTurnRight) {
-			bot->turnRight(SPEED);
+			bot->turnRight(intensity);
 			rightLed.turnOn();
 		}
 
 		if (directionToGo == dvGoAhead) {
-			bot->stepAhead(SPEED);
+			bot->stepAhead(intensity);
 			rightLed.turnOn();
 			leftLed.turnOn();
 		}
-		delay(20);
+		setWaitProportionalToGivenIntensity(intensity);
 	}
 private:
 	PaperBot * bot;

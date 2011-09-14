@@ -40,11 +40,7 @@ public:
 			bot->stop();
 		}
 		else {
-			int16_t timeToWait = (127-ABS(lastMoveIntensity))*2;
-			if (timeToWait < 20) {
-				timeToWait = 20;
-			}
-			setTimeToWaitUntilNextReady(timeToWait);
+			setWaitProportionalToGivenIntensity(lastMoveIntensity);
 		}
 	}
 private:
