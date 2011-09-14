@@ -11,7 +11,8 @@ public:
 	LightDirectionDetector(Eye *leftEye, Eye *rightEye):
 		leftEye(leftEye),
 		rightEye(rightEye),
-		lastTakenDirection(dvTurnRight)
+		lastTakenDirection(dvTurnRight),
+		accuracy(0)
 	{
 		this->gaugeBase();
 		leftEye->setAdjustFactorAgainst(rightEye->getLevel());
@@ -25,6 +26,8 @@ public:
 
 	Direction getDirectionToGo() 
 	{
+		int previousAccuracy = accuracy;
+		accuracy = 100;
 		if (leftEye->isStronglyInfluenced() && rightEye->isStronglyInfluenced()) {
 			return dvGoAhead;
 		}
@@ -34,7 +37,7 @@ public:
 		if (rightEye->isStronglyInfluenced() && leftEye->isWeaklyInfluenced()) {
 			return dvTurnRight;
 		}
-
+		accuracy = previousAccuracy;
 		return determineDirectionOnWeakLevels();
 	}
 
@@ -43,14 +46,27 @@ public:
 		SerialDebug::println("Intensity: leftEye: %d rightEye: %d", leftEye->getIntensity(), rightEye->getIntensity());
 		SerialDebug::println("Direction to go : %d", lastTakenDirection);
 	}
+
+	int getAccuracy() {
+		return accuracy;
+	}
 private:
 	Direction determineDirectionOnWeakLevels() {
+		int previousAccuracy = accuracy;
+
+		accuracy = 50;
 		if (lightWentLeft()) {
 			return dvTurnLeft;
 		}
 		if (lightWentRight()) {
 			return dvTurnRight;
 		}
+
+		if (previousAccuracy <= 20)
+			accuracy = 10;
+		else
+			accuracy -= 10;
+
 		if (leftEye->isStrongerThan(rightEye)) {
 			return dvTurnLeft;
 		}
@@ -75,6 +91,8 @@ private:
 	Eye * leftEye;
 	Eye * rightEye;
 	Direction lastTakenDirection;
+
+	int accuracy;
 };
 
 #endif
