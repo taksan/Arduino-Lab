@@ -6,13 +6,16 @@
 #include "Eye.h"
 #include "AbstractLightDirectionDetector.h"
 
+#define MAX_TIMES_AHEAD_WITHOUT_ACTUAL_AHEAD 10
+
 class LightDirectionDetector : public AbstractLightDirectionDetector {
 public:
 	LightDirectionDetector(Eye *leftEye, Eye *rightEye):
 		leftEye(leftEye),
 		rightEye(rightEye),
 		lastTakenDirection(dvTurnRight),
-		accuracy(0)
+		accuracy(0),
+		aheadStubbornCount(0)
 	{
 		this->gaugeBase();
 		leftEye->setAdjustFactorAgainst(rightEye->getLevel());
@@ -29,14 +32,28 @@ public:
 		int previousAccuracy = accuracy;
 		accuracy = 100;
 		if (leftEye->isStronglyInfluenced() && rightEye->isStronglyInfluenced()) {
+			aheadStubbornCount = 0;
 			return dvGoAhead;
 		}
+
 		if (leftEye->isStronglyInfluenced() && rightEye->isWeaklyInfluenced()) {
-			return dvTurnLeft;
+			lastStrongMove = dvTurnLeft;
 		}
+
 		if (rightEye->isStronglyInfluenced() && leftEye->isWeaklyInfluenced()) {
-			return dvTurnRight;
+			lastStrongMove = dvTurnRight;
 		}
+
+		if (isPreferToGoAhead()) {
+			accuracy = 80;
+			return dvGoAhead;
+		}
+
+		if (lastTakenDirection == dvGoAhead) {
+			return lastStrongMove;
+		}
+
+
 		accuracy = previousAccuracy;
 		return determineDirectionOnWeakLevels();
 	}
@@ -47,14 +64,14 @@ public:
 		SerialDebug::println("Direction to go : %d", lastTakenDirection);
 	}
 
-	int getAccuracy() {
+	int getIntensity() {
 		return accuracy;
 	}
 private:
 	Direction determineDirectionOnWeakLevels() {
 		int previousAccuracy = accuracy;
 
-		accuracy = 50;
+		accuracy = 80;
 		if (lightWentLeft()) {
 			return dvTurnLeft;
 		}
@@ -62,10 +79,10 @@ private:
 			return dvTurnRight;
 		}
 
-		if (previousAccuracy <= 20)
-			accuracy = 10;
+		if (previousAccuracy <= 25)
+			accuracy = 20;
 		else
-			accuracy -= 10;
+			accuracy -= 5;
 
 		if (leftEye->isStrongerThan(rightEye)) {
 			return dvTurnLeft;
@@ -88,11 +105,26 @@ private:
 		rightEye->gaugeBase();
 	}
 
+	bool isPreferToGoAhead() {
+		if (lastTakenDirection != dvGoAhead) {
+			aheadStubbornCount = 0;
+			return false;
+		}
+
+		if (aheadStubbornCount > MAX_TIMES_AHEAD_WITHOUT_ACTUAL_AHEAD)
+			return false;
+
+		aheadStubbornCount++;
+		return true;
+	}
+
 	Eye * leftEye;
 	Eye * rightEye;
 	Direction lastTakenDirection;
+	Direction lastStrongMove;
 
 	int accuracy;
+	int8_t aheadStubbornCount;
 };
 
 #endif

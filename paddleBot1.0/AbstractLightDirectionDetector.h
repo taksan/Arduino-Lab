@@ -17,7 +17,7 @@ public:
 
 	virtual void update() = 0;
 	virtual Direction getDirectionToGo() = 0;
-	virtual int getAccuracy() = 0;
+	virtual int getIntensity() = 0;
 };
 
 

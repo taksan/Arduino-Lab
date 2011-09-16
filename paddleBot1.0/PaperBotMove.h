@@ -11,6 +11,7 @@ class PaperBotMove {
 	public:
 		virtual void perform(int16_t intensity)=0;
 		virtual void setup()=0;
+		virtual bool isStable() { return true; }
 		virtual void stop();
 };
 
@@ -31,7 +32,8 @@ class StepAction: public PaperBotMove
 			dirToStartMovingFromFront(aDirToStartMovingFromFront),
 			dirToStartMovingFromBack(aDirToStartMovingFromBack),
 			thrustStep(STEP_ANGLE),
-			direction(1)
+			direction(1),
+			stable(false)
 	{ }
 
 		void perform(int16_t intensity);
@@ -39,6 +41,9 @@ class StepAction: public PaperBotMove
 		void setup();
 
 		void stop(){};
+
+		bool isStable() { return stable; }
+
 
 	private:
 		int16_t getThrustStep(); 
@@ -49,6 +54,7 @@ class StepAction: public PaperBotMove
 		int16_t dirToStartMovingFromBack;
 		int16_t thrustStep;
 		int16_t direction;
+		bool stable;
 
 		static const int16_t initialThrustForStartFromFront = 40;
 		static const int16_t initialThrustForStartFromBack  = 140;
@@ -64,6 +70,7 @@ class StepAhead: public StepAction
 					INIT_DIR,
 					END_DIR)
 	{ }
+
 };
 
 class StepBack: public StepAction

@@ -12,12 +12,8 @@ public:
 		this->joy = joy;
 	}
 
-	virtual void tick()
+	virtual void doTick()
 	{
-		if (!isReady()) {
-			return;
-		}
-
 		boolean readMove = false;
 		int16_t lastMoveIntensity = joy->getLastMoveIntensity();
 		if (joy->upJoy()) {

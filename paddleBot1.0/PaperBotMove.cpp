@@ -21,20 +21,20 @@ void StepAction::setup()
 		bot->setDirectionAndWait(dirToStartMovingFromBack);
 	}
 }
-extern bool turnPointMet=false;
 
 void StepAction::updateStepDirection()
 {
+	stable = false;
 	if (bot->getThrustAngle() >= backThrustTurningPoint) {
 		bot->setDirectionAndWait(dirToStartMovingFromBack);
 		direction=-1;
-		turnPointMet = true;
+		stable = true;
 	}
 
 	if (bot->getThrustAngle() <= frontThrustTurningPoint) {
 		bot->setDirectionAndWait(dirToStartMovingFromFront);
 		direction=1;
-		turnPointMet = true;
+		stable = true;
 	}
 }
 
@@ -47,7 +47,6 @@ void TurnMove::perform(int16_t intensity) {
 	if (isPastTheFinalAngle(bot->getDirectionAngle())) {
 		bot->setThrustAndWait(angleToReinit);
 		setup();
-		turnPointMet = true;
 	}
 	int16_t angleStep = INTENSITY_FACTOR(intensity) * angleIncrement;
 	int16_t directionAngle = bot->getDirectionAngle()+angleStep;

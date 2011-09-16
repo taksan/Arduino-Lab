@@ -39,6 +39,8 @@ public:
 	int16_t getThrustAngle(); 
 
 	bool isReady();
+
+	bool isStable();
 private:
 
 	void setupForRight(); 
@@ -81,6 +83,8 @@ private:
 	PaperBotMove * noMove;
 
 	int32_t commandExpirationTime;
+
+	bool stable;
 };
 
 #endif

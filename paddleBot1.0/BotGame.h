@@ -3,8 +3,15 @@
 
 class BotGame {
 public:
-	virtual void tick() = 0;
+	virtual void doTick() = 0;
 	BotGame():nextReadyTime(0){}
+
+	void tick()
+	{
+		if (!isReady())
+			return;
+		doTick();
+	}
 
 protected:
 	bool isReady() {

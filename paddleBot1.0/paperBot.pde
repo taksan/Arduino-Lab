@@ -36,7 +36,7 @@ void setup()
 	lightFollow = new LightDirectionDetector(new Eye(api, 2),new Eye(api, 1));
 	games[1] = new FollowTheLightGame(bot, lightFollow, LEFT_LED_PIN, RIGH_LED_PIN);
 
-	currentGameNumber = 0;
+	currentGameNumber = 1;
 }
 
 void updateGameLed() {

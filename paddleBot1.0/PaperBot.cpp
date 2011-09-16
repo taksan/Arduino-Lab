@@ -152,3 +152,7 @@ bool PaperBot::isReady()
 {
 	return millis() > commandExpirationTime; 
 }
+
+bool PaperBot::isStable() {
+	return move->isStable();
+}
