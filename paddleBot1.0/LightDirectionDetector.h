@@ -6,7 +6,7 @@
 #include "Eye.h"
 #include "AbstractLightDirectionDetector.h"
 
-#define MAX_TIMES_AHEAD_WITHOUT_ACTUAL_AHEAD 10
+#define STUBBORN_AHEAD_TIMES 3
 
 class LightDirectionDetector : public AbstractLightDirectionDetector {
 public:
@@ -29,6 +29,7 @@ public:
 
 	Direction getDirectionToGo() 
 	{
+		bool hasStrong = false;
 		int previousAccuracy = accuracy;
 		accuracy = 100;
 		if (leftEye->isStronglyInfluenced() && rightEye->isStronglyInfluenced()) {
@@ -38,10 +39,12 @@ public:
 
 		if (leftEye->isStronglyInfluenced() && rightEye->isWeaklyInfluenced()) {
 			lastStrongMove = dvTurnLeft;
+			hasStrong = true;
 		}
 
 		if (rightEye->isStronglyInfluenced() && leftEye->isWeaklyInfluenced()) {
 			lastStrongMove = dvTurnRight;
+			hasStrong = true;
 		}
 
 		if (isPreferToGoAhead()) {
@@ -50,6 +53,10 @@ public:
 		}
 
 		if (lastTakenDirection == dvGoAhead) {
+			return lastStrongMove;
+		}
+
+		if (hasStrong) {
 			return lastStrongMove;
 		}
 
@@ -111,7 +118,7 @@ private:
 			return false;
 		}
 
-		if (aheadStubbornCount > MAX_TIMES_AHEAD_WITHOUT_ACTUAL_AHEAD)
+		if (aheadStubbornCount > STUBBORN_AHEAD_TIMES)
 			return false;
 
 		aheadStubbornCount++;
