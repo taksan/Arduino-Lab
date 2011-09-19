@@ -4,7 +4,7 @@ AVR_TOOLS_PATH=/usr/bin
 BOARD_TAG=atmega328
 ARDUINO_PORT=/dev/ttyUSB0
 AVRDUDE_CONF=$(ARDUINO_DIR)/hardware/tools/avrdude.conf
-ARDUINO_LIBS=BaseNew VirtualWire2
+ARDUINO_LIBS=BaseNew VirtualWire
 
 
 TARGET=rfcomm
