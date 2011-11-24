@@ -5,17 +5,20 @@
 #include "ArduinoApi.h"
 #include "Eye.h"
 #include "AbstractLightDirectionDetector.h"
+#include "AbstractLightFollower.h"
 
 #define STUBBORN_AHEAD_TIMES 3
 
 class LightDirectionDetector : public AbstractLightDirectionDetector {
 public:
-	LightDirectionDetector(Eye *leftEye, Eye *rightEye):
+	LightDirectionDetector(AbstractLightFollower * lightFollower, Eye *leftEye, Eye *rightEye):
 		leftEye(leftEye),
 		rightEye(rightEye),
 		lastTakenDirection(dvTurnRight),
-		accuracy(0),
-		aheadStubbornCount(0)
+		lastKnownDirection(dvGoNowhere),
+		intensity(0),
+		aheadStubbornCount(0),
+		follower(lightFollower)
 	{
 		this->gaugeBase();
 		leftEye->setAdjustFactorAgainst(rightEye->getLevel());
@@ -30,39 +33,41 @@ public:
 	Direction getDirectionToGo() 
 	{
 		bool hasStrong = false;
-		int previousAccuracy = accuracy;
-		accuracy = 100;
-		if (leftEye->isStronglyInfluenced() && rightEye->isStronglyInfluenced()) {
+		int previousintensity = intensity;
+		Direction newKnownDirection;
+		intensity = 100;
+		if (areBothEyesStrong()) {
 			aheadStubbornCount = 0;
 			return dvGoAhead;
 		}
 
-		if (leftEye->isStronglyInfluenced() && rightEye->isWeaklyInfluenced()) {
-			lastStrongMove = dvTurnLeft;
+		if (isLeftStrongAndRightWeak()) {
+			adjustIntensityToDetailedMovement();
+			newKnownDirection = dvTurnLeft;
 			hasStrong = true;
 		}
 
-		if (rightEye->isStronglyInfluenced() && leftEye->isWeaklyInfluenced()) {
-			lastStrongMove = dvTurnRight;
+		if (isRightStrongAndLeftWeak()) {
+			adjustIntensityToDetailedMovement();
+			newKnownDirection = dvTurnRight;
 			hasStrong = true;
 		}
 
 		if (isPreferToGoAhead()) {
-			accuracy = 80;
+			intensity = 80;
+			lastKnownDirection = newKnownDirection;
 			return dvGoAhead;
 		}
 
-		if (lastTakenDirection == dvGoAhead) {
-			return lastStrongMove;
+		if (follower->canChangeDirection()) {
+
+			if (hasStrong) {
+				lastKnownDirection = newKnownDirection;
+				return lastKnownDirection;
+			}
+			return determineDirectionOnWeakLevels();
 		}
-
-		if (hasStrong) {
-			return lastStrongMove;
-		}
-
-
-		accuracy = previousAccuracy;
-		return determineDirectionOnWeakLevels();
+		return lastTakenDirection;
 	}
 
 	void printDebugInfo() {
@@ -72,25 +77,16 @@ public:
 	}
 
 	int getIntensity() {
-		return accuracy;
+		return intensity;
 	}
 private:
 	Direction determineDirectionOnWeakLevels() {
-		int previousAccuracy = accuracy;
+		int previousintensity = intensity;
 
-		accuracy = 80;
-		if (lightWentLeft()) {
-			return dvTurnLeft;
-		}
-		if (lightWentRight()) {
-			return dvTurnRight;
-		}
-
-		if (previousAccuracy <= 25)
-			accuracy = 20;
-		else
-			accuracy -= 5;
-
+		intensity = 40;
+		if (lastKnownDirection != dvGoNowhere)
+			return lastKnownDirection;
+		
 		if (leftEye->isStrongerThan(rightEye)) {
 			return dvTurnLeft;
 		}
@@ -98,14 +94,17 @@ private:
 		return lastTakenDirection;
 	}
 
-	bool lightWentLeft() {
-		return (leftEye->previousIntensityWasStrong());
+	bool isLeftStrongAndRightWeak() {
+		return leftEye->isStronglyInfluenced() && rightEye->isWeaklyInfluenced();
 	}
 
-	bool lightWentRight() {
-		return (rightEye->previousIntensityWasStrong());
+	bool isRightStrongAndLeftWeak() {
+		return rightEye->isStronglyInfluenced() && leftEye->isWeaklyInfluenced();
 	}
 
+	bool areBothEyesStrong() {
+		return leftEye->isStronglyInfluenced() && rightEye->isStronglyInfluenced();
+	}
 
 	void gaugeBase() {
 		leftEye->gaugeBase();
@@ -125,12 +124,17 @@ private:
 		return true;
 	}
 
+	void adjustIntensityToDetailedMovement() {
+		intensity = 20;
+	}
+
 	Eye * leftEye;
 	Eye * rightEye;
 	Direction lastTakenDirection;
-	Direction lastStrongMove;
+	Direction lastKnownDirection;
+	AbstractLightFollower * follower;
 
-	int accuracy;
+	int intensity;
 	int8_t aheadStubbornCount;
 };
 

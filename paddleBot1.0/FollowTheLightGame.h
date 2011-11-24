@@ -23,6 +23,7 @@ public:
 
 	virtual void doTick()
 	{
+		#if 0
 		if (goAheadUntilTurningStablePoint) {
 			if (!bot->isStable()) {
 				bot->stepAhead(MAX_INTENSITY);
@@ -30,6 +31,7 @@ public:
 				return;
 			}
 		}
+		#endif
 
 		lightDirection->update();
 		Direction directionToGo = lightDirection->getDirectionToGo();

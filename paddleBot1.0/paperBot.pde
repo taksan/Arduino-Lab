@@ -6,6 +6,7 @@
 #include "FollowTheLightGame.h"
 #include "LightDirectionDetector.h"
 #include "ArduinoApiImpl.h"
+#include "LightFollower.h"
 
 #define NUNCHUCK_RX_PIN 7
 #define LEFT_LED_PIN 5
@@ -33,10 +34,10 @@ void setup()
 	games[0] = new WalkingGame(bot,joy);
 
 	ArduinoApi * api = new ArduinoApiImpl();
-	lightFollow = new LightDirectionDetector(new Eye(api, 2),new Eye(api, 1));
+	lightFollow = new LightDirectionDetector(new LightFollower(bot), new Eye(api, 2),new Eye(api, 1));
 	games[1] = new FollowTheLightGame(bot, lightFollow, LEFT_LED_PIN, RIGH_LED_PIN);
 
-	currentGameNumber = 1;
+	currentGameNumber = 0;
 }
 
 void updateGameLed() {
