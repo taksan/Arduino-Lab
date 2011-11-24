@@ -20,7 +20,7 @@ int getSerialFd()
     speed_t brate=B9600;
     cfsetispeed(&toptions, brate);
     cfsetospeed(&toptions, brate);
-// 8N1
+	// 8N1
     toptions.c_cflag &= ~PARENB;
     toptions.c_cflag &= ~CSTOPB;
     toptions.c_cflag &= ~CSIZE;
@@ -58,6 +58,26 @@ IplImage* GetThresholdedImage(IplImage* img)
 	cvReleaseImage(&imgHSV);
 
 	return imgThreshed;
+}
+
+void updateX(int arduinoFd, int offsetX)
+{
+	if (fabs(offsetX) > 20) {
+		char angle = -(15* ((double)offsetX/600));
+
+		if (offsetX > 0)
+			angle = -4;
+		else
+			angle = 4;
+
+		printf("posX: %d angle: %d\n", offsetX, angle);
+		write(arduinoFd, &angle, 1);
+		char val[10];
+		val[9]=0;
+		read(arduinoFd, val, 9);
+		printf("current servo angle: %s\n", val);
+	}
+
 }
 
 int main()
@@ -122,14 +142,11 @@ int main()
 
 		int arduinoFd = getSerialFd();
 
-		if (area > 1000) {
+		if (area > 2000) {
 			if(lastX>0 && lastY>0 && posX>0 && posY>0)
 			{
-				// Draw a yellow line from the previous point to the current point
-				cvLine(imgScribble, cvPoint(posX, posY), cvPoint(lastX, lastY), cvScalar(0,255,255), 5);
-				unsigned short angle = 180 - (180 * ((double)posX/600));
-				printf("posX: %d angle: %d\n", posX, angle);				
-				write(arduinoFd, &angle, 1);
+				int offsetX = posX-300;
+				updateX(arduinoFd, offsetX);
 			}
 		}
 
