@@ -14,9 +14,8 @@ public class LegSlider extends JSlider {
 			
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				byte value = (byte) getValue();
-				String data = String.format("%s %c\n", id, value);
-				arduinoSerial.write(data );
+				String data = String.format("%s %d\n", id, getValue());
+				arduinoSerial.write(data );	
 				arduinoSerial.printReceivedData();
 			}
 		});

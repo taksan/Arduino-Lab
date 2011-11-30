@@ -15,7 +15,8 @@ public:
 		while(Serial.available()) {
 			char data = Serial.read();
 			cmd[i]=data;
-			if (data == 0) break;
+			if (data == '\n') break;
+			i++;
 		}
 		cmd[i] = 0;
 		return strdup(cmd);
@@ -28,7 +29,6 @@ Robot * robot;
 void setup()
 {
 	Serial.begin(9600);
-	Serial.println("------o---- starting");
 	robot = new Robot();
 }
 
@@ -36,8 +36,7 @@ void loop()
 {
 	if (controller.available()) {
 		char * command = controller.readCommand();
-	//	robot->processCommand(command);
-		Serial.println(command);
+		robot->processCommand(command);
 		free(command);
 	}
 }

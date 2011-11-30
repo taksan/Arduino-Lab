@@ -31,10 +31,12 @@ public class PopsicleController {
 
 	public void printReceivedData() {
 		try {
+			if (input.available() > 0)
+				System.out.print("There is data");
 			while(input.available()>0) {
 				char data = (char) input.read();
 				System.out.print((char)data);
-				if (data == '\n')
+				if (data == '\0')
 					break;
 	        }
 			System.out.println("");
