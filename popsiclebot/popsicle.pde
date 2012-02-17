@@ -1,5 +1,5 @@
-#include <ServoTimer2.h>
-#define Servo ServoTimer2
+#include <Servo.h>
+#define Servo Servo
 
 #include "Robot.h"
 

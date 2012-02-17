@@ -7,12 +7,11 @@ class Robot {
 	Controller * controller;
 public:
 	Robot(Controller  * controller) {
-		left = new LeftLeg(8,9,10);
-		right = new RightLeg(11,12,13);
+		left = new LeftLeg(6,7,8,9);
+		right = new RightLeg(10,11,12,13);
 
-		left->upper(60);
-		left->knee(45);
-		right->knee(45);
+		left->knee(135);
+		right->knee(135);
 		this->controller = controller;
 	}
 
@@ -37,19 +36,25 @@ public:
 		}
 
 		switch(legMotor) {
-			case 'u':
-				controller->print("move upper motor to ");
+			case 's':
+				controller->print("move shoulder motor to ");
 				controller->println(angle,DEC);
-				legToMove->upper(angle);
+				legToMove->shoulder(angle);
 				break;
-			case 'm':
-				legToMove->middle(angle);
-				controller->print("move middle motor to ");
+			case 'u':
+				legToMove->upper(angle);
+				controller->print("move upper motor to ");
 				controller->println(angle,DEC);
 				break;
 			case 'k':
 				legToMove->knee(angle);
 				controller->print("move knee motor to ");
+				controller->println(angle,DEC);
+				break;
+
+			case 'f':
+				legToMove->foot(angle);
+				controller->print("move foot motor to ");
 				controller->println(angle,DEC);
 				break;
 			default:

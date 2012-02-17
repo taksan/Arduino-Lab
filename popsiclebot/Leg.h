@@ -1,36 +1,43 @@
 class Leg {
 protected:
+	Servo _shoulder;
 	Servo _upper;
-	Servo _middle;
 	Servo _knee;
+	Servo _foot;
 public:
-	Leg(int upperPin, int middlePin, int kneePin) {
+	Leg(int shoulderPin, int upperPin, int kneePin, int footPin) {
+		_shoulder.attach(shoulderPin);
 		_upper.attach(upperPin);
-		_middle.attach(middlePin);
 		_knee.attach(kneePin);
+		_foot.attach(footPin);
 
+		shoulder(90);
 		upper(90);
-		middle(90);
 		knee(90);
+		foot(90);
+	}
+
+	virtual void shoulder(int angle) {
+		_shoulder.write(angle);
 	}
 
 	virtual void upper(int angle) {
 		_upper.write(angle);
 	}
 
-	virtual void middle(int angle) {
-		_middle.write(angle);
-	}
-
 	virtual void knee(int angle) {
 		_knee.write(angle);
+	}
+
+	virtual void foot(int angle) {
+		_foot.write(angle);
 	}
 };
 
 class LeftLeg : public Leg {
 public:
-	LeftLeg(int upperPin, int middlePin, int kneePin) :
-		Leg(upperPin, middlePin, kneePin)
+	LeftLeg(int shoulderPin, int upperPin, int kneePin, int footPin) :
+		Leg(shoulderPin, upperPin, kneePin, footPin)
 	{
 	}
 
@@ -38,21 +45,24 @@ public:
 
 class RightLeg : public Leg {
 public:
-	RightLeg(int upperPin, int middlePin, int kneePin) :
-		Leg(upperPin, middlePin, kneePin)
+	RightLeg(int footPin, int kneePin, int upperPin, int shoulderPin):
+		Leg(shoulderPin, upperPin, kneePin, footPin)
 	{
 	}
-	void upper(int angle) {
-		_upper.write(180-angle);
+	void shoulder(int angle) {
+		Leg::shoulder(180-angle);
 	}
 
-	void middle(int angle) {
-		_middle.write(180-angle);
+	void upper(int angle) {
+		Leg::upper(180-angle);
 	}
 
 	void knee(int angle) {
-		_knee.write(180-angle);
+		Leg::knee(180-angle);
 	}
 
+	void foot(int angle) {
+		Leg::foot(180-angle);
+	}
 };
 

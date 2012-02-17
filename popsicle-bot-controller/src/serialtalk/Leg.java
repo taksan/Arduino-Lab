@@ -4,6 +4,8 @@ import java.awt.GridLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 public class Leg extends JPanel{
@@ -12,18 +14,36 @@ public class Leg extends JPanel{
 		public final LegSlider middle;
 		public final LegSlider knee;
 		
-		public Leg(String idPrefix, PopsicleController serial) {
-			upper = new LegSlider(idPrefix+"u", serial);
-			middle = new LegSlider(idPrefix+"m", serial);
-			knee = new LegSlider(idPrefix+"k", serial);
+		public Leg(String idPrefix, PopsicleController serial, int ... angles) {
+			upper = new LegSlider(idPrefix+"u", serial, angles[0]);
+			middle = new LegSlider(idPrefix+"m", serial, angles[1]);
+			knee = new LegSlider(idPrefix+"k", serial, angles[2]);
 			setLayout(new GridLayout(6, 1));
 			add(new JLabel("Top Motor"));
-			add(upper);
+			addSlider(upper);
+			
 			
 			add(new JLabel("Leg Motor"));
-			add(middle);
+			addSlider(middle);
 			
 			add(new JLabel("Knee Motor"));
-			add(knee);
+			addSlider(knee);
+		}
+
+		private void addSlider(final LegSlider joint) {
+			JPanel jointPanel = new JPanel();
+			final JLabel jointAngleLabel = new JLabel(""+joint.getValue());
+			jointPanel.add(joint);
+			jointPanel.add(jointAngleLabel);
+			joint.addChangeListener(new ChangeListener() {
+				
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					jointAngleLabel.setText("" + joint.getValue());
+					
+				}
+			});
+			add(jointPanel);
+			
 		}
 }

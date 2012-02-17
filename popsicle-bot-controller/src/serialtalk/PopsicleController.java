@@ -13,7 +13,7 @@ public class PopsicleController {
 
 	public PopsicleController() {
 		try {
-			String serialPort="/dev/ttyUSB1";
+			String serialPort="/dev/ttyUSB0";
 	        CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(
 	        		serialPort);
 	 

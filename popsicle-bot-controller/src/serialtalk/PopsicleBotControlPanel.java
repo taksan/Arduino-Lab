@@ -15,6 +15,7 @@ public class PopsicleBotControlPanel extends JPanel {
     	JFrame jFrame = new JFrame();
     	jFrame.add(servoSlider);
     	jFrame.pack();
+    	jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	jFrame.setVisible(true);
     }
     
@@ -22,13 +23,13 @@ public class PopsicleBotControlPanel extends JPanel {
 		setLayout(new GridLayout(2, 2));
 		arduinoSerial = new PopsicleController();
 		
-		add(new JLabel("Left Leg"));
 		add(new JLabel("Right Leg"));
+		add(new JLabel("Left Leg"));
 		
-		final Leg left = new Leg("l", arduinoSerial);
-		final Leg right = new Leg("r", arduinoSerial);
-		add(left);
+		final Leg right = new Leg("r", arduinoSerial, 90, 135, 90);
+		final Leg left = new Leg("l", arduinoSerial, 90, 135, 90);
 		add(right);
+		add(left);
 	}
 
 }

@@ -7,8 +7,8 @@ import javax.swing.event.ChangeListener;
 public class LegSlider extends JSlider {
 	private static final long serialVersionUID = 1L;
 
-	public LegSlider(final String id, final PopsicleController arduinoSerial) {
-		setValue(90);
+	public LegSlider(final String id, final PopsicleController arduinoSerial, int initialAngle) {
+		setValue(initialAngle);
 		setMaximum(180);
 		addChangeListener(new ChangeListener() {
 			
