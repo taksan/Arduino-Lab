@@ -1,0 +1,10 @@
+sudo apt-get install arduino
+sudo apt-get install libconfig-yaml-perl
+sudo apt-get install libdevice-serialport-perl
+cd ../cursoArduino2011/arduino-mk-0.6/
+sudo ./install.sh
+sudo cp -rf Nunchuck /usr/share/arduino/libraries
+sudo cp -rf VirtualWire /usr/share/arduino/libraries
+sudo cp Wire.cpp /usr/share/arduino/libraries/Wire/Wire.cpp
+sudo cp /usr/share/arduino/libraries/Wire/utility/* /usr/share/arduino/libraries/Wire/
+sudo mv /usr/share/arduino/libraries/Wire/twi.c /usr/share/arduino/libraries/Wire/twi.cpp
