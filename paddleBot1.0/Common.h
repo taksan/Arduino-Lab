@@ -1,7 +1,7 @@
 #ifndef COMMON___H__
 #define COMMON___H__
 
-#include <WProgram.h>
+#include <Arduino.h>
 
 #define ABS(X) ((X)<0?-(X):X)
 

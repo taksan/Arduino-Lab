@@ -10,6 +10,6 @@ void setup()
 }
 
 void loop() {
-	servo1.write(0);
+	servo1.write(90);
 }
 

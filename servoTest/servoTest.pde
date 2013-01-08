@@ -1,6 +1,5 @@
 #include <Servo.h>
 #define SERVO_PIN 7
-#define SERVO2_PIN 8
 #define POT1 4
 #define POT2 5
 

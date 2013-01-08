@@ -1,0 +1,16 @@
+Problemas com o robô:
+
+1) 1 dos motores caros parece estar quebrado
+2) será necessário motores nos pés. 2 funções:
+	i)  contrapeso para equilibrar o robô durante a caminhada
+	ii) não é possível "empurrar" o robô para frente sem esse motor
+3) a bateria atrás tem um ponto positivo, pois o peso faz com que a "cabeça" 
+	rotacione de modo que fica + ou - para frente qdo a perna de trás faz
+	o lado em questão ficar mais baixo que o outro lado
+	O problema é que os cabos dos servos limitam fortemente o movimento
+	da cabeça, de modo que esse movimento "natural" não funciona bem
+	igualmente para os dois lados.
+	(ficou bom com a perna esq. para trás e a dir. para frente. O contrário
+	não fica bom.
+
+

@@ -6,10 +6,14 @@ import gnu.io.SerialPort;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PopsicleController {
 	private InputStream input;
 	private OutputStream output;
+	List<String> commands = new LinkedList<String>();
+	List<ChangeListener> listeners = new LinkedList<ChangeListener>();
 
 	public PopsicleController() {
 		try {
@@ -28,7 +32,7 @@ public class PopsicleController {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
 	public void printReceivedData() {
 		try {
 			if (input.available() > 0)
@@ -44,18 +48,42 @@ public class PopsicleController {
 			throw new RuntimeException(e);
 		}
 	}
-
-	public void write(byte value) {
-		try {
-			output.write(value);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}		
+	
+	
+	public void sendAccumulatedData() {
+		for (String value : commands) {
+			write(value);
+		}
+		commands = new LinkedList<String>();
+		fireCommandsSent();
 	}
 	
-	public void write(String value) {
+
+	public void putCommand(String value) {
+		fireCommandAdded();
+		commands.add(value); 
+	}
+	
+	private void fireCommandsSent() {
+		for (ChangeListener listener : listeners) {
+			listener.commandsSent();
+		}
+	}
+	
+	private void fireCommandAdded() {
+		for (ChangeListener listener : listeners) {
+			listener.commandAdded();
+		}
+	}
+
+	public void addChangeListener(ChangeListener listener) {
+		listeners.add(listener);
+	}
+	
+	private void write(String value) {
 		try {
 			output.write(value.getBytes(), 0, value.length());
+			printReceivedData();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}		

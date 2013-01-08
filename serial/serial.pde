@@ -1,14 +1,8 @@
-void setup()
-{
-	Serial.begin(9600);
-	pinMode(13, OUTPUT);
+void setup(){
+	Serial.begin(115200);
 }
 
-void loop()
-{
-	Serial.println("Hya");
-	digitalWrite(13, HIGH);
-	delay(1000);
-	digitalWrite(13, LOW);
-	delay(1000);
+void loop(){
+	Serial.println("Hola caracola...");
+	delay(2000);
 }

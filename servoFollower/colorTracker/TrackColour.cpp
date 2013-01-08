@@ -1,13 +1,16 @@
 #include <stdio.h>
-#include <cv.h>
 #include <highgui.h>
 #include <fcntl.h>    
 #include <termios.h> 
+#include <cv.h>
+
+#define HEIGHT 440
+#define WIDTH 600
 
 int getSerialFd()
 {
     struct termios toptions;
-    int fd = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY | O_NDELAY);
+    int fd = open("/dev/ttyACM0", O_RDWR | O_NOCTTY | O_NDELAY);
     if (fd == -1)  {
         perror("init_serialport: Unable to open port ");
         return -1;
@@ -60,24 +63,21 @@ IplImage* GetThresholdedImage(IplImage* img)
 	return imgThreshed;
 }
 
-void updateX(int arduinoFd, int offsetX)
+void updateCameraDirection(int arduinoFd, int offset, int width)
 {
-	if (fabs(offsetX) > 20) {
-		char angle = -(15* ((double)offsetX/600));
+	char angle = 0;
+	if (fabs(offset) > 20) {
+		angle = -(20* ((double)offset/width));
 
-		if (offsetX > 0)
-			angle = -4;
+		/*
+		if (offset > 0)
+			angle = -2;
 		else
-			angle = 4;
-
-		printf("posX: %d angle: %d\n", offsetX, angle);
-		write(arduinoFd, &angle, 1);
-		char val[10];
-		val[9]=0;
-		read(arduinoFd, val, 9);
-		printf("current servo angle: %s\n", val);
+			angle = 2;
+			*/
+		printf("pos: %d angle: %d\n", offset, angle);
 	}
-
+	write(arduinoFd, &angle, 1);
 }
 
 int main()
@@ -145,8 +145,11 @@ int main()
 		if (area > 2000) {
 			if(lastX>0 && lastY>0 && posX>0 && posY>0)
 			{
-				int offsetX = posX-300;
-				updateX(arduinoFd, offsetX);
+				int offsetX = posX-WIDTH/2;
+				updateCameraDirection(arduinoFd, offsetX, WIDTH);
+
+				int offsetY = posY - HEIGHT/2;
+				updateCameraDirection(arduinoFd, offsetY, HEIGHT);
 			}
 		}
 
@@ -173,5 +176,8 @@ int main()
 
 	// We're done using the camera. Other applications can now use it
 	cvReleaseCapture(&capture);
+//	CvCapture *capture2 = 
+//	    cvCreateFileCapture_FFMPEG("http://axis-cam/mjpg/video.mjpg?resolution=640x480&req_fps=10&.mjpg");
+
     return 0;
 }

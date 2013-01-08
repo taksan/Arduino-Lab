@@ -1,6 +1,6 @@
 #ifndef PAPER_BOT_H__
 #define PAPER_BOT_H__
-#include <WProgram.h>
+#include <Arduino.h>
 #include <ServoTimer2.h>
 #include "Common.h"
 

@@ -10,24 +10,29 @@ import javax.swing.event.ChangeListener;
 
 public class Leg extends JPanel{
 	private static final long serialVersionUID = 1L;
+		public final LegSlider shoulder;
 		public final LegSlider upper;
-		public final LegSlider middle;
 		public final LegSlider knee;
+		public final LegSlider foot;
 		
 		public Leg(String idPrefix, PopsicleController serial, int ... angles) {
-			upper = new LegSlider(idPrefix+"u", serial, angles[0]);
-			middle = new LegSlider(idPrefix+"m", serial, angles[1]);
+			shoulder = new LegSlider(idPrefix+"s", serial, angles[0]);
+			upper = new LegSlider(idPrefix+"u", serial, angles[1]);
 			knee = new LegSlider(idPrefix+"k", serial, angles[2]);
+			foot = new LegSlider(idPrefix+"f", serial, angles[3]);
 			setLayout(new GridLayout(6, 1));
-			add(new JLabel("Top Motor"));
+			add(new JLabel("Shoulder Motor"));
+			addSlider(shoulder);
+			
+			
+			add(new JLabel("Upper Leg Motor"));
 			addSlider(upper);
-			
-			
-			add(new JLabel("Leg Motor"));
-			addSlider(middle);
 			
 			add(new JLabel("Knee Motor"));
 			addSlider(knee);
+			
+			add(new JLabel("Foot Motor"));
+			addSlider(foot);
 		}
 
 		private void addSlider(final LegSlider joint) {

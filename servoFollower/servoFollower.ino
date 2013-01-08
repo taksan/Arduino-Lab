@@ -4,6 +4,7 @@ Servo horiz, vert;
 int horizPos=90, vertPos=90;
 
 void printServoPos(char id[3], int pos);
+void adjustServoPos(Servo * servo, char id[3], int * currentServoPos);
 
 void setup()  {
 	Serial.begin(9600);
@@ -13,6 +14,11 @@ void setup()  {
 	horiz.write(horizPos);
 	vert.write(vertPos);
 }
+
+void loop()  {
+	adjustServoPos(&horiz, "hz", &horizPos);
+	adjustServoPos(&vert, "vt", &vertPos);
+} 
 
 void adjustServoPos(Servo * servo, char id[3], int * currentServoPos)
 {
@@ -25,17 +31,18 @@ void adjustServoPos(Servo * servo, char id[3], int * currentServoPos)
 		printServoPos(id, *currentServoPos);
 		return;
 	}
-	*currentServoPos = newPos;
-	servo->write(newPos);
+//	int inc=1;
+//	if (*currentServoPos > newPos)
+//		inc=-1;
+//	for(;*currentServoPos!=newPos; *currentServoPos+=inc) {
+//		servo->write(*currentServoPos);
+//	}
 	printServoPos(id, *currentServoPos);
+	*currentServoPos = newPos;
+	servo->write(*currentServoPos);
 }
-
-void loop()  {
-	adjustServoPos(&horiz, "hz", &horizPos);
-} 
 
 void printServoPos(char id[3], int pos) {
 	char val[9];
 	sprintf(val, "%s:%04d=", id, pos);
-	Serial.print(val);
 }

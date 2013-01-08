@@ -1,6 +1,6 @@
 #ifndef ARDUINO__API__IMPL__H
 #define ARDUINO__API__IMPL__H
-#include <WProgram.h>
+#include <Arduino.h>
 
 #include "ArduinoApi.h"
 

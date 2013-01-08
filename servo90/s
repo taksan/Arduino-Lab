@@ -1,0 +1,14 @@
+#include <Servo.h>
+#define SERVO_PIN 7
+
+Servo servo;
+
+void setup()
+{
+	Serial.begin(9600);
+	servo.attach(SERVO_PIN);
+	servo.write(90);
+}
+
+void loop() {
+}
