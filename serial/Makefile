@@ -5,7 +5,7 @@ BOARD_TAG=uno
 ARDUINO_PORT=/dev/ttyACM0
 #/dev/ttyUSB0
 AVRDUDE_CONF=$(ARDUINO_DIR)/hardware/tools/avrdude.conf
-ARDUINO_LIBS=BaseNew 
+ARDUINO_LIBS= 
 
 
 TARGET=serial

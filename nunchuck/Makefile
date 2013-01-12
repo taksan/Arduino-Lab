@@ -4,7 +4,7 @@ BOARD_TAG=mega
 #BOARD_TAG=atmega328
 ARDUINO_PORT=/dev/ttyUSB0
 AVRDUDE_CONF=$(ARDUINO_DIR)/hardware/tools/avrdude.conf
-ARDUINO_LIBS=BaseNew Nunchuck Wire twi Servo
+ARDUINO_LIBS=Nunchuck Wire twi Servo
 
 
 TARGET=rfnunchuck
