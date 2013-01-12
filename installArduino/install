@@ -8,3 +8,7 @@ sudo cp -rf VirtualWire /usr/share/arduino/libraries
 sudo cp Wire.cpp /usr/share/arduino/libraries/Wire/Wire.cpp
 sudo cp /usr/share/arduino/libraries/Wire/utility/* /usr/share/arduino/libraries/Wire/
 sudo mv /usr/share/arduino/libraries/Wire/twi.c /usr/share/arduino/libraries/Wire/twi.cpp
+unzip rxtx-2.1-7-bins-r2.zip
+cp rxtx-2.1-7-bins-r2/*.jar $JAVA_HOME/jre/lib/ext
+cp rxtx-2.1-7-bins-r2/Linux/x86_64-unknown-linux-gnu/librxtxSerial.so $JAVA_HOME/jre/lib/amd64
+
