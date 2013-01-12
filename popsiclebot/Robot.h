@@ -1,12 +1,12 @@
-#include "Controller.h"
+#include "../serialReader/SerialReader.h"
 #include "Leg.h"
 
 class Robot {
 	LeftLeg * left;
 	RightLeg * right;
-	Controller * controller;
+	SerialReader * controller;
 public:
-	Robot(Controller  * controller) {
+	Robot(SerialReader  * controller) {
 		left = new LeftLeg(6,7,8,9);
 		right = new RightLeg(10,11,12,13);
 

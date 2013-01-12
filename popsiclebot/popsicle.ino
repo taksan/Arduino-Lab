@@ -3,7 +3,7 @@
 
 #include "Robot.h"
 
-Controller controller;
+SerialReader controller;
 Robot * robot;
 
 void setup()
