@@ -18,12 +18,19 @@ public class PartySpyController {
 	List<String> commands = new LinkedList<String>();
 	List<ChangeListener> listeners = new LinkedList<ChangeListener>();
 
+	/* http://zizzle-brewbot.blogspot.com.br/2011/04/ttl-bluetooth-transceiver-with-linux.html
+	 * hcitool scan 
+	 * sudo rfcomm bind /dev/rfcomm0 00:19:5D:24:B7:63
+	 */
 	public PartySpyController() {
 		try {
-			String serialPort="/dev/ttyUSB0";
+			String serialPort="/dev/rfcomm0";
+			//String serialPort="/dev/ttyUSB0";
 	        CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(
 	        		serialPort);
 	 
+	        Thread.sleep(1000);
+	        
 	        SerialPort port = (SerialPort)portId.open("serial talk", 4000);
 	        input = port.getInputStream();
 	        output = port.getOutputStream();
