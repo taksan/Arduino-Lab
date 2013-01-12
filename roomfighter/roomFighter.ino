@@ -17,19 +17,44 @@ public:
 	}
 
 	void clockwise() {
-		digitalWrite(bit0, HIGH);
-		digitalWrite(bit1, LOW);
-	}
-
-	void counterclockwise() {
 		digitalWrite(bit0, LOW);
 		digitalWrite(bit1, HIGH);
+	}
+
+	
+	void counterclockwise() {
+		digitalWrite(bit0, HIGH);
+		digitalWrite(bit1, LOW);
 	}
 
 	void stop() {
 		digitalWrite(bit0, LOW);
 		digitalWrite(bit1, LOW);
 
+	}
+};
+
+class LeftWheel : public Wheel {
+public:
+	LeftWheel(int aBit0, int aBit1):Wheel(aBit0,aBit1){}
+	void forward() {
+		counterclockwise();
+	}
+
+	void backward() {
+		clockwise();
+	}
+};
+
+class RightWheel : public Wheel {
+public:
+	RightWheel(int aBit0, int aBit1):Wheel(aBit0,aBit1){}
+	void forward() {
+		clockwise();
+	}
+
+	void backward() {
+		counterclockwise();
 	}
 };
 
@@ -40,17 +65,20 @@ TL[]--------[]TR
 BL[]--------[]BR
 */
 
-Wheel TL(TL_1,TL_2);
-Wheel TR(TR_1,TR_2);
-Wheel BL(BL_1,BL_2);
-Wheel BR(BR_1,BR_2);
+LeftWheel TL(TL_1,TL_2);
+LeftWheel BL(BL_1,BL_2);
+RightWheel TR(TR_1,TR_2);
+RightWheel BR(BR_1,BR_2);
 
 void setup()  {
 	/*
 	Serial.begin(9600);
 
 	*/
-	TL.clockwise();
+	TL.forward();
+	TR.forward();
+	BL.forward();
+	BR.forward();
 }
 
 void loop()  {
