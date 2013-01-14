@@ -34,6 +34,15 @@ void loop()  {
 		if (cmd[0]=='D') {
 			bot->moveDown();
 		}
+		else
+		if (cmd[0]=='F') {
+			bot->moveForward();
+		}
+		else
+		if (cmd[0]=='B') {
+			bot->moveBackward();
+		}
+
 		free(cmd);
 	}
 } 

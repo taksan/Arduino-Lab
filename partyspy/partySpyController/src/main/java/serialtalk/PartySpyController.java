@@ -20,12 +20,11 @@ public class PartySpyController {
 
 	/* http://zizzle-brewbot.blogspot.com.br/2011/04/ttl-bluetooth-transceiver-with-linux.html
 	 * hcitool scan 
+	 * THE NUMBER CAN CHANGE!
 	 * sudo rfcomm bind /dev/rfcomm0 00:19:5D:24:B7:63
 	 */
-	public PartySpyController() {
+	public PartySpyController(String serialPort) {
 		try {
-			String serialPort="/dev/rfcomm0";
-			//String serialPort="/dev/ttyUSB0";
 	        CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(
 	        		serialPort);
 	 
@@ -45,8 +44,10 @@ public class PartySpyController {
 	
 	public void printReceivedData() {
 		try {
-			if (input.available() > 0)
-				System.out.print("There is data");
+			if (input.available() <= 0)
+				return;
+			
+			System.out.print("There is data");
 			while(input.available()>0) {
 				char data = (char) input.read();
 				System.out.print((char)data);
@@ -67,7 +68,7 @@ public class PartySpyController {
 	private void write(String value) {
 		try {
 			output.write(value.getBytes(), 0, value.length());
-			printReceivedData();
+//			printReceivedData();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}		

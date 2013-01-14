@@ -30,9 +30,15 @@ public class PartSpyFrame extends JFrame {
 					spyController.putCommand("R");
 					break;
 				case KeyEvent.VK_UP:
-					spyController.putCommand("U");
+					spyController.putCommand("F");
 					break;
 				case KeyEvent.VK_DOWN:
+					spyController.putCommand("B");
+					break;
+				case KeyEvent.VK_W:
+					spyController.putCommand("U");
+					break;
+				case KeyEvent.VK_S:
 					spyController.putCommand("D");
 					break;
 				}

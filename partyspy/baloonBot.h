@@ -1,11 +1,11 @@
 #include <Servo.h>
 #include "motor.h"
 
-#define LEFT_ANGLE_MOTOR_FACING_FRONT  110
-#define RIGHT_ANGLE_MOTOR_FACING_FRONT 80
+#define LEFT_ANGLE_MOTOR_FACING_FRONT  90
+#define RIGHT_ANGLE_MOTOR_FACING_FRONT 90
 
-#define LEFT_ANGLE_MOTOR_FACING_DOWN   40
-#define RIGHT_ANGLE_MOTOR_FACING_DOWN 150
+#define LEFT_ANGLE_MOTOR_FACING_DOWN   20
+#define RIGHT_ANGLE_MOTOR_FACING_DOWN 170
 
 class BaloonBot {
 private:
@@ -27,6 +27,21 @@ public:
 		prepareHorizontalMovement();
 	}
 
+	void moveForward() {
+		prepareHorizontalMovement();
+		leftHelix.clockwise();
+		rightHelix.clockwise();
+		stop();
+	}
+
+	void moveBackward() {
+		prepareHorizontalMovement();
+		leftHelix.counterclockwise();
+		rightHelix.counterclockwise();
+		stop();
+	}
+
+
 	void rotateLeft() {
 		prepareHorizontalMovement();
 		leftHelix.clockwise();
@@ -44,13 +59,13 @@ public:
 	void moveUp() {
 		prepareVerticalMovement();
 		leftHelix.counterclockwise();
-		rightHelix.clockwise();
+		rightHelix.counterclockwise();
 		stop();
 	}
 
 	void moveDown() {
 		prepareVerticalMovement();
-		leftHelix.counterclockwise();
+		leftHelix.clockwise();
 		rightHelix.clockwise();
 		stop();
 	}
