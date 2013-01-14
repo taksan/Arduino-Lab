@@ -1,6 +1,7 @@
 sudo apt-get install arduino
 sudo apt-get install libconfig-yaml-perl
 sudo apt-get install libdevice-serialport-perl
+sudo apt-get install libbluetooth-dev
 cd ../cursoArduino2011/arduino-mk-0.6/
 sudo ./install.sh
 sudo cp -rf Nunchuck /usr/share/arduino/libraries
