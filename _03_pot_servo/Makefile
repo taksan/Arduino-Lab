@@ -3,7 +3,7 @@ AVR_TOOLS_PATH=/usr/bin
 BOARD_TAG=mega
 ARDUINO_PORT=/dev/ttyUSB0
 AVRDUDE_CONF=$(ARDUINO_DIR)/hardware/tools/avrdude.conf
-ARDUINO_LIBS=BaseNew Servo
+ARDUINO_LIBS= Servo
 
 
 TARGET=pot

@@ -3,3 +3,6 @@ build-cli
 .*.swp
 build-*
 *.o
+.settings
+target
+
