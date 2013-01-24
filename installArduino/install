@@ -12,4 +12,5 @@ sudo mv /usr/share/arduino/libraries/Wire/twi.c /usr/share/arduino/libraries/Wir
 unzip rxtx-2.1-7-bins-r2.zip
 cp rxtx-2.1-7-bins-r2/*.jar $JAVA_HOME/jre/lib/ext
 cp rxtx-2.1-7-bins-r2/Linux/x86_64-unknown-linux-gnu/librxtxSerial.so $JAVA_HOME/jre/lib/amd64
-
+sudo cat attiny/boards.txt >> /usr/share/arduino/hardware/arduino/boards.txt
+sudo cp -rf attiny/variants/* /usr/share/arduino/hardware/arduino/variants/
