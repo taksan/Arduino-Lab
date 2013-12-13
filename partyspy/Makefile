@@ -10,4 +10,4 @@ ARDUINO_LIBS=Servo
 
 TARGET=partySpy
 
-include  /usr/share/arduino/custom/Arduino.mk
+include  ../arduino-mk/Arduino.mk

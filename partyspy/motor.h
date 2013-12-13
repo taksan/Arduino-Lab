@@ -9,13 +9,13 @@ public:
 
     void clockwise() {
         digitalWrite(bit0, LOW);
-        digitalWrite(bit1, HIGH);
+        digitalWrite(bit1, HIGH);//HIGH=MAX
     }   
 
     
     void counterclockwise() {
         digitalWrite(bit0, HIGH);
-        digitalWrite(bit1, LOW);
+        digitalWrite(bit1, LOW);//LOW=MAX
     }   
 
     void stop() {

@@ -8,4 +8,4 @@ ARDUINO_LIBS= VirtualWire Nunchuck Wire twi
 
 TARGET=rfnunchuck
 
-include  /usr/share/arduino/custom/Arduino.mk
+include  ../arduino-mk/Arduino.mk

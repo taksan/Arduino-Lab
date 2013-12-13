@@ -9,4 +9,4 @@ ARDUINO_LIBS=Nunchuck Wire twi Servo
 
 TARGET=rfnunchuck
 
-include  /usr/share/arduino/custom/Arduino.mk
+include  ../arduino-mk/Arduino.mk

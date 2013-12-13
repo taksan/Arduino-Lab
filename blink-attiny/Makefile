@@ -7,4 +7,4 @@ ARDUINO_LIBS=Servo
 
 TARGET=blink
 
-include  /usr/share/arduino/custom/Arduino.mk
+include  ../arduino-mk/Arduino.mk

@@ -8,4 +8,4 @@ ARDUINO_LIBS= Servo
 
 TARGET=pot
 
-include  /usr/share/arduino/custom/Arduino.mk
+include  ../arduino-mk/Arduino.mk

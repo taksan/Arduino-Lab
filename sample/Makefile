@@ -9,4 +9,4 @@ ARDUINO_LIBS=
 
 TARGET=rfcomm
 
-include  /usr/share/arduino/custom/Arduino.mk
+include  ../arduino-mk/Arduino.mk

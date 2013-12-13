@@ -4,8 +4,10 @@ sudo apt-get install libdevice-serialport-perl
 sudo apt-get install libbluetooth-dev
 cd ../cursoArduino2011/arduino-mk-0.6/
 sudo ./install.sh
+cd -
 sudo cp -rf Nunchuck /usr/share/arduino/libraries
 sudo cp -rf VirtualWire /usr/share/arduino/libraries
+sudo cp -rf ServoTimer2 /usr/share/arduino/libraries
 sudo cp Wire.cpp /usr/share/arduino/libraries/Wire/Wire.cpp
 sudo cp /usr/share/arduino/libraries/Wire/utility/* /usr/share/arduino/libraries/Wire/
 sudo mv /usr/share/arduino/libraries/Wire/twi.c /usr/share/arduino/libraries/Wire/twi.cpp

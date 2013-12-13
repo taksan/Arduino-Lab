@@ -11,4 +11,4 @@ ARDUINO_LIBS=twi Wire Gyro
 
 TARGET=gyro
 
-include  /usr/share/arduino/custom/Arduino.mk
+include  ../arduino-mk/Arduino.mk

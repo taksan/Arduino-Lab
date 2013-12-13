@@ -9,4 +9,4 @@ ARDUINO_LIBS= ServoTimer2 VirtualWire
 
 TARGET=paperbot
 
-include  /usr/share/arduino/custom/Arduino.mk
+include  ../arduino-mk/Arduino.mk
