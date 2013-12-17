@@ -55,7 +55,7 @@ public class ServoSlider extends JPanel {
 
 	private void initSerial() {
 		try {
-			String serialPort="/dev/ttyUSB0";
+			String serialPort="/dev/ttyACM0";
 			System.out.println("Using port: " + serialPort);
 	        CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(
 	        		serialPort);

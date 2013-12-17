@@ -3,6 +3,7 @@
 #include <fcntl.h>    
 #include <termios.h> 
 #include <cv.h>
+#include <unistd.h>
 
 #define HEIGHT 440
 #define WIDTH 600
@@ -84,7 +85,7 @@ int main()
 {
 	// Initialize capturing live feed from the camera
 	CvCapture* capture = 0;
-	capture = cvCaptureFromCAM(1);	
+	capture = cvCaptureFromCAM(0);
 
 	// Couldn't get a device? Throw an error and quit
 	if(!capture)
@@ -142,7 +143,7 @@ int main()
 
 		int arduinoFd = getSerialFd();
 
-		if (area > 2000) {
+		if (area > 200) {
 			if(lastX>0 && lastY>0 && posX>0 && posY>0)
 			{
 				int offsetX = posX-WIDTH/2;

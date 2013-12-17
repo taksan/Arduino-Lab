@@ -1,2 +1,2 @@
 all:
-	gcc -ggdb `pkg-config opencv --cflags` TrackColour.cpp -o track `pkg-config --libs opencv`
+	c++ -ggdb `pkg-config opencv --cflags` TrackColour.cpp -o track `pkg-config --libs opencv`
