@@ -20,8 +20,8 @@ public class PopsicleBotControlPanel extends JPanel {
 		c.gridy = 0;
 		add(new JLabel("Left Leg"), c);
 		
-		final Leg right = new Leg("r", controller, 90, 135, 90, 90);
-		final Leg left = new Leg("l", controller, 90, 135, 90, 90);
+		final Leg right = new Leg("r", controller, 90, 90, 135, 92);
+		final Leg left = new Leg("l", controller, 90, 90, 135, 85);
 		c.gridx = 0;
 		c.gridy = 1;
 		add(right, c);

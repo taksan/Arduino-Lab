@@ -13,5 +13,17 @@ public class PopsicleBotControlMain {
     	jFrame.pack();
     	jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	jFrame.setVisible(true);
+    	/*
+    	 Upper Right Leg: 75 (initial)
+    	 	lower numbers : make leg come to front
+    	 	higher numbers: make leg go back
+		 Right Knee: 
+		 	higher numbers raise the lower leg
+    	 Right Foot: higher numbers lift, lower number lowers (92)
+    	 Left Foot: lower numbers lift, higher lowers (85)
+    	 
+    	 Upper Left Leg:
+    	 	lower: raises leg
+    	 */
     }
 }
