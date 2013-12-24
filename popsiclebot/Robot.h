@@ -1,14 +1,15 @@
-#include "../serialReader/SerialReader.h"
 #include "Leg.h"
 
 class Robot {
 	LeftLeg * left;
 	RightLeg * right;
-	SerialReader * controller;
+	FeedbackCallback * controller;
 public:
-	Robot(SerialReader  * controller) {
-		left = new LeftLeg(6,7,8,9);
-		right = new RightLeg(10,11,12,13);
+	Robot(FeedbackCallback * controller):
+		controller(controller)
+	{
+		left = new LeftLeg(controller, 6,7,8,9);
+		right = new RightLeg(controller, 10,11,12,13);
 
 		left->shoulder(90);
 		left->upper(80);
@@ -17,7 +18,7 @@ public:
 
 		right->shoulder(90);
 		right->upper(90);
-		right->knee(145);
+		right->knee(135);
 		right->foot(85);
 		this->controller = controller;
 	}
@@ -27,14 +28,14 @@ public:
 		char legMotor = command[1];
 		char * angleStr = command+3;
 		int angle = atoi(angleStr);
-		Leg * legToMove;
+		Leg * legToRotate;
 		if (chosenLeg == 'l') {
-			legToMove = (LeftLeg*)left;
+			legToRotate = (LeftLeg*)left;
 			controller->print("left leg:");
 		}
 		else if (chosenLeg == 'r') {
 			controller->print("right leg:");
-			legToMove = (RightLeg*)right;
+			legToRotate = (RightLeg*)right;
 		}
 		else {
 			controller->print("invalid leg: ");
@@ -42,33 +43,26 @@ public:
 			return;
 		}
 
-		switch(legMotor) {
-			case 's':
-				controller->print("move shoulder motor to ");
-				controller->println(angle,DEC);
-				legToMove->shoulder(angle);
-				break;
-			case 'u':
-				legToMove->upper(angle);
-				controller->print("move upper motor to ");
-				controller->println(angle,DEC);
-				break;
-			case 'k':
-				legToMove->knee(angle);
-				controller->print("move knee motor to ");
-				controller->println(angle,DEC);
-				break;
+		bool success;
+		const char * limb;
+		#define ROTATE_MOTOR(func) \
+			success = legToRotate->func(angle);\
+			limb = #func;\
+			break;
 
-			case 'f':
-				legToMove->foot(angle);
-				controller->print("move foot motor to ");
-				controller->println(angle,DEC);
-				break;
+		switch(legMotor) {
+			case 's': ROTATE_MOTOR(shoulder)
+			case 'u': ROTATE_MOTOR(upper)
+			case 'k': ROTATE_MOTOR(knee)
+			case 'f': ROTATE_MOTOR(foot)
 			default:
 				controller->print("invalid leg motor: ");
 				controller->println(legMotor);
 		}
+		#undef ROTATE_MOTOR
+		if (success) \
+			controller->printf("rotate %s motor to %d\n", limb, angle);\
+
 	}
+
 };
-
-

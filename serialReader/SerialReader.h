@@ -1,3 +1,4 @@
+#include <stdarg.h>
 
 class SerialReader {
 public:
@@ -26,12 +27,12 @@ public:
 		Serial.println(data);
 	}
 
-	void print(char* data) {
+	void print(const char* data) {
 		Serial.print(data);
 	}
 
-	void println(char* data) {
-		Serial.print(data);
+	void println(const char* data) {
+		Serial.println(data);
 	}
 
 	void println(int data, int type) {
