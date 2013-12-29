@@ -1,27 +1,15 @@
-#include <Servo.h>
-#define LED 0
+int led = 0;
 
-
-Servo servo;
-void setup()
-{
-  pinMode(LED,OUTPUT);
-  servo.attach(7);
-  servo.write(90);
+// the setup routine runs once when you press reset:
+void setup() {                
+  // initialize the digital pin as an output.
+  pinMode(led, OUTPUT);     
 }
 
-int angle = 0;
-int direction = 1;
-void loop()
-{
-  digitalWrite(LED, HIGH);
-  delay(100);
-
-  digitalWrite(LED, LOW);
-  delay(100);  
-
-  if (angle >= 90 || angle <= 0)
-  	direction = -direction;
-
-  angle += direction;
+// the loop routine runs over and over again forever:
+void loop() {
+  digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(200);               // wait for a second
+  digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
+  delay(200);               // wait for a second
 }

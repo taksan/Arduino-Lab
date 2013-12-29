@@ -1,0 +1,1 @@
+- When you change the clock, you must "burn the bootloader" using the arduino IDE.
