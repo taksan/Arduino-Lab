@@ -31,4 +31,5 @@ void loop()
 		}
 		free(command);
 	}
+	robot->tick();
 }

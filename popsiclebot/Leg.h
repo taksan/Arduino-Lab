@@ -51,19 +51,19 @@ public:
 	}
 
 	virtual bool shoulder(int angle) {
-		return _shoulder.write(angle);
+		return _shoulder.rotate(angle);
 	}
 
 	virtual bool upper(int angle) {
-		return _upper.write(angle);
+		return _upper.rotate(angle);
 	}
 
 	virtual bool knee(int angle) {
-		return _knee.write(angle);
+		return _knee.rotate(angle);
 	}
 
 	virtual bool foot(int angle) {
-		return _foot.write(angle);
+		return _foot.rotate(angle);
 	}
 };
 
