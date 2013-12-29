@@ -7,6 +7,7 @@ public class PopsicleBotControlMain {
     public static void main(String[] args) throws Exception{
     	JTextAreaFeedback userFeedback = new JTextAreaFeedback(); 
 		PopsicleController arduinoSerial = new PopsicleController(userFeedback);
+		arduinoSerial.start();
 		
 		String currentAngles = arduinoSerial.sendCommand("s");
 		userFeedback.println("Robot is online. Current stats: " + currentAngles);

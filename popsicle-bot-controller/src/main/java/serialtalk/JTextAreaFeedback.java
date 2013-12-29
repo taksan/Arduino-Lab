@@ -20,10 +20,17 @@ public class JTextAreaFeedback
 	}
 
 	@Override
-	public void print(String str) {
+	public void print(final String str) {
 		this.append(str);
-		if (str.contains("[error]")) 
-			el.onError(str);
+		if (str.contains("[error]")) {
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					el.onError(str);
+				}
+			}, "Handler Error").start();
+		}
 	}
 
 	@Override

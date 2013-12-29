@@ -20,7 +20,7 @@ public class InitialStatus {
 	public InitialStatus(String fromRobot) {
 		//l- s:90 u:96 k:135 f:92 r- s:90 u:90 k:45 f:95
 		Gson gson = new Gson();
-		Robot robot = gson.fromJson(fromRobot, Robot.class);
+		Robot robot = fromJson(fromRobot, gson);
 		right[0] = robot.right.s;
 		right[1] = robot.right.u;
 		right[2] = robot.right.k;
@@ -30,6 +30,15 @@ public class InitialStatus {
 		left[1] = robot.left.u;
 		left[2] = robot.left.k;
 		left[3] = robot.left.f;
+	}
+
+	private Robot fromJson(String fromRobot, Gson gson) {
+		try {
+			return gson.fromJson(fromRobot, Robot.class);
+		}catch (Exception e) {
+			System.err.println("Failed to parse : " + fromRobot);
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public InitialStatus() {

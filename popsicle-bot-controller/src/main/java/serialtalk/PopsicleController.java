@@ -3,11 +3,20 @@ package serialtalk;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import org.apache.commons.lang.UnhandledException;
 
@@ -17,6 +26,7 @@ public class PopsicleController {
 	LinkedHashMap<Object, String> cmdFromSource = new LinkedHashMap<>();
 	List<ChangeListener> listeners = new LinkedList<ChangeListener>();
 	private UserFeedback feedback;
+	BlockingQueue<String> lineQueue = new LinkedBlockingDeque<>();
 
 	public PopsicleController(UserFeedback feedback) {
 		this.feedback = feedback;
@@ -50,20 +60,12 @@ public class PopsicleController {
 	}
 	
 	public String sendCommand(final String val) {
+		lineQueue.clear();
+		write(val);
 		try {
-			String value = val.contains("$")?val:val+"$\n";
-			output.write(value.getBytes(), 0, value.length());
-			while(input.available() == 0);
-			
-			StringBuffer sb = new StringBuffer();
-			char data;
-			do {
-				data = (char) input.read();
-				sb.append(data);
-			} while(data != '\n');
-			return sb.toString();
-		}catch(Exception e) {
-			throw new UnhandledException(e);
+			return lineQueue.take();
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
 		}
 	}
 	
@@ -83,9 +85,40 @@ public class PopsicleController {
 		listeners.add(listener);
 	}
 	
-	private void write(String value) {
-		feedback.println("> "+value.trim());
-		String reply = sendCommand(value);
-		feedback.print(reply);
+	private void write(String val) {
+		String value = val.contains("$")?val:val+"$\n";
+		try {
+			output.write(value.getBytes(), 0, value.length());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	private void  receiveIncomingData() {
+		StringBuffer sb = new StringBuffer();
+		char data;
+		do {
+			try {
+				if (input.available()==0) continue;
+				data = (char) input.read();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			sb.append(data);
+			if (data == '\n') {
+				lineQueue.add(sb.toString());
+				feedback.print("< " + sb.toString());
+				sb = new StringBuffer();
+			}
+		} while(true);
+	}
+
+	public void start() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				receiveIncomingData();
+			}
+		}, "Data Receiver").start();
 	}
 }
