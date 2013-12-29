@@ -20,11 +20,13 @@ public:
 		_upper.attach(upperPin);
 		_knee.attach(kneePin);
 		_foot.attach(footPin);
+	}
 
-		shoulder(90);
-		upper(90);
-		knee(90);
-		foot(90);
+	void init (int shoulder, int upper, int knee, int foot) {
+		_shoulder.write(shoulder);
+		_upper.write(upper);
+		_knee.write(knee);
+		_foot.write(foot);
 	}
 
 	void tick() {
@@ -34,36 +36,30 @@ public:
 		_foot.tick();
 	}
 
-	int shoulder() {
-		return _shoulder.read();
-	}
-
-	int upper() {
-		return _upper.read();
-	}
-
-	int knee() {
-		return _knee.read();
-	}
-
-	int foot() {
-		return _foot.read();
-	}
-
 	virtual bool shoulder(int angle) {
 		return _shoulder.rotate(angle);
 	}
-
 	virtual bool upper(int angle) {
 		return _upper.rotate(angle);
 	}
-
 	virtual bool knee(int angle) {
 		return _knee.rotate(angle);
 	}
-
 	virtual bool foot(int angle) {
 		return _foot.rotate(angle);
+	}
+
+	int shoulder() {
+		return _shoulder.read();
+	}
+	int upper() {
+		return _upper.read();
+	}
+	int knee() {
+		return _knee.read();
+	}
+	int foot() {
+		return _foot.read();
 	}
 };
 

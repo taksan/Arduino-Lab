@@ -23,6 +23,7 @@ public:
 		lowerBound(lower),upperBound(upper), 
 		feedback(feedback)
 	{
+		write(90);
 	}
 
 	void tick() {
@@ -44,15 +45,14 @@ public:
 			return false;
 		}
 
-		//Servo::write(value);
 		feedback->printf("(%d accepted. Will start ticking. )", value);
 		task = new RotateTask(read(),value);
 		return true;
 	}
 
-	void write(int value) {
+	void writeInc(int value) {
 		feedback->printf("processing tick: %d\n", value);
-		Servo::write(value);
+		write(value);
 	}
 
 private:
@@ -61,7 +61,7 @@ private:
 
 bool RotateTask::perform(LegJoint * servo) {
 	from+=inc;
-	servo->write(from);
+	servo->writeInc(from);
 	return from == to;
 }
 

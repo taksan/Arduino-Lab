@@ -12,15 +12,8 @@ public:
 		left  = new LeftLeg (controller,  6, 7, 8,9);
 		right = new RightLeg(controller, 13,12,11,10);
 
-		left->shoulder(90);
-		left->upper(80);
-		left->knee(135);
-		left->foot(92);
-
-		right->shoulder(90);
-		right->upper(90);
-		right->knee(45);
-		right->foot(85);
+		left->init(90,80,135,92);
+		right->init(90,90,45,85);
 		this->controller = controller;
 	}
 
