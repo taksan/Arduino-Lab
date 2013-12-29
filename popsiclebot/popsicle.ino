@@ -1,20 +1,7 @@
-#include "../serialReader/SerialReader.h"
 #include <Servo.h>
 #define Servo Servo
-
-class FeedbackCallback : public SerialReader {
-public:
-	void printf(const char* fmt, ...) {
-		va_list args;
-		va_start(args, fmt);
-		char out[100];
-		vsprintf(out, fmt, args);
-		Serial.print(out);
-		va_end(args);
-	}
-
-};
-
+#include "Tickable.h"
+#include "feedback.h"
 #include "Robot.h"
 
 FeedbackCallback feedback;

@@ -1,3 +1,5 @@
+#ifndef __SERIAL_READER__H_
+#define __SERIAL_READER__H_
 #include <stdarg.h>
 
 class SerialReader {
@@ -40,3 +42,4 @@ public:
 	}
 };
 
+#endif

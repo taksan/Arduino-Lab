@@ -1,30 +1,6 @@
-class LegJoint : public Servo {
-	FeedbackCallback * feedback;
-	int lowerBound;
-	int upperBound;
-public:
-	LegJoint(FeedbackCallback * feedback, int lower, int upper):
-		feedback(feedback), 
-		lowerBound(lower),upperBound(upper) 
-	{
-	}
+#include "LegJoint.h"
 
-	bool accept(int value) {
-		return (value >= lowerBound && value <= upperBound);
-	}
-
-	bool write(int value) {
-		if (!accept(value)) {
-			feedback->printf("%d rejected because it is out of allowed bounds\n", value);
-			return false;
-		}
-
-		Servo::write(value);
-		return true;
-	}
-};
-
-class Leg {
+class Leg : public Tickable {
 protected:
 	LegJoint _shoulder;
 	LegJoint _upper;
@@ -51,6 +27,29 @@ public:
 		foot(90);
 	}
 
+	void tick() {
+		_shoulder.tick();
+		_upper.tick();
+		_knee.tick();
+		_foot.tick();
+	}
+
+	int shoulder() {
+		return _shoulder.read();
+	}
+
+	int upper() {
+		return _upper.read();
+	}
+
+	int knee() {
+		return _knee.read();
+	}
+
+	int foot() {
+		return _foot.read();
+	}
+
 	virtual bool shoulder(int angle) {
 		return _shoulder.write(angle);
 	}
@@ -74,34 +73,18 @@ public:
 		Leg(feedback, shoulderPin, upperPin, kneePin, footPin,
 			55,110,
 			70,180,
-			90, 180)
+			0, 180)
 	{
 	}
-
 };
 
 class RightLeg : public Leg {
 public:
-	RightLeg(FeedbackCallback * feedback, int footPin, int kneePin, int upperPin, int shoulderPin):
+	RightLeg(FeedbackCallback * feedback, int shoulderPin, int upperPin, int kneePin, int footPin):
 		Leg(feedback, shoulderPin, upperPin, kneePin, footPin, 
 		50, 180,
 		0, 180,
-		85, 180)
+		0, 180)
 	{
-	}
-	bool shoulder(int angle) {
-		return Leg::shoulder(180-angle);
-	}
-
-//	void upper(int angle) {
-//		Leg::upper(180-angle);
-//	}
-
-	bool knee(int angle) {
-		return Leg::knee(180-angle);
-	}
-
-	bool foot(int angle) {
-		return Leg::foot(180-angle);
 	}
 };

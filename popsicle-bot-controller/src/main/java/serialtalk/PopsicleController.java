@@ -3,19 +3,23 @@ package serialtalk;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.apache.commons.lang.UnhandledException;
 
 public class PopsicleController {
 	private InputStream input;
 	private OutputStream output;
-	List<String> commands = new LinkedList<String>();
+	LinkedHashMap<Object, String> cmdFromSource = new LinkedHashMap<>();
 	List<ChangeListener> listeners = new LinkedList<ChangeListener>();
+	private UserFeedback feedback;
 
-	public PopsicleController() {
+	public PopsicleController(UserFeedback feedback) {
+		this.feedback = feedback;
 		try {
 			String serialPort="/dev/ttyUSB0";
 	        CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(
@@ -33,35 +37,34 @@ public class PopsicleController {
 		}
 	}
 	
-	public void printReceivedData() {
-		try {
-			if (input.available() > 0)
-				System.out.print("There is data");
-			while(input.available()>0) {
-				char data = (char) input.read();
-				System.out.print((char)data);
-				if (data == '\0')
-					break;
-	        }
-			System.out.println("");
-		}catch(IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	
 	public void sendAccumulatedData() {
-		for (String value : commands) {
+		for (String value : cmdFromSource.values()) 
 			write(value);
-		}
-		commands = new LinkedList<String>();
+		cmdFromSource.clear();
 		fireCommandsSent();
 	}
-	
 
-	public void putCommand(String value) {
+	public void putCommand(Object object, String value) {
 		fireCommandAdded();
-		commands.add(value); 
+		cmdFromSource.put(object, value);
+	}
+	
+	public String sendCommand(final String val) {
+		try {
+			String value = val.contains("$")?val:val+"$\n";
+			output.write(value.getBytes(), 0, value.length());
+			while(input.available() == 0);
+			
+			StringBuffer sb = new StringBuffer();
+			char data;
+			do {
+				data = (char) input.read();
+				sb.append(data);
+			} while(data != '\n');
+			return sb.toString();
+		}catch(Exception e) {
+			throw new UnhandledException(e);
+		}
 	}
 	
 	private void fireCommandsSent() {
@@ -81,11 +84,8 @@ public class PopsicleController {
 	}
 	
 	private void write(String value) {
-		try {
-			output.write(value.getBytes(), 0, value.length());
-			printReceivedData();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}		
+		feedback.println("> "+value.trim());
+		String reply = sendCommand(value);
+		feedback.print(reply);
 	}
 }

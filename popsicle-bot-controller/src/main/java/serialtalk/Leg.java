@@ -13,10 +13,12 @@ public class Leg extends JPanel {
 	public final LegSlider foot;
 
 	public Leg(String idPrefix, PopsicleController serial, int... angles) {
-		shoulder = new LegSlider(idPrefix + "s", serial, angles[0]);
-		upper = new LegSlider(idPrefix + "u", serial, angles[1]);
-		knee = new LegSlider(idPrefix + "k", serial, angles[2]);
-		foot = new LegSlider(idPrefix + "f", serial, angles[3]);
+		shoulder = new LegSlider(idPrefix + "s", serial);
+		upper = new LegSlider(idPrefix + "u", serial);
+		knee = new LegSlider(idPrefix + "k", serial);
+		foot = new LegSlider(idPrefix + "f", serial);
+		setAngles(angles);
+		
 		setLayout(new GridLayout(6, 1));
 		add(new JLabel("Shoulder Motor"));
 		add(shoulder);
@@ -29,5 +31,12 @@ public class Leg extends JPanel {
 
 		add(new JLabel("Foot Motor"));
 		add(foot);
+	}
+	
+	public void setAngles(int... angles) {
+		shoulder.withAngle(angles[0]);
+		upper.withAngle(angles[1]);
+		knee.withAngle(angles[2]);
+		foot.withAngle(angles[3]);
 	}
 }
