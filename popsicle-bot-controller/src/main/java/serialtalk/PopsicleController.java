@@ -9,16 +9,9 @@ import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.LinkedBlockingDeque;
-
-import org.apache.commons.lang.UnhandledException;
+import java.util.concurrent.TimeUnit;
 
 public class PopsicleController {
 	private InputStream input;
@@ -63,7 +56,7 @@ public class PopsicleController {
 		lineQueue.clear();
 		write(val);
 		try {
-			return lineQueue.take();
+			return lineQueue.poll(1, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
@@ -114,11 +107,13 @@ public class PopsicleController {
 	}
 
 	public void start() {
-		new Thread(new Runnable() {
+		Thread dataReceiverThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				receiveIncomingData();
 			}
-		}, "Data Receiver").start();
+		}, "Data Receiver");
+		dataReceiverThread.setDaemon(true);
+		dataReceiverThread.start();
 	}
 }

@@ -9,7 +9,8 @@ public class PopsicleBotControlMain {
 		PopsicleController arduinoSerial = new PopsicleController(userFeedback);
 		arduinoSerial.start();
 		
-		String currentAngles = arduinoSerial.sendCommand("s");
+		String currentAngles = getCurrentRobotStatusOrCry(arduinoSerial);
+		
 		userFeedback.println("Robot is online. Current stats: " + currentAngles);
 		
     	InitialStatus stats = new InitialStatus(currentAngles);
@@ -39,4 +40,16 @@ public class PopsicleBotControlMain {
     	  	lower numbers: rotates arm ccw
     	 */
     }
+
+	private static String getCurrentRobotStatusOrCry(
+			PopsicleController arduinoSerial) {
+		String currentAngles = arduinoSerial.sendCommand("s");
+		if (currentAngles == null) {
+			System.out.println("Response not received on firt attempt, retry");
+			currentAngles = arduinoSerial.sendCommand("s");
+		}
+		if (currentAngles == null)
+			throw new RuntimeException("Could not communicate with robot. Bailing out!");
+		return currentAngles;
+	}
 }
