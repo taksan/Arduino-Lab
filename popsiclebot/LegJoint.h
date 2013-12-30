@@ -23,6 +23,7 @@ public:
 		lowerBound(lower),upperBound(upper), 
 		feedback(feedback)
 	{
+		task = NULL;
 		write(90);
 	}
 
@@ -53,6 +54,11 @@ public:
 	void writeInc(int value) {
 		feedback->printf("processing tick: %d\n", value);
 		write(value);
+	}
+
+	void write(int value) {
+		if (accept(value)) 
+			Servo::write(value);
 	}
 
 private:
