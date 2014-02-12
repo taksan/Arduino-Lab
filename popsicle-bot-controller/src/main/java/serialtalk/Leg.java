@@ -7,16 +7,16 @@ import javax.swing.JPanel;
 
 public class Leg extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public final LegSlider shoulder;
-	public final LegSlider upper;
-	public final LegSlider knee;
-	public final LegSlider foot;
+	public final ArticulatedJointSlider shoulder;
+	public final ArticulatedJointSlider upper;
+	public final ArticulatedJointSlider knee;
+	public final ArticulatedJointSlider foot;
 
-	public Leg(String idPrefix, PopsicleController serial, int... angles) {
-		shoulder = new LegSlider(idPrefix + "s", serial);
-		upper = new LegSlider(idPrefix + "u", serial);
-		knee = new LegSlider(idPrefix + "k", serial);
-		foot = new LegSlider(idPrefix + "f", serial);
+	public Leg(String idPrefix, PopsicleController controller, int... angles) {
+		shoulder = new ArticulatedJointSlider(idPrefix + "s", controller);
+		upper = new ArticulatedJointSlider(idPrefix + "u", controller);
+		knee = new ArticulatedJointSlider(idPrefix + "k", controller);
+		foot = new ArticulatedJointSlider(idPrefix + "f", controller);
 		setAngles(angles);
 		
 		setLayout(new GridLayout(6, 1));

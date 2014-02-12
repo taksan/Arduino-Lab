@@ -5,21 +5,26 @@ class Robot : public Tickable {
 	LeftLeg * left;
 	RightLeg * right;
 	FeedbackCallback * controller;
+	ArticulatedJoint * neck;
 public:
 	Robot(FeedbackCallback * controller):
 		controller(controller)
 	{
 		left  = new LeftLeg (controller,  6, 7, 8,9);
 		right = new RightLeg(controller, 13,12,11,10);
+		neck = new ArticulatedJoint(controller, 0, 180);
+		neck->attach(5);
 
-		left->init(90,80,135,92);
-		right->init(90,90,45,85);
+		neck->write(90);
+		left->init(90,60,125,120);
+		right->init(90,60,55,120);
 		this->controller = controller;
 	}
 
 	void tick() {
 		left->tick();
 		right->tick();
+		neck->tick();
 	}
 
 	void processCommand(const char * command) {
@@ -27,7 +32,16 @@ public:
 			sendRobotJson();
 			return;
 		}
+		if (command[0] == 'n') {
+			rotateNeck(command);
+			return;
+		}
 		rotateLegJoint(command);
+	}
+	inline void rotateNeck(const char * command) {
+		const char * angleStr = command+1;
+		int angle = atoi(angleStr);
+		neck->rotate(angle);
 	}
 
 	inline void rotateLegJoint(const char* command) 
@@ -76,8 +90,8 @@ public:
 		#define FMT "{s:%d,u:%d,k:%d,f:%d}" 
 		#define VALUES_OF(member) member->shoulder(), member->upper(), member->knee(), member->foot()
 		controller->printf(
-			"{left:" FMT ",right:" FMT "}\n",
-			VALUES_OF(left), VALUES_OF(right)
+			"{left:" FMT ",right:" FMT ",neck:%d}\n",
+			VALUES_OF(left), VALUES_OF(right),neck->read()
 			);
 		#undef VALUES_OF
 		#undef FMT

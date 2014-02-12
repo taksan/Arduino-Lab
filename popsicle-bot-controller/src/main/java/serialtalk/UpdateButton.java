@@ -10,6 +10,7 @@ public class UpdateButton extends JButton implements ChangeListener{
 	public UpdateButton(final PopsicleController controller) {
 		super("Update robot");
 		this.setEnabled(false);
+		setFocusable(false);
 		
 		controller.addChangeListener(this);
 		addActionListener(new ActionListener() {

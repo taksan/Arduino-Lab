@@ -10,13 +10,13 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class LegSlider extends JPanel {
+public class ArticulatedJointSlider extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JSlider jointSlider;
 	private JTextField jointTextField;
 	private boolean ignoreUpdate;
 	
-	public LegSlider(final String id, final PopsicleController arduinoSerial) {
+	public ArticulatedJointSlider(final String id, final PopsicleController arduinoSerial) {
 		createComponents(id, arduinoSerial, 0);
 	}
 
@@ -26,6 +26,7 @@ public class LegSlider extends JPanel {
 		withAngle(initialAngle);
 		
 		jointTextField = new JTextField(""+jointSlider.getValue());
+			jointSlider.setFocusable(false);
 		this.add(jointSlider);
 		this.add(jointTextField);
 		jointTextField.setColumns(4);
@@ -72,7 +73,7 @@ public class LegSlider extends JPanel {
 		});
 	}
 
-	public LegSlider withAngle(int initialAngle) {
+	public ArticulatedJointSlider withAngle(int initialAngle) {
 		ignoreUpdate = true;
 		jointSlider.setValue(initialAngle);
 		return this;

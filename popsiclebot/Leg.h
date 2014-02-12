@@ -1,11 +1,11 @@
-#include "LegJoint.h"
+#include "ArticulatedJoint.h"
 
 class Leg : public Tickable {
 protected:
-	LegJoint _shoulder;
-	LegJoint _upper;
-	LegJoint _knee;
-	LegJoint _foot;
+	ArticulatedJoint _shoulder;
+	ArticulatedJoint _upper;
+	ArticulatedJoint _knee;
+	ArticulatedJoint _foot;
 public:
 	Leg(FeedbackCallback * feedback, int shoulderPin, int upperPin, int kneePin, int footPin, 
 		int upperLowBound, int upperUpBound,
@@ -67,7 +67,7 @@ class LeftLeg : public Leg {
 public:
 	LeftLeg(FeedbackCallback * feedback, int shoulderPin, int upperPin, int kneePin, int footPin) :
 		Leg(feedback, shoulderPin, upperPin, kneePin, footPin,
-			55,110,
+			50,160,
 			70,180,
 			0, 180)
 	{
@@ -78,7 +78,7 @@ class RightLeg : public Leg {
 public:
 	RightLeg(FeedbackCallback * feedback, int shoulderPin, int upperPin, int kneePin, int footPin):
 		Leg(feedback, shoulderPin, upperPin, kneePin, footPin, 
-		50, 180,
+		50, 160,
 		0, 180,
 		0, 180)
 	{

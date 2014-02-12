@@ -29,26 +29,35 @@ public class PopsicleBotControlPanel extends JPanel {
 		
 		final Leg right = new Leg("r", controller, initialStatus.right);
 		final Leg left = new Leg("l", controller, initialStatus.left);
+		
 		c.gridx = 0;
 		c.gridy = 1;
 		add(right, c);
 		
-		c.gridx = 1;
 		c.gridy = 1;
+		c.gridx = 1;
 		add(left, c);
+		
+		Neck neck = new Neck(controller, initialStatus);
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 2;
+		add(neck, c);
 		
 		UpdateButton updateRobot = new UpdateButton(controller);
 		
 		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = 3;
 		c.gridwidth = 2;
 		add(updateRobot, c);
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 4;
 		c.gridwidth = 2;
 		c.fill = GridBagConstraints.BOTH;
 		
-		add(new JScrollPane(userFeedback), c);
+		JScrollPane comp = new JScrollPane(userFeedback);
+		comp.setFocusable(false);
+		add(comp, c);
 		userFeedback.setErrorListener(new RobotErrorListener() {
 			@Override
 			public void onError(String str) {

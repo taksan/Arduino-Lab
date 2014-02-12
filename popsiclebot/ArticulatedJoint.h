@@ -1,4 +1,4 @@
-class LegJoint;
+class ArticulatedJoint;
 
 class RotateTask {
 	int from, to, inc;
@@ -10,16 +10,16 @@ public:
 			1:
 			-1;
 	}
-	bool perform(LegJoint * servo); 
+	bool perform(ArticulatedJoint * servo); 
 };
 
-class LegJoint : public Servo, public Tickable {
+class ArticulatedJoint : public Servo, public Tickable {
 private:
 	RotateTask * task;
 public:
 	const int lowerBound;
 	const int upperBound;
-	LegJoint(FeedbackCallback * feedback, int lower, int upper):
+	ArticulatedJoint(FeedbackCallback * feedback, int lower, int upper):
 		lowerBound(lower),upperBound(upper), 
 		feedback(feedback)
 	{
@@ -65,7 +65,7 @@ private:
 	FeedbackCallback * feedback;
 };
 
-bool RotateTask::perform(LegJoint * servo) {
+bool RotateTask::perform(ArticulatedJoint * servo) {
 	from+=inc;
 	servo->writeInc(from);
 	return from == to;

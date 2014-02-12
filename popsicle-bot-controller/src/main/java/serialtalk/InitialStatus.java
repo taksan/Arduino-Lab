@@ -3,8 +3,9 @@ package serialtalk;
 import com.google.gson.Gson;
 
 public class InitialStatus {
-	int [] right = {90, 90, 135, 92};
-	int [] left = {90, 90, 135, 85};
+	public int [] right = {90, 90, 135, 92};
+	public int [] left = {90, 90, 135, 85};
+	public int neck;
 	
 	public static class Robot {
 		public static class Leg {
@@ -15,10 +16,10 @@ public class InitialStatus {
 		}
 		Leg left;
 		Leg right;
+		Integer neck;
 	}
 	
 	public InitialStatus(String fromRobot) {
-		//l- s:90 u:96 k:135 f:92 r- s:90 u:90 k:45 f:95
 		Gson gson = new Gson();
 		Robot robot = fromJson(fromRobot, gson);
 		right[0] = robot.right.s;
@@ -30,6 +31,8 @@ public class InitialStatus {
 		left[1] = robot.left.u;
 		left[2] = robot.left.k;
 		left[3] = robot.left.f;
+		
+		neck = robot.neck;
 	}
 
 	private Robot fromJson(String fromRobot, Gson gson) {
