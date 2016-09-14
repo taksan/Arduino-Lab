@@ -5,6 +5,7 @@ BOARD_TAG=atmega328
 ARDUINO_PORT=/dev/ttyUSB1
 AVRDUDE_CONF=$(ARDUINO_DIR)/hardware/tools/avrdude.conf
 ARDUINO_LIBS= VirtualWire
+USER_LIB_PATH=../user_libs/
 
 
 TARGET=rfcomm
