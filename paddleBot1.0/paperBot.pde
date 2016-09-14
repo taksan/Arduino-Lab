@@ -14,31 +14,13 @@
 
 #define GAME_COUNT 2
 
-Joy * joy;
+Joy * joy = NULL;
 BotGame * games[GAME_COUNT];
 
 Led gameLed(13);
+Led tickLed(12);
 int8_t currentGameNumber;
 LightDirectionDetector * lightFollow;
-
-void setup()
-{
-	Serial.begin(9600);
-	Serial.println("------o");
-	PaperBot * bot = new PaperBot(9,10);
-
-	joy = new Joy(new NunchuckRx(NUNCHUCK_RX_PIN));
-
-	Serial.println("joy started");
-
-	games[0] = new WalkingGame(bot,joy);
-
-	ArduinoApi * api = new ArduinoApiImpl();
-	lightFollow = new LightDirectionDetector(new LightFollower(bot), new Eye(api, 2),new Eye(api, 1));
-	games[1] = new FollowTheLightGame(bot, lightFollow, LEFT_LED_PIN, RIGH_LED_PIN);
-
-	currentGameNumber = 0;
-}
 
 void updateGameLed() {
 	switch(currentGameNumber) {
@@ -51,15 +33,43 @@ void updateGameLed() {
 	}
 }
 
+Servo * thrustMotor;
+Servo * directionMotor;
+void setup()
+{
+	Serial.begin(9600);
+	Serial.println("Starting up...");
+
+	PaperBot * bot = new PaperBot(9,10);
+
+	joy = new Joy(new NunchuckRx(NUNCHUCK_RX_PIN));
+	games[0] = new WalkingGame(bot,joy);
+
+	ArduinoApi * api = new ArduinoApiImpl();
+	lightFollow = new LightDirectionDetector(new LightFollower(bot), new Eye(api, 2),new Eye(api, 1));
+	games[1] = new FollowTheLightGame(bot, lightFollow, LEFT_LED_PIN, RIGH_LED_PIN);
+
+	currentGameNumber = 0;
+
+
+	Serial.println("Rx Nunchuck Started. Turn the led on");
+	updateGameLed();
+}
+
 long prevCount=0;
 long before, now;
 void loop()
 {
+	int32_t before = millis();
 	joy->update();
 	if (joy->zPressed()) {
 		currentGameNumber = (currentGameNumber + 1) % GAME_COUNT;
 	}
+	if (joy->wasUpdated) {
+		gameLed.toggle();
+	}
 	
-	updateGameLed();
+//	updateGameLed();
 	games[currentGameNumber]->tick();
+	tickLed.blink(500);
 }

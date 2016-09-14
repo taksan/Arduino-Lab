@@ -23,7 +23,7 @@ public:
 	ledOn = false;
   }
   
-  long ledOnExpirationTime;
+  uint32_t ledOnExpirationTime;
   void turnOnAndHoldUntilExpired(int16_t timeToHold) {
     turnOn();
     ledOnExpirationTime = millis() + timeToHold;  
@@ -44,6 +44,13 @@ public:
 		turnOff();
 	else 
   		turnOn();
+  }
+
+  void toggle() {
+  	if (ledOn)
+		turnOff();
+	else
+		turnOn();
   }
 
 private:

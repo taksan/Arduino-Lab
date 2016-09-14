@@ -12,10 +12,10 @@
 class FollowTheLightGame : public BotGame {
 public:
 	FollowTheLightGame(PaperBot * bot, AbstractLightDirectionDetector * lightDirection, int16_t leftLedPin, int8_t rightLedPin):
-		leftLed(leftLedPin),
-		rightLed(rightLedPin),
 		bot(bot),
 		lightDirection(lightDirection),
+		leftLed(leftLedPin),
+		rightLed(rightLedPin),
 		previous(dvGoNowhere),
 		goAheadUntilTurningStablePoint(false)
 	{
@@ -40,7 +40,6 @@ public:
 			rightLed.turnOff();
 		}
 		previous = directionToGo;
-		int acc = lightDirection->getIntensity();
 		float accuracy = lightDirection->getIntensity()/100.0;
 		int16_t intensity = MAX_INTENSITY * accuracy;
 		if (intensity < 25)

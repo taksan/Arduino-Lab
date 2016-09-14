@@ -82,7 +82,7 @@ private:
 
 	PaperBotMove * noMove;
 
-	int32_t commandExpirationTime;
+	uint32_t commandExpirationTime;
 
 	bool stable;
 };

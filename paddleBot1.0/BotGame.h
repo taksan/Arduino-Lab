@@ -27,7 +27,7 @@ protected:
 	}
 
 private:
-	int32_t nextReadyTime;
+	uint32_t nextReadyTime;
 
 	void setTimeToWaitUntilNextReady(int32_t timeToWait) {
 		nextReadyTime = millis() + timeToWait;

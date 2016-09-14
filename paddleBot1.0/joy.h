@@ -12,14 +12,19 @@ public:
 		this->nunchuck->begin();
 
 		baseX = this->nunchuck->readJoyX();
+		Serial.println("1");
 		baseY = this->nunchuck->readJoyY();
-		SerialDebug::println("bx %d by %d", baseX, baseY);
+		Serial.println("2");
+		SerialDebug::println("Base joy axis values bx %d by %d", baseX, baseY);
 		jY = baseY;
 		jX = baseX;
+		SerialDebug::println("initial values jX=%d jY=%d", jX, jY);
+		lastMoveIntensity = 0;
+		wasUpdated = false;
 	}
 
 	void update() {
-		nunchuck->update();
+		wasUpdated = nunchuck->update();
 		jY = nunchuck->readJoyY();
 		jX = nunchuck->readJoyX();
 
@@ -54,6 +59,7 @@ public:
 		return nunchuck->zPressed();
 	}
 
+	bool wasUpdated;
 private:
 	void ensureOnlyASingleMovementIsConsidered() {
 		if (ABS(jY-baseY) > ABS(jX-baseX)) {
@@ -71,7 +77,7 @@ private:
 		jY = baseY;
 	}
 
-	inline boolean isRelevant(int op1, int op2) {
+	inline boolean isRelevant(int16_t op1, int16_t op2) {
 		int16_t intensity = op1-op2;
 		bool relevant = intensity > 10;
 		if (relevant)

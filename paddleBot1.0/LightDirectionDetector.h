@@ -16,9 +16,9 @@ public:
 		rightEye(rightEye),
 		lastTakenDirection(dvTurnRight),
 		lastKnownDirection(dvGoNowhere),
+		follower(lightFollower),
 		intensity(0),
-		aheadStubbornCount(0),
-		follower(lightFollower)
+		aheadStubbornCount(0)
 	{
 		this->gaugeBase();
 		leftEye->setAdjustFactorAgainst(rightEye->getLevel());
@@ -33,7 +33,6 @@ public:
 	Direction getDirectionToGo() 
 	{
 		bool hasStrong = false;
-		int previousintensity = intensity;
 		Direction newKnownDirection;
 		intensity = 100;
 		if (areBothEyesStrong()) {
@@ -81,8 +80,6 @@ public:
 	}
 private:
 	Direction determineDirectionOnWeakLevels() {
-		int previousintensity = intensity;
-
 		intensity = 40;
 		if (lastKnownDirection != dvGoNowhere)
 			return lastKnownDirection;

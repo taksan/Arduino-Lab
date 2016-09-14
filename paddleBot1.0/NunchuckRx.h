@@ -3,6 +3,7 @@
 
 #include "../NunchuckParams.h"
 #include <VirtualWire.h>
+#include "SerialDebug.h"
 
 class NunchuckRx : public NunchuckInterface {
 public:
@@ -12,12 +13,15 @@ public:
 	}
 
 	void begin() {
+		Serial.println("Begin rx nunchuck configuration");
 		int boundRate = 2000;
 		vw_set_ptt_inverted(true);
 		vw_setup(boundRate);
 		vw_set_rx_pin(commPin);
 		vw_rx_start(); 
+
 		updateAndEnsureReceivedData();
+		Serial.println("First data received");
 	}
 
 	bool update()
@@ -65,9 +69,10 @@ private:
 		{   
 			if (buflen == sizeof(NunchuckParams)) {
 				memcpy(&receivedParams, buf, sizeof(receivedParams));
+				printDebugInfo();
 				return true;
 			}
-			Serial.println("bogus data received");
+			Serial.println("bogus data received, ignored");
 		}
 		return false;
 	}
@@ -80,8 +85,7 @@ private:
 
 	void printDebugInfo()
 	{
-		char msg[80];
-		sprintf(msg, 
+		SerialDebug::println(
 				"Rx data: x=%d y=%d c=%d z=%d ax=%d ay=%d az=%d",
 				receivedParams.x,
 				receivedParams.y,
@@ -91,7 +95,6 @@ private:
 				receivedParams.ay,
 				receivedParams.az
 			   );
-		Serial.println(msg);
 	}
 
 	int commPin;

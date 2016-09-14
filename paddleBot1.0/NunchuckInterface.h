@@ -1,5 +1,5 @@
-#ifndef NUNCHUCK__INTERFACE__H_
-#define NUNCHUCK__INTERFACE__H_
+#ifndef NUNCHUCK__intERFACE__H_
+#define NUNCHUCK__intERFACE__H_
 
 class NunchuckInterface {
 public:

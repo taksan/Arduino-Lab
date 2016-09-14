@@ -6,11 +6,11 @@
 class Eye {
 public:
 	Eye(ArduinoApi * api, int8_t pin):
-		api(api),
 		pin(pin),
 		adjustFactor(1),
 		previousWasStrong(false),
-		strenghThreshold(STRENGH_THRESHOLD)
+		strenghThreshold(STRENGH_THRESHOLD),
+		api(api)
 	{
 	}
 
