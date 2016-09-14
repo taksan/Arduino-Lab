@@ -145,7 +145,7 @@ void PaperBot::waitBasedOnAngleOffset(int16_t previousAngle, int16_t newAngle)
 	int32_t timeToWait = TIME_TO_DO_180 * (angleOffset / (float)END_DIR);
 
 	commandExpirationTime = millis() + timeToWait;
-	delay(timeToWait);
+//	delay(timeToWait);
 }
 
 bool PaperBot::isReady()

@@ -2,7 +2,7 @@
 #define PAPER_BOT_MOVE_H__
 
 #include "Common.h"
-#define STEP_ANGLE 5
+#define STEP_ANGLE 3
 #define INTENSITY_FACTOR(X) STEP_ANGLE * ((float)X/127)
 
 class PaperBot;
@@ -113,7 +113,8 @@ class TurnMove: public PaperBotMove {
 
 class TurnRightWhenFacingAhead : public TurnMove {
 	public:
-		TurnRightWhenFacingAhead(PaperBot * bot):TurnMove(bot, DIR_180_INIT_THRUST_ANGLE, END_DIR, 110, -STEP_ANGLE) { }
+		TurnRightWhenFacingAhead(PaperBot * bot):
+			TurnMove(bot, DIR_180_INIT_THRUST_ANGLE, END_DIR, 110, -STEP_ANGLE) { }
 
 		void stop();
 	protected:
@@ -124,7 +125,9 @@ class TurnRightWhenFacingAhead : public TurnMove {
 
 class TurnRightWhenFacingBack : public TurnMove {
 	public:
-		TurnRightWhenFacingBack(PaperBot * bot):TurnMove(bot, DIR_0_INIT_THRUST_ANGLE, END_DIR, 70, -STEP_ANGLE) { }
+		TurnRightWhenFacingBack(PaperBot * bot):
+			TurnMove(bot, DIR_0_INIT_THRUST_ANGLE, END_DIR, 70, -STEP_ANGLE) { }
+
 		void stop();
 
 	protected:

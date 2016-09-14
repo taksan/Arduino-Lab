@@ -41,6 +41,15 @@ public:
 	bool isReady();
 
 	bool isStable();
+
+	enum MoveType {
+		none,
+		movingAhead,
+		movingBack,
+		turningRight,
+		turningLeft
+	};
+
 private:
 
 	void setupForRight(); 
@@ -53,15 +62,6 @@ private:
 		ahead,
 		back
 	};
-
-	enum MoveType {
-		none,
-		movingAhead,
-		movingBack,
-		turningRight,
-		turningLeft
-	};
-
 
 	Direction facingDirection;
 	MoveType lastMove;
@@ -86,5 +86,6 @@ private:
 
 	bool stable;
 };
+
 
 #endif
