@@ -44,12 +44,18 @@ public class PopsicleBotControlPanel extends JPanel {
 		c.gridwidth = 2;
 		add(neck, c);
 		
-		UpdateButton updateRobot = new UpdateButton(controller);
-		
+		ResetButton resetRobot = new ResetButton(controller, initialStatus, right, left, neck);
 		c.gridx = 0;
 		c.gridy = 3;
-		c.gridwidth = 2;
+		c.gridwidth = 1;
+		add(resetRobot, c);
+		
+		UpdateButton updateRobot = new UpdateButton(controller);
+		c.gridx = 1;
+		c.gridy = 3;
+		c.gridwidth = 1;
 		add(updateRobot, c);
+		
 		c.gridx = 0;
 		c.gridy = 4;
 		c.gridwidth = 2;
