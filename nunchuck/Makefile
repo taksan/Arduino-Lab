@@ -5,7 +5,7 @@ BOARD_TAG=mega
 ARDUINO_PORT=/dev/ttyUSB0
 AVRDUDE_CONF=$(ARDUINO_DIR)/hardware/tools/avrdude.conf
 ARDUINO_LIBS=Nunchuck Wire twi Servo
-
+USER_LIB_PATH=../user_libs/
 
 TARGET=rfnunchuck
 

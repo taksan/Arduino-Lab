@@ -1,20 +1,19 @@
-sudo apt-get install arduino
-sudo apt-get install libconfig-yaml-perl
-sudo apt-get install libdevice-serialport-perl
-sudo apt-get install libbluetooth-dev
+sudo apt-get install arduino libconfig-yaml-perl libdevice-serialport-perl libbluetooth-dev
 #cd ../cursoArduino2011/arduino-mk-0.6/
 #sudo ./install.sh
 #cd -
 sudo cp -rf Nunchuck /usr/share/arduino/libraries
 sudo cp -rf VirtualWire /usr/share/arduino/libraries
 sudo cp -rf ServoTimer2 /usr/share/arduino/libraries
-sudo cp Wire.cpp /usr/share/arduino/libraries/Wire/Wire.cpp
+#sudo cp Wire.cpp /usr/share/arduino/libraries/Wire/Wire.cpp
 sudo cp /usr/share/arduino/libraries/Wire/utility/* /usr/share/arduino/libraries/Wire/
 sudo mv /usr/share/arduino/libraries/Wire/twi.c /usr/share/arduino/libraries/Wire/twi.cpp
+sudo cat attiny/boards.txt >> /usr/share/arduino/hardware/arduino/boards.txt
+sudo cp -rf attiny/variants/* /usr/share/arduino/hardware/arduino/variants/
+sudo install ard-reset-arduino /usr/bin/ 
+
 unzip rxtx-2.1-7-bins-r2.zip
 cp rxtx-2.1-7-bins-r2/*.jar $JAVA_HOME/jre/lib/ext
 cp rxtx-2.1-7-bins-r2/Linux/x86_64-unknown-linux-gnu/librxtxSerial.so $JAVA_HOME/jre/lib/amd64
 rm -rf rxtx-2.1-7-bins-r2
-sudo cat attiny/boards.txt >> /usr/share/arduino/hardware/arduino/boards.txt
-sudo cp -rf attiny/variants/* /usr/share/arduino/hardware/arduino/variants/
-sudo install ard-reset-arduino /usr/bin/ 
+

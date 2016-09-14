@@ -4,9 +4,10 @@ AVR_TOOLS_PATH=/usr/bin
 BOARD_TAG=atmega328
 ARDUINO_PORT=/dev/ttyUSB0
 AVRDUDE_CONF=$(ARDUINO_DIR)/hardware/tools/avrdude.conf
-ARDUINO_LIBS= ServoTimer2 
+ARDUINO_LIBS=ServoTimer2 
 
+USER_LIB_PATH=../user_libs
 
-TARGET=servo2
+TARGET=treeservos
 
 include  ../arduino-mk/Arduino.mk
