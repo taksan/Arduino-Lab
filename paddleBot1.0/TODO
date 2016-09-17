@@ -1,0 +1,25 @@
+- Every time a sequence of commands that sets angles is executed in a single cycle,
+the paper bot should queue the commands and waits
+
+Example:
+	
+In the next cycles, the queue will be consumed. 
+While the queue has elements, no new commands should be accepted.
+
+paperBot::cycleBegin
+	setThrust(10)
+	wait(20)
+	setThrust(20)
+	wait(15)
+	setDirection(175)
+	wait(30)
+
+paperBot::cycleEnd
+
+paperBot::cycleBegin
+	rejects any new commands, process commands in the queue and dequeue them
+paperBot::cycleEnd
+...
+
+- motor changes are dequeued and the next wait too, proccess
+

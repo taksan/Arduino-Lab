@@ -1,12 +1,8 @@
-all: unitTests
-	./unitTests
+all: paperMove
 
-unitTests: clean
-	g++ -g -o unitTests main.cpp Light*.cpp -lcppunit
-	
 clean:
 	rm -f *.o
 
-paperMove:
+paperMove: ../PaperBotMove.cpp ../PaperBot.cpp PaperBotMoveSpike.cpp
 	g++ -g -c ../PaperBotMove.cpp ../PaperBot.cpp PaperBotMoveSpike.cpp -I.
 	g++ -g -o paperMoveTest *.o

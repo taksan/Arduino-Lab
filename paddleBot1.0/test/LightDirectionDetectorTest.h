@@ -52,5 +52,3 @@ private:
 	int strongLeftThreshold;
 	int strongRightThreshold;
 };
-
-

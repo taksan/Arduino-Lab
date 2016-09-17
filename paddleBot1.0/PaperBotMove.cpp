@@ -80,22 +80,3 @@ void TurnLeftWhenFacingBack::stop() {
 }
 
 
-void NonBlockingMove::perform(int16_t intensity) {
-	if (bot->isReady()) {
-		decorated->perform(intensity);
-	}
-}
-
-void NonBlockingMove::setup() {
-	if (bot->isReady()) {
-		decorated->setup();
-	}
-}
-
-void NonBlockingMove::stop()
-{
-	if (bot->isReady()) {
-		decorated->stop();
-	}
-}
-

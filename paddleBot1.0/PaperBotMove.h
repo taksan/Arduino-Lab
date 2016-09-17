@@ -9,10 +9,10 @@ class PaperBot;
 
 class PaperBotMove {
 	public:
-		virtual void perform(int16_t intensity)=0;
-		virtual void setup()=0;
+		virtual void perform(int16_t intensity){}
+		virtual void setup(){}
 		virtual bool isStable() { return true; }
-		virtual void stop();
+		virtual void stop(){}
 };
 
 class NoMovement: public PaperBotMove {
@@ -114,12 +114,12 @@ class TurnMove: public PaperBotMove {
 class TurnRightWhenFacingAhead : public TurnMove {
 	public:
 		TurnRightWhenFacingAhead(PaperBot * bot):
-			TurnMove(bot, DIR_180_INIT_THRUST_ANGLE, END_DIR, 110, -STEP_ANGLE) { }
+			TurnMove(bot, DIR_180_INIT_THRUST_ANGLE, INIT_DIR, 110, STEP_ANGLE) { }
 
 		void stop();
 	protected:
 		boolean isPastTheFinalAngle(int16_t angle)   { 
-			return angle <= INIT_DIR;
+			return angle >= END_DIR;
 		}
 };
 
@@ -138,7 +138,8 @@ class TurnRightWhenFacingBack : public TurnMove {
 
 class TurnLeftWhenFacingAhead : public TurnMove {
 	public:
-		TurnLeftWhenFacingAhead(PaperBot * bot):TurnMove(bot, DIR_0_INIT_THRUST_ANGLE, INIT_DIR, 70, STEP_ANGLE) { }
+		TurnLeftWhenFacingAhead(PaperBot * bot):
+			TurnMove(bot, DIR_0_INIT_THRUST_ANGLE, INIT_DIR, 70, STEP_ANGLE) { }
 
 		void stop();
 
@@ -159,21 +160,5 @@ class TurnLeftWhenFacingBack : public TurnMove {
 			return angle >= END_DIR;
 		}
 };
-
-class NonBlockingMove: public PaperBotMove {
-public:
-	NonBlockingMove(PaperBot * bot, PaperBotMove * decorated) {
-		this->decorated = decorated;
-		this->bot = bot;
-	}
-	void perform(int16_t intensity);
-	void setup();
-	void stop();
-
-private:
-	PaperBotMove * decorated;
-	PaperBot * bot;
-};
-
 
 #endif

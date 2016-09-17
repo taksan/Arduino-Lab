@@ -26,9 +26,9 @@ public:
 
 	void setDirection(int16_t angle); 
 
-	void setThrustAndWait(int16_t angle); 
+	virtual void setThrustAndWait(int16_t angle); 
 
-	void setDirectionAndWait(int16_t angle); 
+	virtual void setDirectionAndWait(int16_t angle); 
 
 	void setThrust(int16_t angle); 
 

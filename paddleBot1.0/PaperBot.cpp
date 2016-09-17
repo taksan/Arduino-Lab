@@ -129,12 +129,11 @@ void PaperBot::setupForRight() {
 }
 
 void PaperBot::setupForLeft() {
-	if (facingDirection == ahead) {
+	if (facingDirection == ahead) 
 		move = turnLeftWhenFacingAhead;
-	}
-	else {
+	else 
 		move = turnLeftWhenFacingBack;
-	}
+
 	move->setup();
 }
 

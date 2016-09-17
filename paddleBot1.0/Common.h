@@ -7,7 +7,7 @@
 
 #define DIR_0_INIT_THRUST_ANGLE 10
 #define DIR_180_INIT_THRUST_ANGLE 170
-#define INIT_DIR 0
-#define END_DIR  180
+#define INIT_DIR 5
+#define END_DIR  175
 
 #endif

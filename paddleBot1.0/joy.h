@@ -78,7 +78,7 @@ private:
 	}
 
 	inline boolean isRelevant(int16_t op1, int16_t op2) {
-		int16_t intensity = op1-op2;
+		int16_t intensity = ABS(op1-op2);
 		bool relevant = intensity > 10;
 		if (relevant)
 			lastMoveIntensity = intensity;
