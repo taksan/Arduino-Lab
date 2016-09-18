@@ -26,8 +26,11 @@ public:
 
 	void execute() {
 		if (expiration > 0) return;
-		motor->write(angle);
+		if (motor != NULL)
+			motor->write(angle);
+
 		this->expiration = millis() + delay;
+//		SerialDebug::println("executing [%s] angle: %d", name, angle);
 	}
 
 	bool isExpired() {

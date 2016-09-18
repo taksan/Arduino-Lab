@@ -131,6 +131,11 @@ void PaperBot::setThrustAndWait(int16_t angle) {
 	moveQueue.add("thrust", thrustMotor, angle, delay);
 }
 
+void PaperBot::hold(int16_t delay) {
+	if (delay != 0)
+		moveQueue.add("hold", NULL, 0, delay);
+}
+
 void PaperBot::setDirectionAndWait(int16_t angle) {
 	if (angle == directionAngle)
 		return;

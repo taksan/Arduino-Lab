@@ -2,8 +2,6 @@
 #define PAPER_BOT_MOVE_H__
 
 #include "Common.h"
-#define STEP_ANGLE 3
-#define INTENSITY_FACTOR(X) STEP_ANGLE * ((float)X/64)
 
 #define ANGLE_TO_MOVE_TURNING_FROM_FRONT 80
 #define ANGLE_TO_MOVE_TURNING_FROM_BACK  100
@@ -30,12 +28,17 @@ class NoMovement: public PaperBotMove {
 class StepAction: public PaperBotMove
 {
 	public:
-		StepAction(PaperBot * aBot, int16_t aDirToStartMovingFromFront, int16_t aDirToStartMovingFromBack):
+		StepAction(PaperBot * aBot, 
+				   int16_t aDirToStartMovingFromFront, 
+				   int16_t aDirToStartMovingFromBack,
+				   int16_t holdBetweenReverse):
+
 			bot(aBot),
 			dirToStartMovingFromFront(aDirToStartMovingFromFront),
 			dirToStartMovingFromBack(aDirToStartMovingFromBack),
 			thrustStep(STEP_ANGLE),
 			direction(1),
+			holdBetweenReverse(holdBetweenReverse),
 			stable(false)
 	{ }
 
@@ -57,12 +60,13 @@ class StepAction: public PaperBotMove
 		int16_t dirToStartMovingFromBack;
 		int16_t thrustStep;
 		int16_t direction;
+		int16_t holdBetweenReverse;
 		bool stable;
 
 		static const int16_t initialThrustForStartFromFront = 40;
 		static const int16_t initialThrustForStartFromBack  = 140;
 		static const int16_t frontThrustTurningPoint = 25;
-		static const int16_t backThrustTurningPoint = 155;
+		static const int16_t backThrustTurningPoint = 180;
 };
 
 class StepAhead: public StepAction
@@ -71,7 +75,8 @@ class StepAhead: public StepAction
 		StepAhead(PaperBot * aBot):
 			StepAction(aBot, 
 					INIT_DIR,
-					END_DIR)
+					END_DIR,
+					0)
 	{ }
 
 };
@@ -82,7 +87,8 @@ class StepBack: public StepAction
 		StepBack(PaperBot * aBot):
 			StepAction(aBot, 
 					END_DIR,
-					INIT_DIR)
+					INIT_DIR,
+					300)
 	{ }
 };
 

@@ -1,3 +1,6 @@
+#ifndef SERVO__TIMER2__H__
+#define SERVO__TIMER2__H__
+
 class ServoTimer2
 {
   public:
@@ -11,3 +14,5 @@ class ServoTimer2
     int read(){}
 	boolean attached(){}
 };
+
+#endif

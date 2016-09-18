@@ -87,8 +87,10 @@ private:
 	inline boolean isRelevant(int16_t op1, int16_t op2) {
 		int16_t intensity = ABS(op1-op2);
 		bool relevant = intensity > 10;
-		if (relevant)
-			lastMoveIntensity = intensity;
+		if (relevant) {
+			lastMoveIntensity = MIN(intensity,100);
+//			SerialDebug::println("isRelevant: op1: %d op2: %d i: %d", op1, op2, lastMoveIntensity);
+		}
 		return relevant;
 	}
 

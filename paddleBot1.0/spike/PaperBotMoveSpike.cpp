@@ -19,9 +19,9 @@ public:
 int main()
 {
 	PaperBot * p = new PaperBotMock(1,2);
-	TurnMove * move = new TurnRightWhenFacingBack(p);
-//	StepBack * move = new StepBack(p);
+//	TurnMove * move = new TurnRightWhenFacingBack(p);
+	StepBack * move = new StepBack(p);
 
 	for (int i=0; i < 30; i++)
-		move->perform(127);
+		move->perform(100);
 }

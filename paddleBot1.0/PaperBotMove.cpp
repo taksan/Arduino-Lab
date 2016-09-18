@@ -13,12 +13,14 @@ void StepAction::perform(int16_t intensity)
 void StepAction::setup()
 {
 	if (bot->getThrustAngle() < 90) {
-		bot->setThrustAndWait(initialThrustForStartFromFront);
+		bot->setThrustAndWait(frontThrustTurningPoint);
 		bot->setDirectionAndWait(dirToStartMovingFromFront);
+		bot->setThrustAndWait(initialThrustForStartFromFront);
 	}
 	else {
-		bot->setThrustAndWait(initialThrustForStartFromBack);
+		bot->setThrustAndWait(backThrustTurningPoint);
 		bot->setDirectionAndWait(dirToStartMovingFromBack);
+		bot->setThrustAndWait(initialThrustForStartFromBack);
 	}
 }
 
@@ -26,12 +28,14 @@ void StepAction::updateStepDirection()
 {
 	stable = false;
 	if (bot->getThrustAngle() >= backThrustTurningPoint) {
+		bot->hold(holdBetweenReverse);
 		bot->setDirectionAndWait(dirToStartMovingFromBack);
 		direction=-1;
 		stable = true;
 	}
 
 	if (bot->getThrustAngle() <= frontThrustTurningPoint) {
+		bot->hold(holdBetweenReverse);
 		bot->setDirectionAndWait(dirToStartMovingFromFront);
 		direction=1;
 		stable = true;

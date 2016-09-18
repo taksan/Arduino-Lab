@@ -7,7 +7,6 @@
 #include "MoveQueue.h"
 
 #include "PaperBotMove.h"
-#define TIME_TO_DO_180 100
 
 #define Servo ServoTimer2
 
@@ -25,6 +24,8 @@ public:
 	virtual void setDirectionAndWait(int16_t angle); 
 
 	void setThrust(int16_t angle); 
+
+	void hold(int16_t delay);
 
 	void ensureMotorPosition();
 
