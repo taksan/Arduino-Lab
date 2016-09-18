@@ -26,7 +26,6 @@ public:
 
 	void execute() {
 		if (expiration > 0) return;
-		SerialDebug::println("executing [%s] angle: %d", name, angle);
 		motor->write(angle);
 		this->expiration = millis() + delay;
 	}
@@ -55,7 +54,6 @@ public:
 		if (n == queueEnd)//queue full
 			return;
 
-		SerialDebug::println("[%d] adding [%s] angle: %d delay:%d", queueEnd, name, angle, delay);
 		moveQueue[queueEnd].set(name, m, angle, delay);
 		queueEnd = n;
 	}
