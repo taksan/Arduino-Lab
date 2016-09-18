@@ -10,6 +10,7 @@ public:
 	NunchuckRx(int commPin) {
 		this->commPin = commPin;
 		this->buflen = VW_MAX_MESSAGE_LEN;
+		this->ready = false;
 	}
 
 	void begin() {
@@ -20,13 +21,20 @@ public:
 		vw_set_rx_pin(commPin);
 		vw_rx_start(); 
 
-		updateAndEnsureReceivedData();
-		Serial.println("First data received");
 	}
 
 	bool update()
 	{
-		return updateReturnTrueIfNewData();
+		bool result = updateReturnTrueIfNewData();
+		if (!ready && result) {
+			Serial.println("First data received");
+			ready = true;
+		}
+		return result;
+	}
+
+	bool isReady() {
+		return ready;
 	}
 
 	int readJoyX() {
@@ -69,7 +77,7 @@ private:
 		{   
 			if (buflen == sizeof(NunchuckParams)) {
 				memcpy(&receivedParams, buf, sizeof(receivedParams));
-				printDebugInfo();
+				//printDebugInfo();
 				return true;
 			}
 			Serial.println("bogus data received, ignored");
@@ -101,6 +109,7 @@ private:
 	NunchuckParams receivedParams;
 	uint8_t buf[VW_MAX_MESSAGE_LEN];
 	uint8_t buflen;
+	bool ready;
 };
 
 #endif

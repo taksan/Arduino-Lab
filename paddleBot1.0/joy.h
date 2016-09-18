@@ -10,25 +10,23 @@ public:
 	Joy(NunchuckInterface * nunchuck){
 		this->nunchuck = nunchuck;
 		this->nunchuck->begin();
-
-		baseX = this->nunchuck->readJoyX();
-		Serial.println("1");
-		baseY = this->nunchuck->readJoyY();
-		Serial.println("2");
-		SerialDebug::println("Base joy axis values bx %d by %d", baseX, baseY);
-		jY = baseY;
-		jX = baseX;
-		SerialDebug::println("initial values jX=%d jY=%d", jX, jY);
 		lastMoveIntensity = 0;
 		wasUpdated = false;
+		initialized = false;
 	}
 
-	void update() {
+	bool update() {
 		wasUpdated = nunchuck->update();
+		if (!nunchuck->isReady()) return false;
+
+		if (!initialized)
+			this->initialize();
+		
 		jY = nunchuck->readJoyY();
 		jX = nunchuck->readJoyX();
 
 		ensureOnlyASingleMovementIsConsidered();
+		return true;
 	}
 
 	int16_t getLastMoveIntensity() {
@@ -36,19 +34,19 @@ public:
 	}
 
 	boolean upJoy() {
-		return isRelevant(jY, baseY);
+		return jY>baseY && isRelevant(jY, baseY);
 	}
 
 	boolean downJoy() {
-		return isRelevant(baseY, jY);
+		return baseY>jY && isRelevant(baseY, jY);
 	}
 
 	boolean leftJoy() {
-		return isRelevant(baseX, jX);
+		return baseX>jX && isRelevant(baseX, jX);
 	}
 
 	boolean rightJoy() {
-		return isRelevant(jX, baseX);
+		return jX>baseX && isRelevant(jX, baseX);
 	}
 
 	boolean cPressed() {
@@ -61,6 +59,15 @@ public:
 
 	bool wasUpdated;
 private:
+	void initialize() {
+		baseX = this->nunchuck->readJoyX();
+		baseY = this->nunchuck->readJoyY();
+		SerialDebug::println("Base joy axis values bx %d by %d", baseX, baseY);
+		jY = baseY;
+		jX = baseX;
+		SerialDebug::println("initial values jX=%d jY=%d", jX, jY);
+		initialized = true;
+	}
 	void ensureOnlyASingleMovementIsConsidered() {
 		if (ABS(jY-baseY) > ABS(jX-baseX)) {
 			neutralizeXAxis();
@@ -91,6 +98,7 @@ private:
 	int16_t baseY;
 	int16_t jX, jY;
 	int16_t lastMoveIntensity;
+	bool initialized;
 };
 
 #endif

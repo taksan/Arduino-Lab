@@ -3,7 +3,10 @@
 
 #include "Common.h"
 #define STEP_ANGLE 3
-#define INTENSITY_FACTOR(X) STEP_ANGLE * ((float)X/127)
+#define INTENSITY_FACTOR(X) STEP_ANGLE * ((float)X/64)
+
+#define ANGLE_TO_MOVE_TURNING_FROM_FRONT 80
+#define ANGLE_TO_MOVE_TURNING_FROM_BACK  100
 
 class PaperBot;
 
@@ -86,7 +89,11 @@ class StepBack: public StepAction
 
 class TurnMove: public PaperBotMove {
 	public:
-		TurnMove(PaperBot * bot, int16_t angleToReinit, int16_t directionToStartMoving, int16_t thrustToStartMoving, int8_t angleIncrement):
+		TurnMove(PaperBot * bot, 
+		   		 int16_t angleToReinit, 
+				 int16_t directionToStartMoving, 
+				 int16_t thrustToStartMoving, 
+				 int8_t angleIncrement):
 			bot(bot),
 			angleToReinit(angleToReinit),
 			directionToStartMoving(directionToStartMoving),
@@ -114,7 +121,7 @@ class TurnMove: public PaperBotMove {
 class TurnRightWhenFacingAhead : public TurnMove {
 	public:
 		TurnRightWhenFacingAhead(PaperBot * bot):
-			TurnMove(bot, DIR_180_INIT_THRUST_ANGLE, INIT_DIR, 110, STEP_ANGLE) { }
+			TurnMove(bot, DIR_180_INIT_THRUST_ANGLE, INIT_DIR, ANGLE_TO_MOVE_TURNING_FROM_BACK, STEP_ANGLE) { }
 
 		void stop();
 	protected:
@@ -126,7 +133,7 @@ class TurnRightWhenFacingAhead : public TurnMove {
 class TurnRightWhenFacingBack : public TurnMove {
 	public:
 		TurnRightWhenFacingBack(PaperBot * bot):
-			TurnMove(bot, DIR_0_INIT_THRUST_ANGLE, END_DIR, 70, -STEP_ANGLE) { }
+			TurnMove(bot, DIR_0_INIT_THRUST_ANGLE, END_DIR, ANGLE_TO_MOVE_TURNING_FROM_FRONT, -STEP_ANGLE) { }
 
 		void stop();
 
@@ -139,7 +146,7 @@ class TurnRightWhenFacingBack : public TurnMove {
 class TurnLeftWhenFacingAhead : public TurnMove {
 	public:
 		TurnLeftWhenFacingAhead(PaperBot * bot):
-			TurnMove(bot, DIR_0_INIT_THRUST_ANGLE, INIT_DIR, 70, STEP_ANGLE) { }
+			TurnMove(bot, DIR_0_INIT_THRUST_ANGLE, INIT_DIR, ANGLE_TO_MOVE_TURNING_FROM_FRONT, STEP_ANGLE) { }
 
 		void stop();
 
@@ -151,7 +158,8 @@ class TurnLeftWhenFacingAhead : public TurnMove {
 
 class TurnLeftWhenFacingBack : public TurnMove {
 	public:
-		TurnLeftWhenFacingBack(PaperBot * bot):TurnMove(bot, DIR_180_INIT_THRUST_ANGLE, INIT_DIR, 110, STEP_ANGLE) { }
+		TurnLeftWhenFacingBack(PaperBot * bot):
+			TurnMove(bot, DIR_180_INIT_THRUST_ANGLE, INIT_DIR, ANGLE_TO_MOVE_TURNING_FROM_BACK, STEP_ANGLE) { }
 
 		void stop();
 

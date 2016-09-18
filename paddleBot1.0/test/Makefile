@@ -1,12 +1,13 @@
+INCLUDES=-I. -I../../user_libs/SerialDebug/
+LIBS=-lcppunit
+SUBJECTS=../PaperBot.cpp ../PaperBotMove.cpp
+
 all: unitTests
 	./unitTests
 
 unitTests: clean
-	g++ -g -o unitTests main.cpp Light*.cpp -lcppunit
+	g++ --std=c++14 -g -o unitTests *.cpp $(SUBJECTS) $(INCLUDES) $(LIBS)
 	
 clean:
 	rm -f *.o
 
-paperMove:
-	g++ -g -c ../PaperBotMove.cpp ../PaperBot.cpp PaperBotMoveSpike.cpp -I.
-	g++ -g -o paperMoveTest *.o

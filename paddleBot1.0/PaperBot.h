@@ -3,9 +3,11 @@
 #include <Arduino.h>
 #include <ServoTimer2.h>
 #include "Common.h"
+#include "SerialDebug.h"
+#include "MoveQueue.h"
 
 #include "PaperBotMove.h"
-#define TIME_TO_DO_180 200
+#define TIME_TO_DO_180 100
 
 #define Servo ServoTimer2
 
@@ -13,14 +15,6 @@ class PaperBot
 {
 public:
 	PaperBot(int16_t thrustPort, int8_t directionPort); 
-
-	void stepAhead(int16_t intensity);
-
-	void stepBack(int16_t intensity);
-
-	void turnRight(int16_t intensity);
-
-	void turnLeft(int16_t intensity);
 
 	void stop();
 
@@ -42,6 +36,10 @@ public:
 
 	bool isStable();
 
+	void beginCycle();
+
+	void endCycle();
+
 	enum MoveType {
 		none,
 		movingAhead,
@@ -50,13 +48,23 @@ public:
 		turningLeft
 	};
 
+	void go(MoveDirection direction, int16_t intensity);
+	void stepAhead(int16_t intensity);
+	void stepBack(int16_t intensity);
+	void turnRight(int16_t intensity);
+	void turnLeft(int16_t intensity);
+
+protected:
+	MoveQueue moveQueue;
+	Servo * thrustMotor;
+	Servo * directionMotor;
+
 private:
-
 	void setupForRight(); 
-
 	void setupForLeft(); 
 
 	void waitBasedOnAngleOffset(int16_t previousAngle, int16_t newAngle);
+	int32_t calcDelayBasedOnAngleOffset(int16_t previousAngle, int16_t newAngle);
 
 	enum Direction {
 		ahead,
@@ -69,8 +77,6 @@ private:
 	int16_t thrustAngle;
 	int16_t directionAngle;
 
-	Servo * thrustMotor;
-	Servo * directionMotor;
 	PaperBotMove * move;
 
 	PaperBotMove * turnRightWhenFacingBack;
@@ -85,6 +91,10 @@ private:
 	uint32_t commandExpirationTime;
 
 	bool stable;
+
+	bool cycleStarted;
+
+	MoveDirection lastDirection;
 };
 
 

@@ -12,6 +12,7 @@ public:
 	virtual int readAccelX() = 0;
 	virtual int readAccelY() = 0;
 	virtual int readAccelZ() = 0;
+	virtual bool isReady() = 0;
 };
 
 #endif

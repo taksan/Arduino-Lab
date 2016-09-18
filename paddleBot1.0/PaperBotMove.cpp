@@ -43,19 +43,20 @@ int16_t StepAction::getThrustStep()
 	return thrustStep * direction;
 }
 
+void TurnMove::setup() {
+	bot->setDirectionAndWait(directionToStartMoving);
+	bot->setThrustAndWait(thrustToStartMoving);
+}
+
 void TurnMove::perform(int16_t intensity) {
 	if (isPastTheFinalAngle(bot->getDirectionAngle())) {
 		bot->setThrustAndWait(angleToReinit);
 		setup();
+		return;
 	}
 	int16_t angleStep = INTENSITY_FACTOR(intensity) * angleIncrement;
 	int16_t directionAngle = bot->getDirectionAngle()+angleStep;
 	bot->setDirectionAndWait(directionAngle);
-}
-
-void TurnMove::setup() {
-	bot->setDirectionAndWait(directionToStartMoving);
-	bot->setThrustAndWait(thrustToStartMoving);
 }
 
 void TurnRightWhenFacingAhead::stop() {
@@ -78,5 +79,3 @@ void TurnLeftWhenFacingBack::stop() {
 	bot->setThrustAndWait(DIR_180_INIT_THRUST_ANGLE);
 	bot->setDirectionAndWait(INIT_DIR);
 }
-
-

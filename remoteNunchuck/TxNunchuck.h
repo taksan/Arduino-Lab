@@ -1,6 +1,7 @@
 #include "../NunchuckParams.h"
 #include <Nunchuck.h>
 #include <VirtualWire.h>  // you must download and install the VirtualWire.h to your hardware/libraries folder
+#include <SerialDebug.h>
 #undef int
 #undef abs
 #undef double

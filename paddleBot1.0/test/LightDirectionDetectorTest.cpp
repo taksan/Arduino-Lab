@@ -1,7 +1,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <string>
-
+#include "ArduinoMock.h"
 #include "LightDirectionDetectorTest.h"
 
 #define LEFT_EYE_PIN  0

@@ -4,57 +4,40 @@
 #include "BotGame.h"
 #include "SerialDebug.h"
 
-#define FN_PTR(object,ptrToMember)  ((object)->*(ptrToMember))
-typedef void (PaperBot::*PaperBotMoveFn)(int16_t);
-
 class WalkingGame : public BotGame {
 public:
 	WalkingGame(PaperBot * bot, Joy * joy)
 	{
 		this->bot = bot;
 		this->joy = joy;
-		lastMoveType = PaperBot::none;
 	}
 
 	virtual void doTick()
 	{
 		int16_t lastMoveIntensity = joy->getLastMoveIntensity();
-		PaperBotMoveFn fn = NULL;
 
-		PaperBot::MoveType currentMove = PaperBot::none;
 		if (joy->upJoy()) {
-			fn = &PaperBot::stepAhead;
-			currentMove = PaperBot::movingAhead;
+			bot->go(mdAhead, lastMoveIntensity);
 		}
+		else
 		if (joy->downJoy()) {
-			fn = &PaperBot::stepBack;
-			currentMove = PaperBot::movingBack;
+			bot->go(mdBack, lastMoveIntensity);
 		}
+		else
 		if (joy->rightJoy()) {
-			fn = &PaperBot::turnRight;
-			currentMove = PaperBot::turningRight;
+			bot->go(mdRight, lastMoveIntensity);
 		}
+		else
 		if (joy->leftJoy()) {
-			fn = &PaperBot::turnLeft;
-			currentMove = PaperBot::turningLeft;
+			bot->go(mdLeft, lastMoveIntensity);
 		}
-		if (!bot->isReady() && currentMove == lastMoveType)
-			return;
-		lastMoveType = currentMove;
-
-		if (fn) {
-			SerialDebug::println("Will move %d", currentMove);
-			FN_PTR(bot,fn)(lastMoveIntensity);
-			setWaitProportionalToGivenIntensity(lastMoveIntensity);
-		}
-		else {
+		else
 			bot->stop();
-		}
 	}
 private:
 	PaperBot * bot;
 	Joy * joy;
-	PaperBot::MoveType lastMoveType;
+	
 };
 
 #endif

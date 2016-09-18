@@ -1,11 +1,6 @@
 #include "../PaperBot.h"
 #include "../PaperBotMove.h"
 
-SerialClass Serial;
-int millis() {
- 	return 0;
-}
-
 class PaperBotMock : public PaperBot {
 public:
 	PaperBotMock(int a, int b):PaperBot(a,b){}
@@ -24,8 +19,8 @@ public:
 int main()
 {
 	PaperBot * p = new PaperBotMock(1,2);
-//	TurnMove * move = new TurnRightWhenFacingBack(p);
-	StepBack * move = new StepBack(p);
+	TurnMove * move = new TurnRightWhenFacingBack(p);
+//	StepBack * move = new StepBack(p);
 
 	for (int i=0; i < 30; i++)
 		move->perform(127);

@@ -12,7 +12,7 @@ PaperBot::PaperBot(int16_t thrustPort, int8_t directionPort)
 	setDirection(INIT_DIR);
 
 	facingDirection = ahead;
-	lastMove= none;
+	lastMove = none;
 	move = NULL;
 
 	stepAheadAction = new StepAhead(this);
@@ -23,6 +23,43 @@ PaperBot::PaperBot(int16_t thrustPort, int8_t directionPort)
 	noMove = new NoMovement();
 	
 	commandExpirationTime = millis();
+	cycleStarted = false;
+	lastDirection = mdStop;
+}
+
+void PaperBot::go(MoveDirection direction, int16_t intensity) {
+	if (lastDirection != direction)
+		moveQueue.clear();
+
+	if (moveQueue.hasElements()) {
+		BotMoveAction * action = moveQueue.head();
+		if (!action->isExpired()) {
+			action->execute();
+			return;
+		}
+		moveQueue.dequeue();
+		if (moveQueue.hasElements())
+			return;
+	}
+
+	lastDirection = direction;
+	switch(direction) {
+		case mdStop:
+			stop();
+			break;
+		case mdAhead:
+			stepAhead(intensity);
+			break;
+		case mdBack:
+			stepBack(intensity);
+			break;
+		case mdRight:
+			turnRight(intensity);
+			break;
+		case mdLeft:
+			turnLeft(intensity);
+			break;
+	};
 }
 
 void PaperBot::stepAhead(int16_t intensity) {
@@ -88,9 +125,10 @@ void PaperBot::setThrustAndWait(int16_t angle) {
 	if (angle == thrustAngle)
 		return;
 	int previousAngle = thrustAngle;
-	setThrust(angle);
-
-	waitBasedOnAngleOffset(previousAngle, angle);
+	
+	thrustAngle = angle;
+	int32_t delay = calcDelayBasedOnAngleOffset(previousAngle, angle);
+	moveQueue.add("thrust", thrustMotor, angle, delay);
 }
 
 void PaperBot::setDirectionAndWait(int16_t angle) {
@@ -98,9 +136,10 @@ void PaperBot::setDirectionAndWait(int16_t angle) {
 		return;
 	int previousAngle = directionAngle;
 
-	setDirection(angle);
-
-	waitBasedOnAngleOffset(previousAngle, angle);
+	directionAngle = angle;
+	
+	int32_t delay = calcDelayBasedOnAngleOffset(previousAngle, angle);
+	moveQueue.add("direction", directionMotor, angle, delay);
 }
 
 void PaperBot::setThrust(int16_t angle) {
@@ -140,11 +179,13 @@ void PaperBot::setupForLeft() {
 
 void PaperBot::waitBasedOnAngleOffset(int16_t previousAngle, int16_t newAngle)
 {
-	int16_t angleOffset = ABS(previousAngle - newAngle);
-	int32_t timeToWait = TIME_TO_DO_180 * (angleOffset / (float)END_DIR);
+	commandExpirationTime = millis() + calcDelayBasedOnAngleOffset(previousAngle, newAngle);
+}
 
-	commandExpirationTime = millis() + timeToWait;
-//	delay(timeToWait);
+int32_t PaperBot::calcDelayBasedOnAngleOffset(int16_t previousAngle, int16_t newAngle)
+{
+	int16_t angleOffset = ABS(previousAngle - newAngle);
+	return TIME_TO_DO_180 * (angleOffset / (float)END_DIR);
 }
 
 bool PaperBot::isReady()

@@ -17,18 +17,18 @@
 Joy * joy = NULL;
 BotGame * games[GAME_COUNT];
 
-Led gameLed(13);
-Led tickLed(12);
+Led commLed(13);
+Led gameModeLed(12);
 int8_t currentGameNumber;
 LightDirectionDetector * lightFollow;
 
 void updateGameLed() {
 	switch(currentGameNumber) {
 	case 0:
-		gameLed.turnOn();
+		gameModeLed.turnOn();
 		break;
 	case 1:
-		gameLed.turnOff();
+		gameModeLed.turnOff();
 		break;
 	}
 }
@@ -60,16 +60,16 @@ long prevCount=0;
 long before, now;
 void loop()
 {
-	int32_t before = millis();
-	joy->update();
+	if (!joy->update())
+		return;
+
+	if (joy->wasUpdated) 
+		commLed.toggle();
+
 	if (joy->zPressed()) {
 		currentGameNumber = (currentGameNumber + 1) % GAME_COUNT;
 	}
-	if (joy->wasUpdated) {
-		gameLed.toggle();
-	}
 	
-//	updateGameLed();
+	updateGameLed();
 	games[currentGameNumber]->tick();
-	tickLed.blink(500);
 }

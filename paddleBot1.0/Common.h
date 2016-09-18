@@ -10,4 +10,14 @@
 #define INIT_DIR 5
 #define END_DIR  175
 
+enum MoveDirection {
+	mdStop,
+	mdAhead,
+	mdBack,
+	mdRight,
+	mdLeft
+};
+
+
+
 #endif
