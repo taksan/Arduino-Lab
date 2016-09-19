@@ -11,6 +11,8 @@ public:
 		this->commPin = commPin;
 		this->buflen = VW_MAX_MESSAGE_LEN;
 		this->ready = false;
+		this->badMessageCount = 0;
+		this->resyncNeed = false;
 	}
 
 	void begin() {
@@ -25,7 +27,19 @@ public:
 
 	bool update()
 	{
+		if (resyncPerformed()) 
+			return false;
+
 		bool result = updateReturnTrueIfNewData();
+		if (!result) {
+			if (badMessageCount > 5) {
+				resyncNeed = true;
+				vw_rx_stop();
+				return false;
+			}
+		}
+		badMessageCount = 0;
+
 		if (!ready && result) {
 			Serial.println("First data received");
 			ready = true;
@@ -81,13 +95,14 @@ private:
 				return true;
 			}
 			Serial.println("bogus data received, ignored");
+			badMessageCount++;
 		}
 		return false;
 	}
 
-	void updateAndEnsureReceivedData() {
-		while (!updateReturnTrueIfNewData()) {
-			delay(20);
+	void restart() {
+		if (badMessageCount > 5) {
+			resyncNeed = true;
 		}
 	}
 
@@ -105,11 +120,33 @@ private:
 			   );
 	}
 
+	bool resyncPerformed() {
+		if (!resyncNeed) 
+			return false;
+		Serial.println("Communication corrupted. Trying to reboot comm.");
+		badMessageCount = 0;
+		begin();
+		return true;
+	}
+
+	bool needsResync() {
+		if (badMessageCount < 5)
+			return false;
+
+
+		Serial.println("Communication corrupted. Trying to reboot comm.");
+		resyncNeed = true;
+		vw_rx_stop();
+		return false;
+	}
+
 	int commPin;
 	NunchuckParams receivedParams;
 	uint8_t buf[VW_MAX_MESSAGE_LEN];
 	uint8_t buflen;
 	bool ready;
+	uint8_t badMessageCount;
+	bool resyncNeed;
 };
 
 #endif
