@@ -37,10 +37,6 @@ public:
 
 	bool isStable();
 
-	void beginCycle();
-
-	void endCycle();
-
 	enum MoveType {
 		none,
 		movingAhead,
@@ -50,12 +46,13 @@ public:
 	};
 
 	void go(MoveDirection direction, int16_t intensity);
+
+protected:
 	void stepAhead(int16_t intensity);
 	void stepBack(int16_t intensity);
 	void turnRight(int16_t intensity);
 	void turnLeft(int16_t intensity);
 
-protected:
 	MoveQueue moveQueue;
 	Servo * thrustMotor;
 	Servo * directionMotor;

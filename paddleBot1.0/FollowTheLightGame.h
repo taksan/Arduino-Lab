@@ -1,7 +1,7 @@
 #ifndef FOLLOW_THE_LIGHT_GAME__
 #define FOLLOW_THE_LIGHT_GAME__
 
-#include "led.h"
+#include <Led.h> 
 #include "PaperBot.h"
 #include "BotGame.h"
 
@@ -46,21 +46,21 @@ public:
 			intensity = 25;
 		
 		if (directionToGo == dvTurnLeft) {
-			bot->turnLeft(intensity);
+			bot->go(mdLeft, intensity);
 			leftLed.turnOn();
 		}
 
 		if (directionToGo == dvTurnRight) {
-			bot->turnRight(intensity);
+			bot->go(mdRight, intensity);
 			rightLed.turnOn();
 		}
 
 		if (directionToGo == dvGoAhead) {
-			bot->stepAhead(intensity);
+			bot->go(mdAhead, intensity);
 			rightLed.turnOn();
 			leftLed.turnOn();
 		}
-		setWaitProportionalToGivenIntensity(intensity);
+//		setWaitProportionalToGivenIntensity(intensity);
 	}
 private:
 	PaperBot * bot;
