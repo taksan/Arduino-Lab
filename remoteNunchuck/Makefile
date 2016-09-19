@@ -4,7 +4,7 @@ BOARD_TAG=mega
 #BOARD_TAG=atmega328
 ARDUINO_PORT=/dev/ttyUSB0
 AVRDUDE_CONF=$(ARDUINO_DIR)/hardware/tools/avrdude.conf
-ARDUINO_LIBS=VirtualWire Nunchuck Wire twi SerialDebug
+ARDUINO_LIBS=VirtualWire Nunchuck Wire twi SerialDebug ArduinoCpp
 USER_LIB_PATH=../user_libs/
 
 TARGET=rfnunchuck

@@ -2,16 +2,17 @@
 #include <Nunchuck.h>
 #include <VirtualWire.h>  // you must download and install the VirtualWire.h to your hardware/libraries folder
 #include <SerialDebug.h>
+#include <Led.h>
 #undef int
 #undef abs
 #undef double
 #undef float
 #undef round
 
-
 class TxNunchuck {
 public:
-	TxNunchuck(int txPort)
+	TxNunchuck(int txPort):
+		dataState(13)
 	{
 		int boundRate = 2000;
 
@@ -24,7 +25,6 @@ public:
 	void update()
 	{
 		nunchuck.update();
-		char nunchuckParams[60];
 		NunchuckParams p;
 		p.x = nunchuck.readJoyX();
 		p.y = nunchuck.readJoyY();
@@ -36,21 +36,24 @@ public:
 
 		vw_send((uint8_t *)&p, sizeof(p));
 		vw_wait_tx();
+		dataState.blink(500);
 
-		sprintf(nunchuckParams, 
-				"x=%d y=%d c=%d z=%d ax=%d ay=%d az=%d",
-				nunchuck.readJoyX(),
-				nunchuck.readJoyY(),
-				nunchuck.cPressed(),
-				nunchuck.zPressed(),
-				nunchuck.readAccelX(),
-				nunchuck.readAccelY(),
-				nunchuck.readAccelZ()
-			   );
-
-		Serial.print("Sender : ");
-		Serial.println(nunchuckParams);
+//		printDebugInfo();
 	}
+
 private:
+	void printDebugInfo() {
+		SerialDebug::println(
+			"Sender: x=%d y=%d c=%d z=%d ax=%d ay=%d az=%d",
+			nunchuck.readJoyX(),
+			nunchuck.readJoyY(),
+			nunchuck.cPressed(),
+			nunchuck.zPressed(),
+			nunchuck.readAccelX(),
+			nunchuck.readAccelY(),
+			nunchuck.readAccelZ()
+		   );
+	}
 	Nunchuck nunchuck;
+	Led dataState;
 };
